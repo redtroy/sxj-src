@@ -1,0 +1,960 @@
+﻿<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗" />
+<meta name="description"
+	content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。" />
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+<script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<link type="text/css" rel="stylesheet"
+	href="${b.staticPath}style/purchasing-pool.css" />
+	<@b.dialogBox/><@b.pageScript/>
+<!--tab切换开始-->
+<script type="text/javascript">
+	function setTab(name, cursel, n) {
+		for (i = 1; i <= n; i++) {
+			var menu = document.getElementById(name + i);
+			menu.className = i == cursel ? "hover" : "";
+			$("#purchaseType").val(cursel);
+			if (cursel == 1) {
+				$("#cg").text("普通玻璃");
+			} else if (cursel == 2) {
+				$("#cg").text("深加工玻璃");
+			} else if (cursel == 3) {
+				$("#cg").text("型材");
+			} else if (cursel == 4) {
+				$("#cg").text("配件");
+			}
+			query();
+		}
+	}
+	var show;
+	function openApply(recordNumber, type) {
+		$("#applyType").val(type);
+		
+		if (type == 1) {
+			$("#typeValue").text("普通玻璃");
+		} else if (type == 2) {
+			$("#typeValue").text("深加工玻璃");
+		} else if (type == 3) {
+			$("#typeValue").text("型材");
+		} else if (type == 4) {
+			$("#typeValue").text("配件");
+		}
+		var applyNum = $("#applyNum").val("");
+		var applyPrice = $("#applyPrice").val("");
+		$("#releaseRecordId").val(recordNumber);
+		show = layer.open({
+			type : 1,
+			area: ['500px', '300px'],
+			offset : [ '30%', '35%' ],
+			title : "采购申请单", //不显示标题
+			content : $("#modal")
+		});
+	}
+	function query(page) {
+		var purchase=$("#purchaseType").val();
+		var params = "purchase="+purchase;
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
+		}
+		$.post("getPurchase.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		});
+	}
+	
+	function saveApply(){
+// 		var company = "${company}";
+// 		var memberNo = "${memberNo}";
+// 		var applyNum = $("#applyNum").val();
+// 		var applyPrice = $("#applyPrice").val();
+// 		var applyType = $("#applyType").val();
+// 		var releaseRecordId = $("#releaseRecordId").val();
+// 		var json ='{"memberNo":"'+memberNo+'","company":"'+company+'","num":"'+applyNum+'","price":"'+applyPrice+'","applyType":'+applyType+',"recordNumber":"'+releaseRecordId+'"}';
+// 		$.ajax({
+// 	        type: "POST",
+// 	        url: "http://192.168.1.234/houtai/admin.php/Index/purchase",
+// 	        contentType: "application/json; charset=utf-8",
+// 	        data: JSON.stringify(json),
+// 	        dataType: "html",
+// 	        success: function (result) {
+// 	            if (result > 0) {
+// 	                alert("请求已提交！我们会尽快与您取得联系");
+// 	            }
+// 	        },
+// 	        error: function (result) {
+// 	            $("#request-process-patent").html("提交数据失败！");
+// 	        }
+// 	    });
+		dialogBox(function(index) {
+			$.post("saveApply.htm", $("#applyForm").serialize(),
+					function(data) {
+						if (data.isok == 'ok') {
+							messageInfo("申请成功");
+						} else {
+							errorInfo(data.isok );
+						}
+					});
+		}, "是否申请采购?");
+	}
+</script>
+<!--tab切换结束-->
+</head>
+
+<body>
+	<div id="header"><@b.header /></div>
+	<div class="fence-wide ly-clearFix">
+		<div class="yard-190 mt15 ly-left"><@b.leftMenu /></div>
+		<div class="yard-870 rightSide ly-left inviteBox">
+			<div class="heading mb15 ly-clearFix">
+				<h1>
+					<span class="title fontYH f20 fb">采购池</span>
+				</h1>
+			</div>
+			<div class="contBox">
+				<!--采购池开始------------------------------------------------------------------------------------------------------------>
+				<div id="lib_Tab1">
+					<div id="lib_Menuboxr">
+						<ul>
+							<li class="hover" id="11" onclick="setTab('1',1,4)">
+								<div class="tname-r">普通玻璃</div>
+								<div class="total-r">${purchase.ordinaryGlass}㎡</div>
+								<div class="con-r">
+									<span class="numl-r">${purchase.ordinaryIncrease}</span><span class="add-r">新增<br />(㎡)
+									</span>
+								</div>
+								<div class="con-r">
+									<span class="Consume-r">消耗<br />(㎡)
+									</span><span class="numr-r">${purchase.ordinaryReduce}</span>
+								</div>
+							</li>
+
+							<li class="" id="12" onclick="setTab('1',2,4)">
+								<div class="tname-r">深加工玻璃</div>
+								<div class="total-r">${purchase.deepGlass}㎡</div>
+								<div class="con-r">
+									<span class="numl-r">${purchase.deepIncrease}</span><span class="add-r">新增<br />(㎡)
+									</span>
+								</div>
+								<div class="con-r">
+									<span class="Consume-r">消耗<br />(㎡)
+									</span><span class="numr-r">${purchase.deepReduce}</span>
+								</div>
+							</li>
+
+							<li class="" id="13" onclick="setTab('1',3,4)">
+								<div class="tname-r">型 材</div>
+								<div class="total-r">${purchase.profiles}吨</div>
+								<div class="con-r">
+									<span class="numl-r">${purchase.profilesIncrease}</span><span class="add-r">新增<br />(吨)
+									</span>
+								</div>
+								<div class="con-r">
+									<span class="Consume-r">消耗<br />(吨)
+									</span><span class="numr-r">${purchase.profilesReduce}</span>
+								</div>
+							</li>
+
+							<li class="" id="14" onclick="setTab('1',4,4)"
+								style="margin-right: 0">
+								<div class="tname-r">配 件</div>
+								<div class="total-r">${purchase.fitting}件</div>
+								<div class="con-r">
+									<span class="numl-r">${purchase.fittingIncrease}</span><span class="add-r">新增<br />(件)
+									</span>
+								</div>
+								<div class="con-r">
+									<span class="Consume-r">消耗<br />(件)
+									</span><span class="numr-r">${purchase.fittingReduce}</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<input type="hidden" id="purchaseType" value="${query.purchase}"/>
+					<div class="lib_Contentbox lib_tabborder">
+						<div id="con_1_1">
+							<div id="detail-name">
+								<ul>
+									<li class="" id="1a3" onclick="setTab('1a',3,4)">消耗采购量</li>
+									<li class="" id="1a2" onclick="setTab('1a',2,4)">新增采购量</li>
+									<li class="hover" id="1a1" onclick="setTab('1a',1,4)">采购池
+									</li>
+								</ul>
+							</div>
+
+							<div id="con_1a_1">
+								<div class="t-name"><span id="cg">普通玻璃</span>采购池</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right" id="res_table">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+												<th scope="col">操作</th>
+											</tr>
+											<#list rrList as list>
+											<tr>
+												<td>${list.recordNumber}</td>
+												<td><#if list.purchase==1>普通玻璃<#elseif
+													list.purchase==2>深加工玻璃<#elseif list.purchase==3>型材<#elseif
+													list.purchase==4>配件</#if></td>
+												<td>${list.num}</td>
+												<td id="red">${list.priceRange}</td>
+												<td>${list.releaseTime?string("yyyy-MM-dd")}</td>
+												<td><button class="button-ora fillet"
+														onclick="openApply('${list.recordNumber}','${list.purchase}');">点击申请</button></td>
+											</tr>
+											</#list>
+										</tbody>
+									</table>
+								</div>
+							<@b.pager/>
+							</div>
+							<div id="con_1a_2" style="display: none">
+								<div class="t-name">普通玻璃新增采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1a_3" style="display: none">
+								<div class="t-name"><span id="cg"></span>消耗采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+
+						<div id="con_1_2" style="display: none">
+							<div id="detail-name">
+								<ul>
+									<li class="" id="1b3" onclick="setTab('1b',3,4)">消耗采购量</li>
+									<li class="" id="1b2" onclick="setTab('1b',2,4)">新增采购量</li>
+									<li class="hover" id="1b1" onclick="setTab('1b',1,4)">采购池
+									</li>
+								</ul>
+							</div>
+
+							<div id="con_1b_1">
+								<div class="t-name">深加工玻璃采购池</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+												<th scope="col">操作</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1b_2" style="display: none">
+								<div class="t-name">深加工玻璃新增采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1b_3" style="display: none">
+								<div class="t-name">深加工玻璃消耗采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+
+
+
+						<div id="con_1_3" style="display: none">
+							<div id="detail-name">
+								<ul>
+									<li class="" id="1c3" onclick="setTab('1c',3,4)">消耗采购量</li>
+									<li class="" id="1c2" onclick="setTab('1c',2,4)">新增采购量</li>
+									<li class="hover" id="1c1" onclick="setTab('1c',1,4)">采购池
+									</li>
+								</ul>
+							</div>
+							<div id="con_1c_1">
+								<div class="t-name">型材采购池</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+												<th scope="col">操作</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1c_2" style="display: none">
+								<div class="t-name">型材新增采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1c_3" style="display: none">
+								<div class="t-name">型材消耗采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div id="con_1_4" style="display: none">
+							<div id="detail-name">
+								<ul>
+									<li class="" id="1d3" onclick="setTab('1d',3,4)">消耗采购量</li>
+									<li class="" id="1d2" onclick="setTab('1d',2,4)">新增采购量</li>
+									<li class="hover" id="1d1" onclick="setTab('1d',1,4)">采购池
+									</li>
+								</ul>
+							</div>
+							<div id="con_1d_1">
+								<div class="t-name">配件采购池</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+												<th scope="col">操作</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+												<td><button class="button-ora fillet">点击申请</button></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1d_2" style="display: none">
+								<div class="t-name">配件新增采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+							<div id="con_1d_3" style="display: none">
+								<div class="t-name">配件消耗采购量</div>
+								<div class="detail-con">
+									<table width="97%" border="0" align="right">
+										<tbody>
+											<tr>
+												<th scope="col">编号</th>
+												<th scope="col">产品类型</th>
+												<th scope="col">新增采购量(㎡)</th>
+												<th scope="col">报价区间(元/㎡)</th>
+												<th scope="col">设置时间</th>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>33</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>333</td>
+												<td>33</td>
+												<td>rr</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>33</td>
+												<td>33</td>
+												<td>ttttttt</td>
+												<td id="red">1-10</td>
+												<td>&nbsp;</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div id="pager">
+									<ul class="pages">
+										<li class="pgNext pgEmpty">首页</li>
+										<li class="pgNext pgEmpty">上一页</li>
+										<li class="page-number pgCurrent">1</li>
+										<li class="page-number">2</li>
+										<li class="page-number">3</li>
+										<li class="page-number">4</li>
+										<li class="page-number">5</li>
+										<li class="page-number">6</li>
+										<li class="page-number">7</li>
+										<li class="page-number">8</li>
+										<li class="page-number">9</li>
+										<li class="page-number">...</li>
+										<li class="page-number">100</li>
+										<li class="pgNext">下一页</li>
+										<li class="pgNext">尾页</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--采购池结束------------------------------------------------------------------------------------------------------------>
+			</div>
+		</div>
+	</div>
+	<@b.footer />
+	<div id="modal" class="apply-box">
+		<form action="" id="applyForm">
+			<input type="hidden" name="applyType" id="applyType" value=""/> 
+			<input type="hidden" name="memberNo" id="memberNo" value="${memberNo}" /> 
+			<input type="hidden" name="serialNumber" id="releaseRecordId" value="" />
+			<input type="hidden" name="company" id="company" value="${company}" />
+			<table width="90%">
+				<tr>
+					<td class="lt">申请采购类型：</td>
+					<td class="rg" id="typeValue"></td>
+				</tr>
+				<tr>
+					<td class="lt">申请采购数量：</td>
+					<td><input type="text" value="" name="applyNum" id="applyNum" placeholder="请填写申请采购的数量"
+						class="num-inp" /></td>
+				</tr>
+				<tr>
+					<td class="lt">价格：</td>
+					<td><input type="text" value="" name="price" id="applyPrice"placeholder="请填写价格"
+						class="price-inp" /></td>
+				</tr>
+			</table>
+			</form>
+			<div class="but-box">
+				<button class="but-yes" onclick="saveApply()">申请</button>
+				<button class="but-canc" onclick="javascript:layer.close(show);">取消</button>
+			</div>
+		
+
+
+	</div>
+</body>
+</html>
+
+
+
+<!----分页
+<div class="ly-clearFix">
+	<div id="pager" class="jPaginate"></div>
+</div>
+<script type="text/javascript">
+		$(function() {
+			$("#pager").paginate({
+				count 		: 50,
+				start 		: 1,
+				display     : 10,
+				border					: true,
+				border_color			: '#CCC',
+				text_color  			: '#333',
+				background_color    	: '#FFF',	
+				border_hover_color		: '#ff4400',
+				text_hover_color  		: '#ff4400',
+				background_hover_color	: '#fff', 
+				images					: false,
+				mouse					: 'press'
+			});
+});
+</script>
+
+
+分页--->

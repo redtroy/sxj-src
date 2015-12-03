@@ -46,4 +46,6 @@ public interface IProjectService
     public void updateItem(ItemEntity temItem) throws SQLException;
 
     public ItemEntity getItemById(String id);
+
+    public List<ItemModel> openQueryItems(String projectId);
 }

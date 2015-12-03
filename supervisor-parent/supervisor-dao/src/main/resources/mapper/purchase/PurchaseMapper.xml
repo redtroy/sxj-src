@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.purchase.IPurchaseDao">
+	<resultMap id="PurchaseEntityResultMap"
+		type="com.sxj.supervisor.entity.purchase.PurchaseEntity">
+		<id property="cId" column="C_ID" jdbcType="VARCHAR" />
+		<result property="ordinaryGlass" column="ORDINARY_GLASS"
+			jdbcType="INTEGER" />
+		<result property="deepGlass" column="DEEP_GLASS" jdbcType="INTEGER" />
+		<result property="profiles" column="PROFILES" jdbcType="INTEGER" />
+		<result property="fitting" column="FITTING" jdbcType="INTEGER" />
+		<result property="ordinaryIncrease" column="ORDINARY_INCREASE"
+			jdbcType="INTEGER" />
+		<result property="ordinaryReduce" column="ORDINARY_REDUCE"
+			jdbcType="INTEGER" />
+		<result property="deepIncrease" column="DEEP_INCREASE"
+			jdbcType="INTEGER" />
+		<result property="deepReduce" column="DEEP_REDUCE" jdbcType="INTEGER" />
+		<result property="profilesIncrease" column="PROFILES_INCREASE"
+			jdbcType="INTEGER" />
+		<result property="profilesReduce" column="PROFILES_REDUCE"
+			jdbcType="INTEGER" />
+		<result property="fittingIncrease" column="FITTING_INCREASE"
+			jdbcType="INTEGER" />
+		<result property="fittingReduce" column="FITTING_REDUCE"
+			jdbcType="INTEGER" />
+	</resultMap>
+</mapper>

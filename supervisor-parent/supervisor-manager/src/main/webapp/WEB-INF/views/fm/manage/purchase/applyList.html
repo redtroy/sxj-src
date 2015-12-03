@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet"
+	type="text/css" />
+	<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<@b.pageScript/>
+<script>
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
+		}
+		$.post("queryApply.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		});
+	}
+</script>
+</head>
+<body>
+	<@b.header />
+	<div id="main" class="fence-wide">
+		<@b.menuPath/>
+		<div id="mainBg" class="ly-clearFix yard-1200">
+			<@b.leftMenu />
+			<div id="rightBar">
+				<!-- InstanceBeginEditable name="rightBar" -->
+				<h2 class="title">申报采购管理</h2>
+				
+					<div id="searchBox">
+					<form action="" id="search_form">
+						编号<input type="text" name="serialNumber" value="" /> 申购企业名称<input
+							style="width: 200px" type="text" name="company" value="" /> 产品类型
+						<select name="applyType" class="input-w120h36">
+							<option selected="selected" value="">全部</option>
+							<option value="1">普通玻璃</option>
+							<option value="2">深加工玻璃</option>
+							<option value="3">型材</option>
+							<option value="4">配件</option>
+						</select> 申请单时间段 <input type="text" name="startDate" value="" datepicker />-<input
+							type="text" name="endDate" value="" datepicker />
+							
+						<span class="btn btn-blue" onclick="query();">
+							<span>查询</span>
+						</span>
+						</form>
+					</div>
+				
+				<table border="0" cellpadding="0" cellspacing="0" class="tabList"
+					id="res_table">
+					<col width="10%" />
+					<col width="26%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="8%" />
+					<col width="18%" />
+					<col width="15%" />
+					<col width="7%" />
+					<tr>
+						<th>编号</th>
+						<th>企业名称</th>
+						<th>产品类型</th>
+						<th>采购数量(㎡)</th>
+						<th>采购价格(元)</th>
+						<th>申报时间</th>
+						<th>状态</th>
+						<th class="rLine">操作</th>
+					</tr>
+					<#list list as list>
+					<tr class="disable">
+						<td>${list.serialNumber}</td>
+						<td>${list.company}</td>
+						<td><#if list.applyType==1>普通玻璃<#elseif
+							list.applyType==2>深加工玻璃<#elseif list.applyType==3>型材<#elseif
+							list.applyType==4>配件</#if></td>
+						<td>${list.applyNum}</td>
+						<td>${list.price}</td>
+						<td>${list.applyTime?string("yyyy-MM-dd")}</td>
+						<td><#if list.applyStatus==1> <em class="state no">未接收</em><#elseif
+							list.applyStatus==2> <em class="state normal">已接收</em><#elseif
+							list.applyStatus==3> <em class="state verified">审核通过</em><#elseif
+							list.applyStatus==4> <em class="state fail">审核不通过</em> </#if>
+						</td>
+						<td></td>
+					</tr>
+					</#list>
+				</table>
+				 <@b.pager/>
+			</div>
+		</div>
+	</div>
+	<@b.footer />
+</body>
+</html>

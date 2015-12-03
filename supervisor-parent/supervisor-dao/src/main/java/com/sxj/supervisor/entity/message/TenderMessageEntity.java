@@ -12,6 +12,11 @@ import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.message.ITenderMessageDao;
 import com.sxj.supervisor.enu.message.MessageStateEnum;
 
+/**
+ * 已读未读关系
+ * @author Administrator
+ *
+ */
 @Table(name = "M_TENDER_MESSAGE")
 @Entity(mapper = ITenderMessageDao.class)
 public class TenderMessageEntity extends Pagable implements Serializable

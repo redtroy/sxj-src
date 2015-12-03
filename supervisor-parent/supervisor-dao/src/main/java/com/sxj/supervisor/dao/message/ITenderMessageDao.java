@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Get;
+import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.supervisor.entity.message.TenderMessageEntity;
 import com.sxj.supervisor.model.message.TenderMessageModel;
 import com.sxj.util.persistent.QueryCondition;
@@ -16,9 +17,14 @@ public interface ITenderMessageDao
     //@Update
     public Integer updateMessage(TenderMessageEntity message);
     
+    @Insert
+    public void save(TenderMessageEntity entity);
+    
     @Get
     public TenderMessageEntity getMessage(String id);
     
     public List<TenderMessageModel> queryMessageList(
             QueryCondition<TenderMessageModel> query);
+            
+    public long countUnreadByMember(String memberNo);
 }

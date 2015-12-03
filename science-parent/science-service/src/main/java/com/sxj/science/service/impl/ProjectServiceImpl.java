@@ -141,6 +141,60 @@ public class ProjectServiceImpl implements IProjectService
     }
     
     @Override
+    public List<ItemModel> openQueryItems(String projectId) throws ServiceException
+    {
+        try
+        {
+            List<ItemModel> modelList = new ArrayList<ItemModel>();
+            QueryCondition<ItemEntity> query = new QueryCondition<>();
+            query.addCondition("projectId", projectId);
+            List<ItemEntity> itemList = itemDao.query(query);
+            if (itemList != null && itemList.size() > 0)
+            {
+                for (ItemEntity item : itemList)
+                {
+                    QueryCondition<DocEntity> queryItem = new QueryCondition<>();
+                    queryItem.addCondition("itemId", item.getId());
+                    queryItem.addGroup("SERIES");
+                    List<DocEntity> docList = docDao.query(queryItem);
+                    if (docList.size() > 0)
+                    {
+                        item.setState(2);
+                    }
+                    else
+                    {
+                        item.setState(0);
+                    }
+                    
+                    for (DocEntity docEntity : docList)
+                    {
+                        if (docEntity.getState() == 0)
+                        {
+                            item.setState(0);
+                        }
+                        if (docEntity.getState() == 1)
+                        {
+                            item.setState(1);
+                            break;
+                        }
+                    }
+                    ItemModel model = new ItemModel();
+                    model.setItem(item);
+                    model.setDocList(docList);
+                    modelList.add(model);
+                }
+            }
+            return modelList;
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询工程错误", e, this.getClass());
+            throw new ServiceException("查询工程错误", e);
+        }
+        
+    }
+    
+    @Override
     public List<ItemModel> queryItems(String projectId) throws ServiceException
     {
         try

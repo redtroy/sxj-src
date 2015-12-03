@@ -335,6 +335,10 @@ var basePath ='${basePath}';
 			callback : function(data) {
 				if (data){
 					$("#memberIdB").val(data.result);
+					if(data.result=="B000159"){
+						$("#hidenType").fadeIn();
+						$("#hidenSelect ").val("")
+					}
 					var pass = cg_validform.check(false, $("#memberIdB"));
 					$(this).parent().children(".Validform_wrong").hide();
 				}
@@ -345,11 +349,16 @@ var basePath ='${basePath}';
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].title == memberNameB) {
 						$("#memberIdB").val(data[i].result);
+						if(data.result=="B000159"){
+							$("#hidenType").fadeIn();
+							$("#hidenSelect").prop("selected", 'selected');
+						}
 						match = true;
 					}
 				}
 				if (!match) {
 					$("#memberIdB").val("");
+					$("#hidenType").fadeOut();
 					var pass = cg_validform.check(false, $("#memberIdB"));
 					if (!pass)
 						$(this).parent().children(".Validform_wrong").show();
@@ -486,6 +495,14 @@ var basePath ='${basePath}';
 												name="memberNameB" /><input type="hidden" id="memberIdB"
 												name="memberIdB" id="" value="" datatype="*1-50"
 												nullmsg="请输入正确的供方名称" />
+										</div>
+										<div class="item" id="hidenType" style="display: none;">
+											<label>备案类型</label>
+											<select id="hidenSelect" name="recordType" datatype="*" nullmsg="请选择备案类型">
+												<option value="">请选择备案类型</option>
+												<option value="1">玻璃备案</option>
+												<option value="2">型材备案</option>
+											</select>
 										</div>
 										<div class="item">
 											<label>工程地址</label><input class="input input-w240h36" value=""

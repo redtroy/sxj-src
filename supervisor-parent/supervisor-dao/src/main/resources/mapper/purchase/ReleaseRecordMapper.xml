@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sxj.supervisor.dao.purchase.IReleaseRecordDao">
+	<resultMap id="ReleaseRecordEntityResultMap"
+		type="com.sxj.supervisor.entity.purchase.ReleaseRecordEntity">
+		<id property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="recordNumber" column="RECORD_NUMBER" jdbcType="VARCHAR" />
+		<result property="adminId" column="ADMIN_ID" jdbcType="VARCHAR" />
+		<result property="purchase" column="PURCHASE" jdbcType="INTEGER" />
+		<result property="num" column="NUM" jdbcType="INTEGER" />
+		<result property="releaseTime" column="RELEASE_TIME" jdbcType="TIMESTAMP" />
+		<result property="priceType" column="PRICE_TYPE" jdbcType="INTEGER" />
+		<result property="priceRange" column="PRICE_RANGE" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="queryReleaseRecordList" resultMap="ReleaseRecordEntityResultMap"
+		parameterType="com.sxj.util.persistent.QueryCondition">
+		<![CDATA[SELECT * FROM M_RELEASE_RECORD WHERE 1=1 ]]>
+		<if test="condition.purchase != null and condition.purchase !=''">
+			<![CDATA[AND PURCHASE =#{condition.purchase} ]]>
+		</if>
+		<![CDATA[ ORDER BY RELEASE_TIME DESC]]>
+	</select>
+</mapper>

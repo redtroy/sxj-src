@@ -29,4 +29,6 @@ public interface IWindDoorService
     public List<WindDoorEntity> query(WindDoorModel query);
     
     public void checkState(String id, Integer state);
+    
+    public List<WindDoorEntity> queryUnread(String memberNo);
 }

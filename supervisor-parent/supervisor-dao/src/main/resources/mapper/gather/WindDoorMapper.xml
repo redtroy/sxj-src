@@ -20,6 +20,7 @@
 		<result property="flag" column="FLAG" jdbcType="INTEGER" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 		<result property="nowDate" column="NOW_DATE" jdbcType="TIMESTAMP" />
+		<result property="oid" column="OID" jdbcType="VARCHAR"/> 
 	</resultMap>
 
 
@@ -27,6 +28,15 @@
 	<select id="getMaxWindDoor" resultMap="WindDoorResultMap"
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM M_WIND_DOOR ORDER BY FLAG DESC ]]>
+	</select>
+	
+	<select id="getByOid" resultMap="WindDoorResultMap" parameterType="String">
+		<![CDATA[select * from M_WIND_DOOR where OID=#{oid}]]>
+	</select>
+	
+	<select id="queryUnreadByMember" resultMap="WindDoorResultMap">
+		select door.* from M_WIND_DOOR door left join M_TENDER_MESSAGE message on door.ID=message.INFO_ID
+and message.MEMBER_NO=#{memberNo} where message.ID is null;
 	</select>
 	<!--  -->
 	<select id="queryList" resultMap="WindDoorResultMap"

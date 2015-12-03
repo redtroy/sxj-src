@@ -1,10 +1,10 @@
 package com.sxj.supervisor.service.impl.message;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,6 +76,10 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     @Value("${mobile.pwd}")
     private String pwd;
     
+    @Autowired()
+    @Qualifier("xinxi1Sender")
+    private Sender xinxi1Sender;
+    
     @Override
     @Transactional
     public void addConfig(String memberNo, List<MessageConfigEntity> config)
@@ -106,9 +110,11 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     {
         try
         {
-            for (Iterator<MessageConfigEntity> iterator = config.iterator(); iterator.hasNext();)
+            for (Iterator<MessageConfigEntity> iterator = config
+                    .iterator(); iterator.hasNext();)
             {
-                MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator.next();
+                MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator
+                        .next();
                 dao.updateConfig(messageConfigEntity);
             }
             
@@ -186,17 +192,19 @@ public class MessageConfigServiceImpl implements IMessageConfigService
             {
                 if (config.getIsAccetp())
                 {
-                    ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
-                    Sender sender = manager.getSender(Xinxi1Sender.class.getName());
-                    SendStatus status = sender.send(config.getPhone(), message
-                            + "，请登录私享家绿色门窗平台查看详情！");
+                    ChannelManager manager = ChannelManager
+                            .getInstance("classpath:config/sms.properties");
+                    Sender sender = manager
+                            .getSender(Xinxi1Sender.class.getName());
+                    SendStatus status = sender.send(config.getPhone(),
+                            message + "，请登录私享家绿色门窗平台查看详情！");
                     System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
                             + message + "，请登录私享家绿色门窗平台查看详情！");
                     if (status.getStatus().equals(""))
                     {
                         sender = manager.getSender(C123Sender.class.getName());
-                        status = sender.send(config.getPhone(), message
-                                + "，请登录私享家绿色门窗平台查看详情！");
+                        status = sender.send(config.getPhone(),
+                                message + "，请登录私享家绿色门窗平台查看详情！");
                         System.out.println("C123Sender发送结果:" + status
                                 + "  短线内容:" + message + "，请登录私享家绿色门窗平台查看详情！");
                     }
@@ -251,21 +259,10 @@ public class MessageConfigServiceImpl implements IMessageConfigService
     {
         try
         {
-            QueryCondition<MessageConfigEntity> query = new QueryCondition<>();
-            query.addCondition("messageType", MessageTypeEnum.TENDER.getId());
-            List<MessageConfigEntity> configList = dao.queryConfigList(query);
-            List<String> phones = new ArrayList<String>();
-            if (configList != null && configList.size() > 0)
+            List<String> phones = dao
+                    .queryPhonesByMessageType(MessageTypeEnum.TENDER);
+            if (phones.size() > 0)
             {
-                for (Iterator<MessageConfigEntity> iterator = configList.iterator(); iterator.hasNext();)
-                {
-                    MessageConfigEntity config = iterator.next();
-                    if (config.getIsAccetp())
-                    {
-                        phones.add(config.getPhone());
-                    }
-                    
-                }
                 //                NewSendMessage.getInstance(smsUrl,
                 //                        userName,
                 //                        password,
@@ -284,22 +281,21 @@ public class MessageConfigServiceImpl implements IMessageConfigService
                 //                        csid)
                 //                        .sendMessage(phones.toArray(new String[phones.size()]),
                 //                                message + "，请登录私享家绿色门窗平台查看详情！");
-                ChannelManager manager = ChannelManager.getInstance("classpath:config/sms.properties");
-                Sender sender = manager.getSender(Xinxi1Sender.class.getName());
-                SendStatus status = sender.sendBatch(phones.toArray(new String[phones.size()]),
+                SendStatus status = xinxi1Sender.sendBatch(
+                        phones.toArray(new String[phones.size()]),
                         message + "，请登录私享家绿色门窗平台查看详情！",
                         false);
-                System.out.println("Xinxi1Sender发送结果:" + status + "  短线内容:"
-                        + message + "，请登录私享家绿色门窗平台查看详情！");
-                if (status.getStatus().equals(""))
-                {
-                    sender = manager.getSender(C123Sender.class.getName());
-                    status = sender.sendBatch(phones.toArray(new String[phones.size()]),
-                            message + "，请登录私享家绿色门窗平台查看详情！",
-                            false);
-                    System.out.println("C123Sender发送结果:" + status + "  短线内容:"
-                            + message + "，请登录私享家绿色门窗平台查看详情！");
-                }
+                System.out.println(
+                        "Xinxi1Sender 短线内容:" + message + "，请登录私享家绿色门窗平台查看详情2！");
+                //                if (status.getStatus().equals(""))
+                //                {
+                //                    sender = manager.getSender(C123Sender.class.getName());
+                //                    status = sender.sendBatch(phones.toArray(new String[phones.size()]),
+                //                            message + "，请登录私享家绿色门窗平台查看详情！",
+                //                            false);
+                //                    System.out.println("C123Sender发送结果:" + status + "  短线内容:"
+                //                            + message + "，请登录私享家绿色门窗平台查看详情！");
+                //                }
                 /*NewSendMessage.getInstance(smsUrl,
                         userName,
                         password,

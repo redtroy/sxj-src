@@ -10,6 +10,11 @@ import com.sxj.mybatis.orm.annotations.Table;
 import com.sxj.mybatis.pagination.Pagable;
 import com.sxj.supervisor.dao.gather.WindDoorDao;
 
+/**
+ * 工程信息
+ * @author Administrator
+ *
+ */
 @Entity(mapper = WindDoorDao.class)
 @Table(name = "M_WIND_DOOR")
 public class WindDoorEntity extends Pagable implements Serializable
@@ -97,6 +102,9 @@ public class WindDoorEntity extends Pagable implements Serializable
      */
     @Column(name = "STATE")
     private Integer state;
+    
+    @Column(name = "OID")
+    private String oid;
     
     public Date getNowDate()
     {
@@ -226,6 +234,16 @@ public class WindDoorEntity extends Pagable implements Serializable
     public void setState(Integer state)
     {
         this.state = state;
+    }
+    
+    public String getOid()
+    {
+        return oid;
+    }
+    
+    public void setOid(String oid)
+    {
+        this.oid = oid;
     }
     
 }

@@ -84,7 +84,8 @@ function sub(){
 		messageInfo("必须上传word文档");
 		return;
 	}
-	
+	dialogBox(function(index) {
+		loadingImg();
 	 $.post("${basePath}projectMessage/saveUpload.htm",{qy:qy,bdfl:bdfl,xmmc:xmmc,jzrq:jzrq,filePath:filePath,filePathBack:filePathBack,adjunctPath:adjunctPath},function(data){
 		if (data=='ok'){
 			succInfo(function(){location.href="${basePath}projectMessage/woodList.htm";},'上传成功！');
@@ -92,6 +93,7 @@ function sub(){
 			errorInfo('上传失败！');
 		}
 	}) 
+	}, "是否上传工程信息！");
 }
 </script>
 <!-- InstanceEndEditable -->
@@ -128,8 +130,8 @@ function sub(){
       <input type="hidden" id="filePath" value="" />   
       <input type="hidden" id="filePathBack" value="" />
       <input type="hidden" id="adjunctPath" value="" />      
-      <div id="upload_doc"><ul><li><label>&nbsp;</label><input type="file" id="insertWordHtml" /></li>
-      <li><label>&nbsp;</label><input type="file" id="insertFJ" /></li></ul></div>
+      <div id="upload_doc"><ul><li><input type="file" id="insertWordHtml" /></li>
+      <li><input type="file" id="insertFJ" /></li></ul></div>
       <div class="btnBox" style="clear:both; margin-top:20px;"><a href="javascript:sub();" class="button button-orange button-small">确定</a><a href="javascript:history.go(-1);" class="button button-gray button-small">返回</a> </div></div>
     <!-- InstanceEndEditable --></div>
 </div>

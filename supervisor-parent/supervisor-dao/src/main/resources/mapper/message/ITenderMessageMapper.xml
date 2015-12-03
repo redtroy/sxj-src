@@ -20,7 +20,9 @@
 		<result property="memberNo" column="MEMBER_NO" jdbcType="VARCHAR" />
 		<result property="state" column="STATE" jdbcType="INTEGER" />
 	</resultMap>
-	
+	<select id="countUnreadByMember" resultType="java.lang.Long">
+		select count(ID) from M_TENDER_MESSAGE where MEMBER_NO=#{memberNo} and STATE=0
+	</select>
 	<!-- 高级查询 -->
 	<select id="queryMessageList"
 		resultMap="com.sxj.supervisor.dao.message.ITenderMessageDao.message"

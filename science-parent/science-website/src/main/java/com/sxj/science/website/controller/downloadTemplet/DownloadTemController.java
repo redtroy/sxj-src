@@ -647,7 +647,7 @@ public class DownloadTemController extends BaseController
     {
         try
         {
-            List<ItemModel> list = projectService.queryItems(projectId);
+            List<ItemModel> list = projectService.openQueryItems(projectId);
             ProjectEntity temPro = projectService.getProject(projectId);
             
             Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -765,6 +765,15 @@ public class DownloadTemController extends BaseController
             ItemEntity temItem = projectService.getItemById(id);
             temItem.setIsShow(Integer.parseInt(isShow));
             projectService.updateItem(temItem);
+            ProjectEntity project = projectService.getProject(temItem.getProjectId());
+            if(isShow.equals("0")){
+                project.setBatchCount(project.getBatchCount()-1);
+                projectService.updateProject(project);
+            }
+            else if(isShow.equals("1")){
+                project.setBatchCount(project.getBatchCount()+1);
+                projectService.updateProject(project);
+            }
             resultMap.put("isOK", "true");
         }
         catch (Exception e)

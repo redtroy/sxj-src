@@ -24,5 +24,6 @@
         </dependent-module>
         <property name="context-root" value="science-website"/>
         <property name="java-output-path" value="/science-website/target/classes"/>
+        <property name="component.exclusion.patterns" value="WEB-INF/lib/*.jar"/>
     </wb-module>
 </project-modules>

@@ -31,8 +31,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import third.rewrite.fastdfs.service.IStorageClientService;
-
 import com.sxj.file.common.LocalFileUtil;
 import com.sxj.science.dao.export.IDocDao;
 import com.sxj.science.dao.export.IProjectDao;
@@ -52,6 +50,8 @@ import com.sxj.util.exception.ServiceException;
 import com.sxj.util.exception.SystemException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
+
+import third.rewrite.fastdfs.service.IStorageClientService;
 
 @Service
 @Transactional
@@ -114,7 +114,7 @@ public class ScienceServiceImpl implements IScienceService
     @Override
     public OptimizedModel process(List<ScienceEntity> listValue,
             String projectId, String length, String interval)
-            throws ServiceException
+                    throws ServiceException
     {
         try
         {
@@ -152,6 +152,11 @@ public class ScienceServiceImpl implements IScienceService
             return executeExe(map, projectId, length, interval);
         }
         catch (Exception e)
+        {
+            SxjLogger.error("优化下料数据错误", e, this.getClass());
+            throw new ServiceException("优化下料数据错误", e);
+        }
+        catch (Error e)
         {
             SxjLogger.error("优化下料数据错误", e, this.getClass());
             throw new ServiceException("优化下料数据错误", e);
@@ -241,8 +246,8 @@ public class ScienceServiceImpl implements IScienceService
                     text = text + scienceEntity.getQuantity() + "\r\n";
                     if (StringUtils.isNotEmpty(scienceEntity.getQuantity()))
                     {
-                        quantity = quantity
-                                + Double.parseDouble(scienceEntity.getQuantity());
+                        quantity = quantity + Double
+                                .parseDouble(scienceEntity.getQuantity());
                     }
                     if (list.size() == 16)
                     {
@@ -355,8 +360,8 @@ public class ScienceServiceImpl implements IScienceService
         InputStream is = new FileInputStream(temPath);
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         Transformer transformer = TransformerFactory.createTransformer(is, os);
-        JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig()
-                .getExpressionEvaluator();
+        JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer
+                .getTransformationConfig().getExpressionEvaluator();
         Map<String, Object> functionMap = new HashMap<>();
         functionMap.put("increaser", new Increaser());
         evaluator.getJexlEngine().setFunctions(functionMap);
@@ -367,7 +372,8 @@ public class ScienceServiceImpl implements IScienceService
         boolean useFastFormulaProcessor = true;
         for (Area xlsArea : xlsAreaList)
         {
-            xlsArea.applyAt(new CellRef(xlsArea.getStartCellRef().getCellName()),
+            xlsArea.applyAt(
+                    new CellRef(xlsArea.getStartCellRef().getCellName()),
                     context);
             if (processFormulas)
             {
