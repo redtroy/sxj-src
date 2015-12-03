@@ -99,7 +99,6 @@
 		dialogBox(function(index) {
 			$.post("saveApply.htm", $("#applyForm").serialize(),
 					function(data) {
-						alert(data.isok);
 						if (data.isok == 'ok') {
 							messageInfo("申请成功");
 						} else {
