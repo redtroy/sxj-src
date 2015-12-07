@@ -22,9 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sxj.spring.modules.util.StringUtils;
+import com.sxj.supervisor.dao.gather.WindDoorDao;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.supervisor.service.tasks.grabber.Info;
 import com.sxj.supervisor.service.tasks.grabber.RequestHeader;
+import com.sxj.util.exception.ServiceException;
 
 import third.rewrite.fastdfs.service.IStorageClientService;
 
@@ -60,7 +62,10 @@ public class ProjectGrabber
     @Autowired
     private IStorageClientService storageClientService;
     
-    public void grab(String projectName)
+    @Autowired
+    private WindDoorDao windDoorDao;
+    
+    public List<WindDoorEntity> grab(String projectName) throws ServiceException
     {
         try
         {
@@ -68,15 +73,12 @@ public class ProjectGrabber
             RequestHeader param = touch();
             List<WindDoorEntity> list = new ArrayList<>();
             page(projectName, param, list);
-            logger.debug("");
-            for (WindDoorEntity entity : list)
-                System.out.println(
-                        entity.getXmmc() + "------" + entity.getGifPath()
-                                + "------" + entity.getFilePath());
+            return list;
         }
         catch (IOException e)
         {
             logger.error("---------抓取数据异常---------", e);
+            throw new ServiceException(e);
         }
     }
     
@@ -132,31 +134,45 @@ public class ProjectGrabber
             Elements tds = tr.getElementsByTag("td");
             String bdfl = tds.get(1).text(); // 标段分类
             String xmmc = tds.get(2).text();// 项目名称
+            if (xmmc.indexOf("已作废") > 0)
+                continue;
             String url = tds.get(2).getElementsByTag("a").attr("href");
             String qy = tds.get(3).text();// 区域
             String jzsj = tds.get(4).text();// 截至日期
-            
-            Info info = row(DOMAIN + url);
-            byte[] bytes = info.getContent().getBytes();
-            String filePath = storageClientService.uploadFile(null,
-                    new ByteArrayInputStream(bytes),
-                    bytes.length,
-                    "JPG");
-            WindDoorEntity windDoor = new WindDoorEntity();
-            windDoor.setId(StringUtils.getUUID());
-            windDoor.setBdfl(bdfl);
-            windDoor.setFilePath(filePath);
-            windDoor.setJzrq(jzsj);
-            windDoor.setQy(qy);
-            windDoor.setXmmc(xmmc);
-            windDoor.setState(0);
-            windDoor.setPublishFirm("网站采集");
-            windDoor.setNowDate(new Date());
-            if (StringUtils.isNotEmpty(info.getImage()))
+            try
             {
-                windDoor.setGifPath(info.getImage());
+                Info info = row(DOMAIN + url);
+                byte[] bytes = info.getContent().getBytes();
+                String filePath = storageClientService.uploadFile(null,
+                        new ByteArrayInputStream(bytes),
+                        bytes.length,
+                        "JPG");
+                WindDoorEntity windDoor = new WindDoorEntity();
+                windDoor.setId(StringUtils.getUUID());
+                windDoor.setBdfl(bdfl);
+                windDoor.setFilePath(filePath);
+                windDoor.setJzrq(jzsj);
+                windDoor.setQy(qy);
+                windDoor.setXmmc(xmmc);
+                if (xmmc.indexOf("已作废") > 0)
+                    windDoor.setState(1);
+                else
+                    windDoor.setState(0);
+                ;
+                windDoor.setPublishFirm("网站采集");
+                windDoor.setNowDate(new Date());
+                windDoor.setOid(info.getOid());
+                if (StringUtils.isNotEmpty(info.getImage()))
+                {
+                    windDoor.setGifPath(info.getImage());
+                }
+                list.add(windDoor);
             }
-            list.add(windDoor);
+            catch (Exception ioe)
+            {
+                logger.error("{}抓取异常，继续下一条", url, ioe);
+            }
+            
         }
         return list;
     }
@@ -165,6 +181,11 @@ public class ProjectGrabber
     {
         logger.debug("正在从{}抓取单行数据", url);
         Document doc = (Document) Jsoup.connect(url).timeout(10000).get();
+        String oid = url.split("GongGaoGuid=")[1];
+        WindDoorEntity byOid = windDoorDao.getByOid(oid);
+        if (byOid != null)
+            throw new RuntimeException("工程信息已存在,URL:" + url);
+            
         Element element = doc.getElementById("ZBGGDetail1_tblInfo");
         if (element.getElementById("ZBGGDetail1_trAttach") != null
                 && !"".equals(element.getElementById("ZBGGDetail1_trAttach")))
@@ -176,6 +197,7 @@ public class ProjectGrabber
                 .getElementsByTag("img")
                 .attr("src");
         Info info = new Info();
+        info.setOid(oid);
         if (StringUtils.isNotEmpty(img))
         {
             String gifPath = fetchImage(

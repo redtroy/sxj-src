@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sxj.mybatis.orm.annotations.BatchInsert;
 import com.sxj.mybatis.orm.annotations.Get;
+import com.sxj.mybatis.orm.annotations.Insert;
 import com.sxj.mybatis.orm.annotations.Update;
 import com.sxj.supervisor.entity.gather.WindDoorEntity;
 import com.sxj.util.persistent.QueryCondition;
@@ -16,6 +17,9 @@ public interface WindDoorDao
      */
     @BatchInsert
     public void addWindDoor(List<WindDoorEntity> list);
+    
+    @Insert
+    public void save(WindDoorEntity entity);
     
     /**
      * 最新数据的排序查询
@@ -41,4 +45,8 @@ public interface WindDoorDao
      */
     @Update
     public void updateWind(WindDoorEntity wd);
+    
+    public WindDoorEntity getByOid(String oid);
+    
+    public List<WindDoorEntity> queryUnreadByMember(String memberNo);
 }

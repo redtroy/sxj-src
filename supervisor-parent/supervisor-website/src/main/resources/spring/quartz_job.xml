@@ -10,7 +10,7 @@
 		<property name="triggers">
 			<list>
 				<ref bean="alJobTrigger" />      <!-- 铝采集 -->
-				<ref bean="windDoorJobTrigger" />   <!-- 门窗采集 -->
+			 <!--	<ref bean="windDoorJobTrigger" />   门窗采集 -->
 			</list>
 		</property>
 		<property name="configLocation" value="classpath:spring/quartz.properties"></property>

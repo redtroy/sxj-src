@@ -1,4 +1,4 @@
-package com.sxj.supervisor.grabber;
+package com.sxj.supervisor.sms;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,33 +7,21 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.sxj.supervisor.dao.gather.WindDoorDao;
-import com.sxj.supervisor.service.tasks.impl.ProjectGrabber;
+import com.sxj.supervisor.service.message.IMessageConfigService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:spring/applicationContext_2.xml" })
 @TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = false)
-public class ProjectGrabberTest
+public class MessageConfigServiceTest
 {
     @Autowired
-    private ProjectGrabber grabber;
-    
-    @Autowired
-    private WindDoorDao winDoorDao;
+    private IMessageConfigService messageConfigService;
     
     @Test
-    public void testGrab()
+    public void testSendAllMessage()
     {
-        //        IStorageClientService createMock = EasyMock
-        //                .createMock(IStorageClientService.class);
-        //        grabber.setStorageClientService(createMock);
-        grabber.grab("幕墙");
-    }
-    
-    public void testGetByOid()
-    {
-        winDoorDao.getByOid("");
+        messageConfigService.sendAllMessage("您有一条新的开发商招标信息3");
     }
     
 }

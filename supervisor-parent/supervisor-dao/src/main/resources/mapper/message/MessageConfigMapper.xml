@@ -32,4 +32,8 @@
 	<delete id="delConfig" parameterType="java.lang.String">
 	<![CDATA[delete from M_MESSAGE_CONFIG where MEMBER_NO=#{memberNo}]]>
 	</delete>
+	
+	<select id="queryPhonesByMessageType" resultType="java.lang.String">
+		select PHONE from M_MESSAGE_CONFIG where MESSAGE_TYPE=#{type} and IS_ACCETP=1
+	</select>
 </mapper>

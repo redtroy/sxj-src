@@ -147,6 +147,9 @@ public class ProjectController extends BaseController
             ItemEntity item = projectService.getItemById(itemId);
             item.setIsShow(0);
             projectService.updateItem(item);
+            ProjectEntity project = projectService.getProject(item.getProjectId());
+            project.setBatchCount(project.getBatchCount() - 1);
+            projectService.updateProject(project);
             map.put("isOK", true);
         }
         catch (Exception e)

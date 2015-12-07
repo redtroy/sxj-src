@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +32,23 @@ import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.entity.purchase.PurchaseEntity;
 import com.sxj.supervisor.entity.purchase.ReleaseRecordEntity;
+import com.sxj.supervisor.entity.record.RecordEntity;
+import com.sxj.supervisor.enu.record.ContractTypeEnum;
+import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
+import com.sxj.supervisor.enu.record.RecordFlagEnum;
+import com.sxj.supervisor.enu.record.RecordStateEnum;
+import com.sxj.supervisor.enu.record.RecordTypeEnum;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
+import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.controller.BaseController;
 import com.sxj.util.common.FileUtil;
+import com.sxj.util.common.ISxjHttpClient;
+import com.sxj.util.common.StringUtils;
+import com.sxj.util.exception.WebException;
 import com.sxj.util.logger.SxjLogger;
 
 @Controller
@@ -55,6 +66,12 @@ public class PurchaseController extends BaseController {
 
 	@Autowired
 	private IContractService contractService;
+
+	@Autowired
+	private ISxjHttpClient httpClient;
+
+	@Autowired
+	private IRecordService recordService;
 
 	/**
 	 * 上传文件
@@ -200,18 +217,21 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("getPurchase")
-	public String getPurchase(ModelMap map,ReleaseRecordEntity releaseRecordEntity,HttpSession session) {
+	public String getPurchase(ModelMap map,
+			ReleaseRecordEntity releaseRecordEntity, HttpSession session) {
 		SupervisorPrincipal userBean = (SupervisorPrincipal) session
 				.getAttribute("userinfo");
 		PurchaseEntity purchaseEntity = purchaseService.getPurchase();
 		releaseRecordEntity.setPagable(true);
 		releaseRecordEntity.setShowCount(5);
-		List<ReleaseRecordEntity> rrList = purchaseService.queryReleaseRecords(releaseRecordEntity);
+		List<ReleaseRecordEntity> rrList = purchaseService
+				.queryReleaseRecords(releaseRecordEntity);
 		map.put("purchase", purchaseEntity);
 		map.put("rrList", rrList);
 		map.put("query", releaseRecordEntity);
 		map.put("memberNo", userBean.getMember().getMemberNo());
 		map.put("company", userBean.getMember().getName());
+
 		return "site/purchase/purchase";
 	}
 
@@ -251,10 +271,16 @@ public class PurchaseController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("queryApply")
-	public String queryApply(ModelMap map, ApplyEntity applyEntity) {
+	public String queryApply(ModelMap map, ApplyEntity applyEntity,
+			HttpSession session) {
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		applyEntity.setPagable(true);
+		applyEntity.setMemberNo(userBean.getMember().getMemberNo());
 		List<ApplyEntity> applyList = purchaseService.queryApply(applyEntity);
+		map.put("query", applyEntity);
 		map.put("applyList", applyList);
-		return "site/member/edit-member";
+		return "site/purchase/applyList";
 	}
 
 	/**
@@ -285,5 +311,152 @@ public class PurchaseController extends BaseController {
 			out.close();
 		}
 
+	}
+
+	/**
+	 * 请求汇窗平台
+	 * 
+	 * @param apply
+	 * @param response
+	 * @param request
+	 * @param session
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "saveApply")
+	public @ResponseBody Map<String, String> saveApply(ApplyEntity apply,
+			HttpServletResponse response, HttpServletRequest request,
+			HttpSession session) throws IOException {
+		Map<String, String> map = new HashMap<String, String>();
+		SupervisorPrincipal userBean = (SupervisorPrincipal) session
+				.getAttribute("userinfo");
+		Map<String, String> jsonMap = new HashMap<String, String>();
+		jsonMap.put("memberNo", userBean.getMember().getMemberNo());
+		jsonMap.put("company", userBean.getMember().getName());
+		jsonMap.put("num", apply.getApplyNum().toString());
+		jsonMap.put("price", apply.getPrice());
+		jsonMap.put("applyType", apply.getApplyType().toString());
+		jsonMap.put("recordNumber", apply.getSerialNumber());
+		// String json =JsonMapper.nonEmptyMapper().toJson(jsonMap);
+		// String msg =
+		// httpClient.postJson("http://192.168.1.234/houtai/admin.php/Index/purchase",
+		// json);
+
+		String msg = httpClient
+				.post("http://192.168.1.234/houtai/admin.php/Index/purchase",
+						jsonMap);
+		if (!StringUtils.notEquals(msg, "success")) {
+			map.put("isok", "ok");
+		} else {
+			map.put("isok", msg);
+		}
+
+		try {
+		} catch (Exception e) {
+			SxjLogger.error("保存采购申请单出错 ", e, this.getClass());
+			map.put("isok", "no");
+		}
+		return map;
+	}
+
+	/**
+	 * 添加更新申请单数据
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "updateApply")
+	@ResponseBody
+	public void updateApply(@RequestBody ApplyEntity applyEntity,
+			HttpServletResponse response, HttpServletRequest request)
+			throws IOException {
+		PrintWriter out = response.getWriter();
+		try {
+			purchaseService.updateApply(applyEntity);
+			out.print("1");
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			SxjLogger.error("更新申请单数据出错 ", e, this.getClass());
+			out.print("0");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
+	}
+
+	/**
+	 * 添加备案信息
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 * @throws WebException
+	 */
+	@RequestMapping(value = "addRecord")
+	@ResponseBody
+	public void addRecord(@RequestBody RecordEntity record,
+			HttpServletResponse response, HttpServletRequest request)
+			throws IOException, WebException {
+		PrintWriter out = response.getWriter();
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			MemberEntity memberB = memberService
+					.memberInfo(record.getApplyId());
+			MemberEntity memberA = memberService.memberInfo(record
+					.getMemberIdA());
+			record.setApplyId(memberB.getMemberNo());
+			record.setApplyName(memberB.getName());
+			record.setMemberIdB(memberB.getMemberNo());
+			record.setMemberIdA(memberA.getMemberNo());
+			record.setMemberNameA(memberA.getName());
+			record.setMemberNameB(memberB.getName());
+			record.setState(RecordStateEnum.NOBINDING);
+			record.setType(RecordTypeEnum.CONTRACT);
+			if (record.getRecordType() == 1) {
+				record.setContractType(ContractTypeEnum.GLASS);
+			} else if (record.getRecordType() == 2) {
+				record.setContractType(ContractTypeEnum.EXTRUSIONS);
+			} else {
+				throw new WebException("错误的合同类型");
+			}
+			record.setApplyDate(new Date());
+			record.setDelState(false);
+			record.setFlag(RecordFlagEnum.B);
+			record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
+			recordService.addRecord(record);
+			map.put("state", "1");
+			map.put("recordNo", record.getRecordNo());
+			out.print(JsonMapper.nonEmptyMapper().toJson(map));
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			map.put("state", "0");
+			SxjLogger.error("新增备案出错 ", e, this.getClass());
+			throw new WebException("新增备案错误");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
+	}
+
+	@RequestMapping("/modifyRecord")
+	@ResponseBody
+	public void modifyRecord(@RequestBody RecordEntity record,
+			HttpServletResponse response, HttpServletRequest request)
+			throws WebException {
+		try {
+//			if(){
+//				
+//			}
+		} catch (Exception e) {
+			SxjLogger.error("生成备案错误", e, this.getClass());
+			throw new WebException("生成备案错误");
+		}
 	}
 }

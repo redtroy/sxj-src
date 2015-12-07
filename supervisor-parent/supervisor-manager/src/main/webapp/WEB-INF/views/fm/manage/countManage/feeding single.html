@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
@@ -1137,3 +1138,1144 @@ function changeParam(hh){
 </body>
 <!-- InstanceEnd -->
 </html>
+=======
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/menu-list.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>私享家绿色门窗平台管理系统</title>
+<link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
+<link href="${b.staticPath}style/feeding_single.css" rel="stylesheet" type="text/css" />
+<script src="${b.staticPath}js/jquery.js"></script>
+<script src="${b.staticPath}js/intense.js"></script>
+<script src="${b.staticPath}js/jquery.paginate.js"></script>
+<script src="${b.staticPath}js/datepicker.js"></script>
+<script src="${b.staticPath}js/datepicker.zh-CN.js"></script>
+<link rel="stylesheet" href="${b.staticPath}js/datepicker.css"/>
+<!-- <script src="${b.staticPath}js/jquery.jqprint.js"></script> -->
+<script src="${b.staticPath}js/mtable2.js"></script>
+<style type="text/css">
+.new{background-color:#faeaea;color:#ff0000;position:absolute;z-index:9999999; padding:2px 6px; margin-top:-52px; text-align:center; border:1px solid #ffb4b4;}
+</style>
+<@b.dialogBox/>
+<script>
+jQuery(document).ready(function($) {
+	$('.sltinput').click(function(){
+		$('.maskdivgen').fadeIn(100);
+		$('.dropList').slideDown(200);
+	})
+	$('.modal-header .close').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+	$('.popBtn').click(function(){
+		$('.maskdivgen').fadeOut(100);
+		$('.dropList').slideUp(200);
+	})
+})
+</script>
+
+
+
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<!--坐标固定-->
+<script src="http://static.menchuang.org.cn/supervisor-website/js/jquery.js"></script>
+<script type="text/javascript">  //$(document).ready(function(){   
+$(function(){   //获取要定位元素距离浏览器顶部的距离   
+var navH =130;   //或者$(".nb").offset().top 
+//滚动条事件   
+$(window).scroll(function(){   //获取滚动条的滑动距离   
+var scroH = $(this).scrollTop();   //滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定   
+if(scroH>=navH){  
+$(".nb").css({"position":"fixed","top":0});   
+}else if(scroH<navH){   
+$(".nb").css({"position":"static"});   
+}  
+})   
+})   
+</script>
+<script type="text/javascript">  //$(document).ready(function(){   
+$(function(){   //获取要定位元素距离浏览器顶部的距离   
+var navH =150;   //或者$(".nb").offset().top 
+//滚动条事件   
+$(window).scroll(function(){   //获取滚动条的滑动距离   
+var scroH = $(this).scrollTop();   //滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定   
+if(scroH>=navH){  
+$(".na").css({"position":"fixed","top":24});   
+}else if(scroH<navH){   
+$(".na").css({"position":"static"});   
+}  
+})   
+})   
+</script>
+<!--返回顶部脚本开始-->
+<script>
+ lastScrollY=0;
+function heartBeat(){ 
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+ 
+percent=.1*(diffY-lastScrollY); 
+if(percent>0)percent=Math.ceil(percent); 
+else percent=Math.floor(percent); 
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent; 
+if(diffY == 0){document.getElementById("full").style.display = "none"}
+else{document.getElementById("full").style.display = "block"}
+}
+suspendcode="<div id=\"full\" style='display:none;width:100px; height:60px; position:absolute;right:0; top:500px; margin-left:460px;z-index:100; text-align:center;'><a href='#'><img src='${b.staticPath}images/top.png' border=0 alt='返回顶部'></a></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+<script>
+var paramIndex=1;
+function saveHtml(id){
+	var finish='1';
+	checkInput();
+// 	alert(complete);
+// 	return false;
+	if(complete==false){
+		finish='0';
+	}
+	var htmlDataBackup=$("#divId").html();
+	$("#insertParam").remove();
+	var htmlData=$("#divId").html();
+	
+	var params = {
+			finish:finish,
+			htmlDataBackup:htmlDataBackup,
+			htmlData:htmlData,
+			id:id
+	};
+	$.post("${basePath}openCount/saveHtml.htm",params,function(data){
+			if(data.isOK == 'true'){
+				alert("新增成功")
+//   				window.close();
+				returnList();
+			}else{
+				errorInfo("新增模板错误");
+// 				alert("新增模板错误");
+			}
+	});
+}
+
+function showParamDiv(){
+	if(paramIndex<13){
+		$(".paramDiv"+paramIndex).show();
+		paramIndex++;
+	}else{
+		errorInfo("参数设置已达上限");
+	}
+}
+
+function returnList(){
+	window.location.href = "${basePath}openCount/query.htm";
+}
+
+function changeParam(hh){
+	var value=$(hh).val();
+	$(hh).attr("value",value);
+}
+</script>
+<!--返回顶部脚本结束-->
+<!--坐标固定-->
+</head>
+<body class="return">
+<@b.header />
+<div id="main" class="fence-wide">
+<!-- InstanceBeginEditable name="local" -->
+<@b.menuPath/>
+<!-- InstanceEndEditable -->
+<div id="mainBg" class="ly-clearFix yard-1200">
+    <@b.leftMenu />
+
+	
+	<div id="rightBar">
+	<!-- InstanceBeginEditable name="rightBar" -->
+	<!--生出新下料表开始-->
+		<div class="new-box" >
+		<div id="divId">
+		<#if windowType.htmlDataBackup!="">
+              ${windowType.htmlDataBackup}
+        <#else>
+		<form id="doc_form_${windowType.id}" action="javascript:void(0);" method="post">
+		<input type="hidden" name="windowId" value="${windowType.id}"/>
+		<input type="hidden" name="id" value=""/>
+		<input type="hidden" name="projectId" value=""/>
+		<input type="hidden" name="itemId" value=""/>
+		<input type="hidden" name="memberNo" value=""/>
+		<input type="hidden" name="htmlData" value=""/>
+		<table style="border:1px solid #cdcdcd;width:931px" coordinate="0,-1" cellpadding="0" cellspacing="0" class="tabList" id="tableId_${windowType.id}">
+			<tbody><tr>
+			    <th class="bgcolor-top" colspan="2">序列号</th>
+			    <th width="8%" scope="col"><input type="text" class="input input-w50h25 nontrace" id="location" value="" name="input"></th>
+			    <th width="12%" class="bgcolor-top" scope="col">函数</th>
+			    <th scope="col" colspan="9"><input type="text" class="input input-w660h25 nontrace" id="fvalue" value="" name="input"></th>
+			    </tr>
+			  <tr>
+			    <th width="1%">&nbsp;</th>
+			    <th width="5%" scope="col">A</th>
+			    <th width="8%" scope="col">B</th>
+			    <th width="12%" scope="col">C</th>
+			    <th width="8%" scope="col">D</th>
+			    <th width="8%" scope="col">E</th>
+			    <th width="8%" scope="col">F</th>
+			    <th width="5%" scope="col">G</th>
+			    <th width="8%" scope="col">H</th>
+			    <th width="12%" scope="col">I</th>
+			    <th width="8%" scope="col">J</th>
+			    <th width="8%" scope="col">K</th>
+			    <th width="9%" scope="col">L</th>
+			  </tr>
+			  <tr>
+			    <th width="1%" scope="row">1</th>
+			    <td colspan="3" class="bgcolor border-left">门窗立面</td>
+			    <td class="bgcolor" colspan="3">门窗系列</td>
+			    <td class="bgcolor" colspan="2">门窗代号</td>
+			    <td class="bgcolor">数量</td>
+			    <td class="bgcolor">颜色</td>
+			    <td colspan="2" class="bgcolor">外形尺寸</td>
+			  </tr>
+			  <tr style="border-bottom:1px solid #e0e0e0">
+			    <th scope="row">2</th>
+			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="" name="windowFaca"/></td>
+			    <td colspan="3"><input type="text" class="input input-w130h25 checkStr" value="${windowType.series}" name="series"/></td>
+			    <td colspan="2"><input type="text" class="input input-w100h25 checkStr" value="${windowType.winId}" name="windowCode"/></td>
+			    <td><input type="text" class="input input-w100h25 checkNan" value="" name="quantity"/></td>
+			    <td><input type="text" class="input input-w50h25 checkStr" value="" name="color"/></td>
+			    <td colspan="2"><input type="text" class="input input-w150h25" value="见图" name="input"/></td>
+			    </tr>
+			  <tr>
+			    <th scope="row">3</th>
+			    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w100h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td rowspan="13" colspan="6">
+					<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:1px solid #e0e0e0" coordinate="6,3">
+					  <tbody><tr>
+						<th class="noborder-top" scope="col" colspan="12">玻璃尺寸表</th>
+					  </tr>
+					  <tr class="header">
+						<td width="10%" class="bgcolor" >序号</td>
+						<td width="16%" class="bgcolor" check="checkNan">玻璃宽</td>
+						<td width="24%" class="bgcolor" check="checkNan">玻璃高</td>
+						<td width="16%" class="bgcolor" check="checkNan">数量</td>
+						<td width="34%" class="bgcolor" check="checkStr">玻璃种类</td>
+					  </tr>
+					  <tr>
+						<td>1</td>
+						<td><input name="glassList[0].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[0].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[0].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[0].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>2</td>
+						<td><input name="glassList[1].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[1].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[1].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[1].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>3</td>
+						<td><input name="glassList[2].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[2].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[2].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[2].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>4</td>
+						<td><input name="glassList[3].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[3].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[3].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[3].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>5</td>
+						<td><input name="glassList[4].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[4].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[4].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[4].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>6</td>
+						<td><input name="glassList[5].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[5].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[5].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[5].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>  
+					  <tr>
+						<td>7</td>
+						<td><input name="glassList[6].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[6].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[6].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[6].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>8</td>
+						<td><input name="glassList[7].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[7].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[7].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[7].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>9</td>
+						<td><input name="glassList[8].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[8].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[8].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[8].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					  <tr>
+						<td>10</td>
+						<td><input name="glassList[9].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[9].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[9].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[9].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>  
+					  <tr>
+						<td>11</td>
+						<td><input name="glassList[10].width" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[10].height" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="glassList[10].quantity" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="glassList[10].type" type="text" value="" title="" class="input input-w150h25"/></td>
+					  </tr>
+					</tbody></table>
+			    </td>
+			    </tr>
+			  <tr>
+				<th scope="row">4</th>
+				<td colspan="4" rowspan="13"><div style="width:300px;height:320px; background-color:#CCC;z-index:8;"><img src="${b.imagePath}${windowType.imageSrc}" width="300" height="320" /></div></td>
+				<td colspan="2" ><button id="insertParam" name="button" type="button" value="增加参数" class="btn btn-blue" onclick="showParamDiv()"><span>增加参数+</span></button></td>
+			</tr>
+			<tr>
+				<th scope="row">5</th>
+				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text" value="h1:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv1"><input name="input" type="text"  class="input input-w49h25 left param" id="h1"   /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">6</th>
+				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input5" type="text" value="h2:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv2"><input name="input6" type="text"  class="input input-w49h25 left param" id="h2"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">7</th>
+				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input9" type="text" value="h3:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv3"><input name="input11" type="text"  class="input input-w49h25 left param" id="h3"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">8</th>
+				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input10" type="text" value="h4:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv4"><input name="input12" type="text"  class="input input-w49h25 left param" id="h4"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">9</th>
+				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input21" type="text" value="h5:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv5"><input name="input13" type="text"  class="input input-w49h25 left param" id="h5"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">10</th>
+				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input22" type="text" value="h6:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv6"><input name="input14" type="text"  class="input input-w49h25 left param" id="h6"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">11</th>
+				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input23" type="text" value="h7:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv7"><input name="input15" type="text"  class="input input-w49h25 left param" id="h7"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">12</th>
+				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input24" type="text" value="h8:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv8"><input name="input16" type="text" value="" class="input input-w49h25 left param" id="h8"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">13</th>
+				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input25" type="text" value="h9:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv9"><input name="input17" type="text"  class="input input-w49h25 left param" id="h9"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">14</th>
+				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input26" type="text" value="h10:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv10"><input name="input18" type="text"  class="input input-w49h25 left param" id="h10"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">15</th>
+				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input27" type="text" value="h11:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv11"><input name="input19" type="text"  class="input input-w49h25 left param" id="h11"  /></div></td>
+			</tr>
+			<tr>
+				<th scope="row">16</th>
+				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input28" type="text" value="h12:" class="input input-w35h25 center nontrace"/></div></td>
+				<td><div style="display: none; width: 60px" class="paramDiv12"><input name="input20" type="text"  class="input input-w49h25 left param" id="h12"  /></div></td>
+			    <td rowspan="8" colspan="6">
+					<table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-left:1px solid #e0e0e0" coordinate="6,16">
+					  <tbody><tr>
+						<th class="noborder-top" scope="col" colspan="12">半成品规格</th>
+					  </tr>
+					  <tr class="header">
+					<td width="10%" class="bgcolor">序号</td>
+					<td width="16%" class="bgcolor"  check="checkStr">名称</td>
+					<td width="24%" class="bgcolor"  check="checkNan">宽度</td>
+					<td width="10.6%" class="bgcolor"  check="checkNan">高度</td>
+					<td width="19.6%" class="bgcolor"  check="checkNan">数量</td>
+					<td width="19.6%" class="bgcolor" >备注</td>
+		  			</tr>
+			  			<tr>
+						<td>1</td>
+						<td><input type="text"  name="productList[0].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[0].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[0].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[0].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[0].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
+					 <tr>
+						<td>2</td>
+						<td><input type="text"  name="productList[1.name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[1].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[1].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[1].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[1].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
+					  <tr>
+						<td>3</td>
+						<td><input type="text"  name="productList[2].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[2].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[2].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[2].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[2].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
+					 <tr>
+						<td>4</td>
+						<td><input type="text"  name="productList[3].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[3].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[3].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[3].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[3].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
+					  <tr>
+						<td>5</td>
+						<td><input name="productList[4].name" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="productList[4].width" type="text" value="" class="input input-w100h25"/></td>
+						<td><input name="productList[4].height" type="text" value="" class="input input-w50h25"/></td>
+						<td><input name="productList[4].quantity" type="text" value="" title="" class="input input-w50h25"/></td>
+						<td><input name="productList[4].remark"  type="text" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
+					  <tr>
+						<td>6</td>
+						<td><input type="text"  name="productList[5].name" class="input input-w50h25"   value="" /></td>
+						<td><input type="text"  name="productList[5].width"  class="input input-w100h25" value="" name="input"/></td>
+						<td><input type="text"  name="productList[5].height"  class="input input-w35h25" value="" name="input12"/></td>
+						<td><input type="text"  name="productList[5].quantity" class="input input-w50h25" value="" name="input49"/></td>
+						<td><input type="text"  name="productList[5].remark" class="input input-w50h25" value="" name="input55"/></td>
+					  </tr>
+					  <tr>
+					</tr></tbody></table>
+			    </td>
+			    </tr>
+			  <tr>
+			    <th scope="row">17</th>
+			    <td><input type="text" class="input input-w35h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w100h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25" value="" name="input"></td>
+			  </tr>
+			  <tr>
+			    <th scope="row">18</th>
+			    <td style="text-align:left; padding-left:8px" colspan="6">技术说明：</td>
+			    </tr>
+			  <tr>
+			    <th scope="row">19</th>
+			    <td style="text-align:left; padding-left:8px" colspan="6"><label style="display:inline">1、</label><input type="text" class="input input-w400h25" value="" name="input"></td>
+			    </tr>
+			  <tr>
+			    <th scope="row">20</th>
+			    <td style="text-align:left; padding-left:8px" colspan="6"><label style="display:inline">2、<input type="text" class="input input-w400h25" value="" name="input"></label></td>
+			    </tr>
+			  <tr>
+			    <th scope="row">21</th>
+			    <td style="text-align:left; padding-left:8px" colspan="6"><label style="display:inline">3、<input type="text" class="input input-w400h25" value="" name="input"></label></td>
+			    </tr>
+			  <tr>
+			    <th scope="row">22</th>
+			    <td colspan="2">洞口尺寸:</td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    <td>*</td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    </tr>
+			  <tr>
+			    <th scope="row">23</th>
+			    <td colspan="2">制作尺寸:</td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    <td>*</td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    <td><input type="text" class="input input-w50h25 checkNan" value="" name="input"></td>
+			    </tr>
+			  <tr>
+			    <th scope="row">24</th>
+			    <td style="padding:0px" rowspan="15" colspan="12">
+			<!--配件表开始-->		
+					<table width="100%" cellspacing="0" cellpadding="0" border="0" coordinate="0,24">
+					  <tbody><tr>
+						<th class="noborder-right" scope="col" colspan="12">配件表</th>
+					  </tr>
+					  <tr class="header" split="5">
+						<td width="5%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">配件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkStr">单位</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
+						<td width="8.2%" class="bgcolor" >技术要求</td>
+						<td width="5.4%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">配件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkStr">单位</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
+						<td width="9%" class="bgcolor" >技术要求</td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[0].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[0].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[0].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[0].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[0].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[0].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[1].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[1].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[1].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[1].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[1].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[1].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[2].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[2].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[2].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[2].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[2].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[2].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[3].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[3].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[3].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[3].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[3].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[3].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[4].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[4].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[4].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[4].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[4].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[4].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[5].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[5].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[5].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[5].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[5].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[5].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[6].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[6].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[6].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[6].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[6].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[6].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[7].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[7].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[7].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[7].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[7].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[7].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[8].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[8].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[8].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[8].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[8].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[8].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[9].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[9].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[9].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[9].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[9].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[9].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[10].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[10].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[10].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[10].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[10].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[10].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[11].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[11].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[11].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[11].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[11].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[11].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[12].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[12].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[12].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[12].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[12].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[12].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[13].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[13].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[13].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[13].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[13].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[13].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[14].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[14].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[14].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[14].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[14].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[14].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[15].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[15].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[15].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[15].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[15].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[15].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[16].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[16].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[16].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[16].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[16].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[16].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[17].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[17].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[17].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[17].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[17].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[17].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[18].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[18].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[18].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[18].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[18].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[18].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[19].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[19].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[19].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[19].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[19].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[19].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[20].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[20].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[20].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[20].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[20].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[20].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[21].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[21].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[21].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[21].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[21].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[21].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[22].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[22].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[22].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[22].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[22].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[22].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[23].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[23].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[23].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[23].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[23].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[23].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="partsList[24].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[24].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[24].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[24].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[24].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[24].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[25].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="partsList[25].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[25].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="partsList[25].unit" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[25].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="partsList[25].techonlogy" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					</tbody></table>
+			<!--配件表结束-->
+			    </td>
+			    </tr>
+			  <tr>
+			    <th scope="row">25</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">26</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">27</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">28</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">29</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">30</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">31</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">32</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">33</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">34</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">35</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">36</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">37</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">38</th>
+			  </tr>
+			  <tr>
+			    <th scope="row">39</th>
+			    <td style="padding:0px" rowspan="20" colspan="12">
+			<!--下料尺寸表开始-->		
+					<table width="100%" cellspacing="0" cellpadding="0" border="0" coordinate="0,39">
+					  <tbody><tr>
+						<th class="noborder-top" scope="col" colspan="12">下料尺寸表</th>
+					  </tr>
+					  <tr class="header" split="5" >
+						<td width="5%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">构件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkNan">长度</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
+						<td width="8.2%" class="bgcolor">备注</td>
+						<td width="5.4%" class="bgcolor" check="checkStr">用途</td>
+						<td width="8%" class="bgcolor" check="checkStr">构件名称</td>
+						<td width="12%" class="bgcolor" check="checkStr">规格代号</td>
+						<td width="8%" class="bgcolor" check="checkNan">长度</td>
+						<td width="8%" class="bgcolor" check="checkNan">数量</td>
+						<td width="9%" class="bgcolor">备注</td>
+					  </tr>
+					   <tr>
+						 <td><input name="scienceList[0].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[0].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[0].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[0].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[0].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[0].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[1].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[1].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[1].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[1].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[1].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[1].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[2].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[2].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[2].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[2].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[2].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[2].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[3].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[3].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[3].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[3].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[3].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[3].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[4].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[4].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[4].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[4].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[4].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[4].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[5].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[5].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[5].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[5].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[5].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[5].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[6].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[6].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[6].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[6].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[6].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[6].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[7].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[7].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[7].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[7].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[7].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[7].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[8].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[8].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[8].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[8].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[8].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[8].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[9].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[9].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[9].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[9].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[9].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[9].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[10].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[10].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[10].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[10].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[10].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[10].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[11].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[11].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[11].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[11].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[11].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[11].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[12].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[12].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[12].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[12].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[12].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[12].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[13].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[13].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[13].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[13].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[13].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[13].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[14].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[14].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[14].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[14].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[14].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[14].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[15].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[15].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[15].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[15].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[15].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[15].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[16].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[16].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[16].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[16].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[16].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[16].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[17].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[17].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[17].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[17].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[17].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[17].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[18].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[18].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[18].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[18].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[18].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[18].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[19].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[19].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[19].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[19].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[19].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[19].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[20].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[20].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[20].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[20].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[20].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[20].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[21].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[21].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[21].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[21].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[21].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[21].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[22].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[22].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[22].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[22].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[22].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[22].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[23].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[23].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[23].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[23].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[23].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[23].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[24].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[24].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[24].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[24].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[24].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[24].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[25].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[25].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[25].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[25].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[25].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[25].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[26].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[26].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[26].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[26].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[26].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[26].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[27].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[27].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[27].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[27].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[27].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[27].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[28].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[28].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[28].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[28].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[28].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[28].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[29].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[29].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[29].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[29].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[29].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[29].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[30].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[30].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[30].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[30].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[30].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[30].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[31].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[31].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[31].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[31].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[31].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[31].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[32].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[32].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[32].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[32].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[32].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[32].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[33].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[33].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[33].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[33].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[33].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[33].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					  <tr>
+						 <td><input name="scienceList[34].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[34].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[34].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[34].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[34].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[34].remark" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[35].used" type="text" value="" class="input input-w35h25"/></td>
+						 <td><input name="scienceList[35].name" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[35].type" type="text" value="" class="input input-w100h25"/></td>
+						 <td><input name="scienceList[35].length" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[35].quantity" type="text" value="" class="input input-w50h25"/></td>
+						 <td><input name="scienceList[35].remark" type="text" value="" class="input input-w50h25"/></td>
+					  </tr>
+					</tbody></table>
+			<!--下料尺寸表结束-->
+			    </td>
+			  </tr>
+			  <tr>
+			    <th scope="row">40</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">41</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">42</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">43</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">44</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">45</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">46</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">47</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">48</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">49</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">50</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">51</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">52</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">53</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">54</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">55</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">56</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">57</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">58</th>
+			    </tr>
+			  <tr>
+			    <th scope="row">59</th>
+			    <td rowspan="3" colspan="12">
+					<table width="100%" cellspacing="0" cellpadding="0" border="0">
+					  <tbody><tr>
+						<td width="12.4%" class="noborder-top bgcolor" colspan="2">工程名称：</td>
+						<td width="26.4%" class="noborder-top" colspan="3"><input type="text"  class="input input-w235h25 nontrace last_project_name"  name="projectName"/></td>
+						<td width="7.9%" class="noborder-top bgcolor">日期：</td>
+						<td width="12.7%" class="noborder-top" colspan="2"><input type="text" value="${.now?date}" class="input input-w100h25 nontrace checkStr"  name="input" datepicker/></td>
+						<td width="11.5%" class="noborder-top bgcolor">设计：</td>
+						<td width="15.1%" class="noborder-top" colspan="2"><input type="text" class="input input-w130h25 nontrace"  name="input"/></td>
+						<td width="8.5%" class="noborder-top">&nbsp;</td>
+					  </tr>
+					  <tr>
+						<td rowspan="2" colspan="5"><input type="text" class="com-name input input-w340h25" value="江苏私享家科技有限公司" name="input"/></td>
+						<td class="bgcolor">图号：</td>
+						<td colspan="2"><input type="text" class="input input-w100h25 nontrace"  name="input"/></td>
+						<td class="bgcolor">审核：</td>
+						<td colspan="2"><input type="text" class="input input-w130h25 nontrace"  name="input"/></td>
+						<td>&nbsp;</td>
+					  </tr>
+					  <tr>
+						<td class="bgcolor">批次：</td>
+						<td colspan="2"><input type="text" class="input input-w100h25 nontrace last_item_name"  name="input"/></td>
+						<td class="bgcolor">批准：</td>
+						<td colspan="2"><input type="text" class="input input-w130h25 nontrace"  name="input"/></td>
+						<td>&nbsp;</td>    
+					  </tr>
+					</tbody></table>
+			      </td>
+			  </tr>
+			  <tr>
+			    <th scope="row">60</th>
+			  </tr>
+			  <tr>
+			    <th scope="row">61</th>
+			  </tr>
+			</tbody>
+		</table>
+		<div id="button_div_${windowType.id}" style="width:440px;margin:auto;height:80px;display: none;">
+			<ul>
+			<li><p id="button_doc_${windowType.id}" onclick="addDoc('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>保存</span></p></li>
+			<li><p onclick="resetTable('${windowType.id}',this);" class=" btn btn-green" data-dismiss="modal"><span>一键还原</span></p></li>
+			<li><p onclick="copyTable('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>复制</span></p></li>
+			<li><p onclick="removeTable('${windowType.id}',this);" class=" btn btn-red" data-dismiss="modal"><span>删除</span></p></li>
+			<li><p onclick="printTable('${windowType.id}',this);" class=" btn btn-blue" data-dismiss="modal"><span>打印</span></p></li>
+			</ul>
+		</div>
+		</form>
+		  </#if>
+		  </div>
+		<!--生出新下料表结束-->
+		<div style="width:140px;margin:auto;height:30px">
+			<ul>
+			<li style="float:left"><button name="button" type="button" value="保存" class="button button-orange ly-center" onclick="saveHtml('${windowType.id}')">保存</button></li>
+			<li style="float:right"><button name="button" type="button" value="取消" class="button button-green ly-center"  onclick="returnList()">取消</button></li>
+			</ul>
+		</div>
+	  </div>
+	<!-- InstanceEndEditable -->
+	</div>
+
+
+</div>
+
+
+<@b.footer />
+</body>
+<!-- InstanceEnd -->
+</html>
+>>>>>>> branch 'master' of scm@192.168.1.216:/home/scm/repositories/sxj-src.git

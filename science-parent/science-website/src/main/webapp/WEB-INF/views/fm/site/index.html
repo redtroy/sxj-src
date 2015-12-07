@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>私享家门窗算料优化系统(测试版本)</title>
 <link href="${b.staticPath}style/style.css" rel="stylesheet" type="text/css" />
 <script src="${b.staticPath}js/jquery.js" type="text/javascript"></script>
 <script src="${b.staticPath}js/jquery.uploadify.js"></script>
@@ -24,6 +24,7 @@ var pageIndex;
 var projectId;
 $(document).ready(function()
         {
+	var loadInfoIndex;
             $("#uploadify").uploadify({
             	swf : '${basePath}upload/uploadify.swf',
     			uploader : "${basePath}optim/uploadOptim.htm",
@@ -36,26 +37,33 @@ $(document).ready(function()
     			width : 120,
     			buttonText : '上传原始数据文件',
     			onUploadStart : function(file) {
+    				loadInfoIndex=loadingImg();
     				$('#uploadify').uploadify("settings","formData", { 'projectId': projectId });
+    				$('#' + file.id).remove();
+    			},
+    			onQueueComplete:function(queueData){
+    				layer.close(loadInfoIndex);
+    				alert("成功上传"+queueData.uploadsSuccessful+"个文件");
     			},
     			onUploadSuccess : function(file, data, response) {
-    				alert("上传成功");
-    				var num = 1;
-    				var dataObj = eval("(" + data + ")");//转换为json对象 
-    				var hideVal = $hidden.val();
-    				if (hideVal == '') {
-    					hideVal = dataObj.fileIds;
-    				} else {
-    					var arrays = hideVal.split(",");
-    					for (var i = 0; i < arrays.length; i++) {
-    						if (arrays[i]) {
-    							num += 1;
-    						}
-    					}
-    					hideVal += "," + dataObj.fileIds;
-    				}
-    				$hidden.val(hideVal);
-    				refreshElastislide($container, $carousel, dataObj);
+    				$('#' + file.id).find('.data').html('上传完毕');
+    				//$('#' + file.id).remove();
+//     				var num = 1;
+//     				var dataObj = eval("(" + data + ")");//转换为json对象 
+//     				var hideVal = $hidden.val();
+//     				if (hideVal == '') {
+//     					hideVal = dataObj.fileIds;
+//     				} else {
+//     					var arrays = hideVal.split(",");
+//     					for (var i = 0; i < arrays.length; i++) {
+//     						if (arrays[i]) {
+//     							num += 1;
+//     						}
+//     					}
+//     					hideVal += "," + dataObj.fileIds;
+//     				}
+//     				$hidden.val(hideVal);
+//     				refreshElastislide($container, $carousel, dataObj);
     			}
             });
         });
@@ -549,26 +557,6 @@ function downloadReport(){
 	        </ul>
 	    </div>
 	</div>
-<!--     <div class="modal in uploadxls" id="uploadxls" aria-hidden="false"  style="display: none;">  -->
-<!--     <a class="close" data-dismiss="modal" onclick="closeDiv();">×</a> -->
-<!--         <h1>上传下料单文件</h1> -->
-<!--         <div class="upload"> -->
-<!-- 		<ul> -->
-<!-- 		<li><button class=" button button-orange">下载下料单模板</button></li> -->
-<!-- 		<li> -->
-<!-- 		 <input type="file" name="uploadify" id="uploadify" /> -->
-<!-- <!-- 		<button class=" button button-orange" id="uploadify">上传下料单文件</button> --> -->
-<!-- 		</li> -->
-<!-- 		</ul> -->
-<!-- 		</div><p>温馨提示：目前仅支持依照本站模板格式填写的Excel下料单文件,若无模板，请先下载模板</p> -->
-<!-- 		<div class="choose"> -->
-<!-- 		<ul> -->
-<!-- 		<li><button class=" button button-orange" data-dismiss="modal" onclick="query();">确定</button></li> -->
-<!-- 		<li><button class=" button button-green" data-dismiss="modal" onclick="closeDiv();">取消</button></li> -->
-<!-- 		</ul> -->
-<!-- 		</div> -->
-<!--     </div> -->
-<!-- 上传原始数据文件 -->
 <div class="modal in uploadsourcexls" id="uploadsourcexls" aria-hidden="false" style="display: none;">
     <a class="close" data-dismiss="modal"  onclick="closeDiv();">×</a>
     <h1>
@@ -584,8 +572,8 @@ function downloadReport(){
         温馨提示：目前仅支持依照本站模板格式填写的Excel原始数据文件,若无模板，请先下载模板</p>
     <div class="choose choose_one">
         <ul>
-       		<li><button class="button button-green" data-dismiss="modal" onclick="query();">确定</button></li>
-            <li><button class="button button-green" data-dismiss="modal" onclick="closeDiv();">关闭</button></li>
+       		<li><button class="button button-green" data-dismiss="modal" onclick="query();">关闭</button></li>
+<!--             <li><button class="button button-green" data-dismiss="modal" onclick="closeDiv();">关闭</button></li> -->
         </ul>
     </div>
 </div>
@@ -615,6 +603,29 @@ function downloadReport(){
  </div>     
 <div id="opreport" class="modal in opreport" style="display: none;">
 </div>
+<!--进入页面的免责声明开始-->
+<div id="modal">
+	<div class="disclaimer-box"></div>
+	<div class="modal in disclaimer" id="disclaimer">
+		<a class="close" onclick="removeElement()">×</a>
+		<h1>免责声明</h1>
+		<div class="content" style="display:block">
+			<p><span>本系统</span>  经过多次详细的测试，但不能保证本系统使用及结果完全没有错误。使用本系统风险由用户自行承担，用户必须对一应数据及结果进行仔细核对方可实际使用，本公司对系统的一应数据与结果不负任何责任！</p>
+		</div>
+		<div class="choose choose_m">
+			<button class=" button button-orange" onclick="removeElement()">我知道了</button>	
+		</div>
+	</div>
+	<script type="text/javascript" language="javascript">
+		function display() {
+			document.getElementById("modal").style.display = "block";
+		}
+		function removeElement() {
+			document.getElementById("modal").style.display = "none";
+		}
+	</script>
+</div>
+<!--进入页面的免责声明结束-->
 
 <div class="modal in prereport" id="prereport" > <a class="close" data-dismiss="modal" href="javascript:hidePrereport()">×</a>
         <h1>查看统计报表</h1>

@@ -60,4 +60,6 @@ public interface IPurchaseService {
 	 */
 	public List<ReleaseRecordEntity> queryReleaseRecords(
 			ReleaseRecordEntity releaseRecordEntity);
+
+	void updateApply(ApplyEntity apply);
 }

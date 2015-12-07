@@ -211,6 +211,7 @@ public class ProjectServiceImpl implements IProjectService
                     QueryCondition<DocEntity> queryItem = new QueryCondition<>();
                     queryItem.addCondition("itemId", item.getId());
                     queryItem.addGroup("SERIES");
+                    queryItem.addCondition("isShow", 1);
                     List<DocEntity> docList = docDao.query(queryItem);
                     if (docList.size() > 0)
                     {

@@ -34,6 +34,7 @@ public class DownloadTemServiceImpl implements IDownloadTemService
             }
             QueryCondition<WindowTypeEntity> condition = new QueryCondition<WindowTypeEntity>();
             condition.addCondition("area", query.getArea());// 地区
+            condition.addCondition("finish", query.getFinish());// 公司名称或系列
             condition.addCondition("companyName", query.getCompanyName());// 公司名称
             condition.addCondition("type", query.getType());// 类型
             condition.addCondition("series", query.getSeries());// 系列
@@ -165,8 +166,10 @@ public class DownloadTemServiceImpl implements IDownloadTemService
     @Override
     public List<WindowTypeEntity> autoWindowType(WindowTypeEntity query)
     {
-        try {
-            if (query == null) {
+        try
+        {
+            if (query == null)
+            {
                 return null;
             }
             QueryCondition<WindowTypeEntity> condition = new QueryCondition<WindowTypeEntity>();
@@ -179,17 +182,19 @@ public class DownloadTemServiceImpl implements IDownloadTemService
             List<WindowTypeEntity> list = windowTypeDao.autoWindowType(condition);
             query.setPage(condition);
             return list;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new ServiceException("查询备案信息错误", e);
         }
     }
-
+    
     @Override
     public WindowTypeEntity getWindowTypeById(String id)
     {
         return windowTypeDao.getWindowType(id);
     }
-
+    
     @Override
     public void updateWindowType(WindowTypeEntity windowType)
     {
