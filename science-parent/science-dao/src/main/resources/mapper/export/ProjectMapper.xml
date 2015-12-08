@@ -30,6 +30,9 @@
 		<if test="condition.memberName != null and condition.memberName != ''">
 			<![CDATA[ AND p.MEMBER_NAME LIKE CONCAT('%',#{condition.memberName},'%')]]>
 		</if>
+		<if test="condition.memberNo!= null and condition.memberNo != ''">
+			<![CDATA[ AND p.MEMBER_NO =#{condition.memberNo}]]>
+		</if>
 		<if test="condition.zhaoBiaoNo != null and condition.zhaoBiaoNo != ''">
 			<![CDATA[ AND p.ZHAOBIAO_NO LIKE CONCAT('%',#{condition.zhaoBiaoNo},'%')]]>
 		</if>
@@ -47,6 +50,9 @@
 		<![CDATA[SELECT SUM(tmp.BATCH_COUNT) from (SELECT DISTINCT p.* from S_PROJECT p INNER join S_ITEM i on p.ID=i.PROJECT_ID WHERE 1 = 1]]>
 		<if test="condition.name != null and condition.name != ''">
 		<![CDATA[ AND (p.NAME LIKE CONCAT(#{condition.name},'%') OR i.NAME LIKE CONCAT(#{condition.name},'%'))]]>
+		</if>
+		<if test="condition.memberNo != null and condition.memberNo != ''">
+		<![CDATA[ AND (p.MEMBER_NO=#{condition.memberNo}]]>
 		</if>
 		<![CDATA[ ) as tmp ]]>
 	</select>

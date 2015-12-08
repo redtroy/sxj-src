@@ -40,6 +40,8 @@ public class BasicController extends BaseController
     @RequestMapping("index")
     public String ToIndex(ProjectQuery query, HttpSession session, ModelMap map)
     {
+        session.setAttribute("memberNo", query.getMemberNo());
+        session.setAttribute("memberName", query.getMemberName());
         query.setPagable(true);
         query.setShowCount(20);
         query.setIsShow(1);
@@ -75,8 +77,6 @@ public class BasicController extends BaseController
         {
             count = 0;
         }
-        session.setAttribute("memberNo", query.getMemberNo());
-        session.setAttribute("memberName", query.getMemberName());
         map.put("projectList", list);
         map.put("query", query);
         map.put("maxCount", count);

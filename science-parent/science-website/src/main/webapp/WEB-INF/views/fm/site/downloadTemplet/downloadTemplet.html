@@ -136,6 +136,7 @@ function comfir(){
  			$('#doc_form_'+idArr).attr("index",index);
  			$("#table_div").find("#button_div_"+idArr).find("ul").attr("index",index);
  			$('#doc_form_'+idArr).attr("id","doc_form_"+idArr+"_"+index);
+ 			$('#tableId_'+idArr).attr("id","tableId_"+idArr+"_"+index);
  			$("#table_div").find("#button_div_"+idArr).attr("id","button_div_"+idArr+"_"+index);
  			$("#table_div").find("#button_doc_"+idArr).attr("id","button_doc_"+idArr+"_"+index);
  			$("#index_hidden").val(index+1);
@@ -224,7 +225,7 @@ function closetemp(){
             
         </ul>
 	</div>
-<div id="down_type" style="width:790px;clear:both">
+<div id="down_type">
     	<ul style="min-height:400px">
         	<!-- <li><div class="mask" style="display:none"><img src="${b.staticPath}images/Check.png" width="67" height="57" alt=""/></div><div class="img"><img src="${b.staticPath}images/type1.gif" alt=""></div></li> -->
             <#list list as model>

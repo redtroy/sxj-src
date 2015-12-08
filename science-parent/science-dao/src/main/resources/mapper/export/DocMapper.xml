@@ -29,7 +29,7 @@
 		<![CDATA[(SELECT COUNT(*) FROM S_GLASS g WHERE g.DOC_ID = d.ID AND g.HEIGHT <> '' AND g.QUANTITY <> '' AND g.WIDTH <> '' AND g.TYPE <> '') AS gCount,]]>
 		<![CDATA[(SELECT COUNT(*) FROM S_P_PRODUCT p WHERE p.DOC_ID = d.ID AND p.HEIGHT <> '' AND p.NAME <> '' AND p.QUANTITY <> '' AND p.WIDTH <> '' ) AS pCount,]]>
 		<![CDATA[(SELECT COUNT(*) FROM S_PARTS pa WHERE pa.DOC_ID = d.ID AND pa.`NAME` <> '' AND pa.QUANTITY <> '' AND pa.TECHONLOGY <> '' AND pa.TYPE <> '' AND pa.UNIT <> '' AND pa.USED <> '') AS paCount,]]>
-		<![CDATA[(SELECT COUNT(*) FROM S_SCIENCE s WHERE s.DOC_ID = d.ID AND s.LENGTH <> '' AND s.NAME <> '' AND s.QUANTITY <> '' AND s.REMARK <> '' AND s.TYPE <> '' AND s.USED <> '' ) AS sCount]]>
+		<![CDATA[(SELECT COUNT(*) FROM S_SCIENCE s WHERE s.DOC_ID = d.ID AND s.LENGTH <> '' AND s.NAME <> '' AND s.QUANTITY <> ''  AND s.TYPE <> '' AND s.USED <> '' ) AS sCount]]>
 		<![CDATA[ FROM S_DOC d WHERE 1 = 1]]>
 		<if test="condition.itemId != null and condition.itemId !=''">
 			<![CDATA[ and d.ITEM_ID =#{condition.itemId}]]>

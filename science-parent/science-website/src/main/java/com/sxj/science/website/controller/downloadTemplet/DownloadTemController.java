@@ -108,6 +108,7 @@ public class DownloadTemController extends BaseController
             }
             query.setArea(areaId);
             query.setSearchStr(searchStr);
+            query.setFinish(1 + "");
             List<WindowTypeEntity> list = downloadTemService.queryWindowType(query);
             List<String> companyNameList = new ArrayList<String>();
             List<String> typeList = new ArrayList<String>();
@@ -349,9 +350,9 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/openQuery")
-    public @ResponseBody Map<String, Object> openQuery(String winId,String area,
-            String companyName, String type, String series, String name,
-            String currentPage) throws WebException
+    public @ResponseBody Map<String, Object> openQuery(String winId,
+            String area, String companyName, String type, String series,
+            String name, String currentPage) throws WebException
     {
         try
         {
@@ -571,8 +572,8 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/saveHtml")
-    public @ResponseBody String saveHtml(String id,String finish, String htmlData,String htmlDataBackup)
-            throws WebException
+    public @ResponseBody String saveHtml(String id, String finish,
+            String htmlData, String htmlDataBackup) throws WebException
     {
         //        Map<String,Object> resultMap=new HashMap<String,Object>();
         try
@@ -606,7 +607,7 @@ public class DownloadTemController extends BaseController
                 query.setPagable(true);
             }
             query.setCurrentPage(Integer.parseInt(currentPage));
-            query.setShowCount(20);            
+            query.setShowCount(20);
             Map<String, Object> resultMap = new HashMap<String, Object>();
             if (!StringUtil.isBlank(projectNo))
             {
@@ -676,9 +677,12 @@ public class DownloadTemController extends BaseController
         {
             Map<String, Object> resultMap = new HashMap<String, Object>();
             List<ItemModel> list = projectService.queryItems(id);
-            if(list!=null&&list.size()>0){
+            if (list != null && list.size() > 0)
+            {
                 resultMap.put("isOK", "false");
-            }else{
+            }
+            else
+            {
                 projectService.deleteProject(id);
                 resultMap.put("isOK", "true");
             }
@@ -731,13 +735,13 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/changeShow")
-    public @ResponseBody Map<String, Object> changeShow(String id,String isShow)
+    public @ResponseBody Map<String, Object> changeShow(String id, String isShow)
             throws WebException
     {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try
         {
-            ProjectEntity temPro=projectService.getProject(id);
+            ProjectEntity temPro = projectService.getProject(id);
             temPro.setIsShow(Integer.parseInt(isShow));
             projectService.updateProject(temPro);
             resultMap.put("isOK", "true");
@@ -752,13 +756,13 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/changeItemShow")
-    public @ResponseBody Map<String, Object> changeItemShow(String id,String isShow)
-            throws WebException
+    public @ResponseBody Map<String, Object> changeItemShow(String id,
+            String isShow) throws WebException
     {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try
         {
-            ItemEntity temItem=projectService.getItemById(id);
+            ItemEntity temItem = projectService.getItemById(id);
             temItem.setIsShow(Integer.parseInt(isShow));
             projectService.updateItem(temItem);
             ProjectEntity project = projectService.getProject(temItem.getProjectId());
@@ -782,13 +786,13 @@ public class DownloadTemController extends BaseController
     }
     
     @RequestMapping("/changeAloneShow")
-    public @ResponseBody Map<String, Object> changeAloneShow(String id,String isShow)
-            throws WebException
+    public @ResponseBody Map<String, Object> changeAloneShow(String id,
+            String isShow) throws WebException
     {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try
         {
-            AloneOptimEntity temAlone=optimService.getAloneOptim(id);
+            AloneOptimEntity temAlone = optimService.getAloneOptim(id);
             temAlone.setIsShow(Integer.parseInt(isShow));
             optimService.updateAloneOptim(temAlone);
             resultMap.put("isOK", "true");
@@ -828,7 +832,7 @@ public class DownloadTemController extends BaseController
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try
         {
-            AloneOptimEntity alone=this.optimService.getAloneOptim(id);
+            AloneOptimEntity alone = this.optimService.getAloneOptim(id);
             List<AloneOptimEntity> optimList = new ArrayList<AloneOptimEntity>();
             optimList.add(alone);
             resultMap.put("optimList", optimList);

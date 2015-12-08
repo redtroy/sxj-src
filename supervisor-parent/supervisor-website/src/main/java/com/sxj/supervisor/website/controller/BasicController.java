@@ -800,8 +800,6 @@ public class BasicController extends BaseController
         }
         else if (userBean.getMember() != null && userBean.getAccount() != null)
         {
-            List<MemberFunctionModel> list = roleService
-                    .getRoleFunctions(userBean.getAccount().getId());
             map.put("list", list);
         }
         if (userBean.getMember() != null)

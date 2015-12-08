@@ -105,7 +105,12 @@ public class DocController extends BaseController
         try
         {
             DocEntity doc = docService.getDoc(docId);
+            doc.setIsShow(0);
             docService.editDoc(doc);
+            
+            ItemEntity item = projectService.getItemById(doc.getItemId());
+            item.setCount(item.getCount() - 1);
+            projectService.updateItem(item);
             map.put("isOK", true);
         }
         catch (Exception e)
@@ -169,9 +174,14 @@ public class DocController extends BaseController
         ProjectEntity project = projectService.getProject(projectId);
         map.put("projectId", projectId);
         map.put("itemId", itemId);
+        ItemEntity item = projectService.getItemById(itemId);
         if (project != null)
         {
             map.put("projectName", project.getName());
+        }
+        if (item != null)
+        {
+            map.put("itemName", item.getName());
         }
         map.put("memberNo", "E00001");
         
