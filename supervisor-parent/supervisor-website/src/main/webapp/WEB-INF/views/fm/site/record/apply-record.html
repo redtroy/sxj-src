@@ -166,6 +166,7 @@ var basePath ='${basePath}';
 	function AcgApplyRecord() {
 		var memberIdB = $("#memberIdB").val();
 		var memberNameB = $("#memberNameB").val();
+		var value = $("#hidenType").attr("value");
 		if (memberIdB == '') {
 			errorInfo('请选择系统自动感应的用户！');
 			return;
@@ -174,10 +175,18 @@ var basePath ='${basePath}';
 			errorInfo('请选择系统自动感应的用户！');
 			return;
 		}
+		
 		var refContractNo = $("#refContractNo").val();
 		if (refContractNo == '') {
 			errorInfo('请输入销售合同号！');
 			return;
+		}
+		if(value==1){
+			var sel =$("#hidenSelect").val();	
+			if(sel==""){
+				errorInfo('请选择合同类型！');
+				return;
+			}
 		}
 		var cgimgPath = $("#cgimgPath").val();
 		if (cgimgPath == '') {
@@ -337,7 +346,8 @@ var basePath ='${basePath}';
 					$("#memberIdB").val(data.result);
 					if(data.result=="B000159"){
 						$("#hidenType").fadeIn();
-						$("#hidenSelect ").val("")
+						$("#hidenSelect ").val("");
+						$("#hidenType ").attr("value",1);
 					}
 					var pass = cg_validform.check(false, $("#memberIdB"));
 					$(this).parent().children(".Validform_wrong").hide();
@@ -351,7 +361,8 @@ var basePath ='${basePath}';
 						$("#memberIdB").val(data[i].result);
 						if(data.result=="B000159"){
 							$("#hidenType").fadeIn();
-							$("#hidenSelect").prop("selected", 'selected');
+							$("#hidenSelect ").val("");
+							$("#hidenType ").attr("value",1);
 						}
 						match = true;
 					}
@@ -359,6 +370,7 @@ var basePath ='${basePath}';
 				if (!match) {
 					$("#memberIdB").val("");
 					$("#hidenType").fadeOut();
+					$("#hidenType ").attr("value",0);
 					var pass = cg_validform.check(false, $("#memberIdB"));
 					if (!pass)
 						$(this).parent().children(".Validform_wrong").show();
@@ -496,14 +508,6 @@ var basePath ='${basePath}';
 												name="memberIdB" id="" value="" datatype="*1-50"
 												nullmsg="请输入正确的供方名称" />
 										</div>
-										<div class="item" id="hidenType" style="display: none;">
-											<label>备案类型</label>
-											<select id="hidenSelect" name="recordType" datatype="*" nullmsg="请选择备案类型">
-												<option value="">请选择备案类型</option>
-												<option value="1">玻璃备案</option>
-												<option value="2">型材备案</option>
-											</select>
-										</div>
 										<div class="item">
 											<label>工程地址</label><input class="input input-w240h36" value=""
 												  id="engAddress"
@@ -513,6 +517,14 @@ var basePath ='${basePath}';
 											<label>关联销售合同号</label><input class="input input-w240h36" readonly="readonly"
 												value="" id="refContractNo" name="refContractNo"
 												datatype="ys" nullmsg="请输入工程地址选择销售合同" errormsg="销售合同号只能用英文+数字"  ajaxurl="getContract.htm"/>
+										</div>
+										<div class="item" id="hidenType" value="0" style="display: none;">
+											<label>合同类型</label>
+											<select id="hidenSelect" name="recordType">
+												<option value="">请选择合同类型</option>
+												<option value="1">玻璃合同</option>
+												<option value="2">型材合同</option>
+											</select>
 										</div>
 										<div class="item">
 											<label>&nbsp;</label>

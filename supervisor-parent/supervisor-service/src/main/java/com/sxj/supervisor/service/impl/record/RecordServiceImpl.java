@@ -165,27 +165,27 @@ public class RecordServiceImpl implements IRecordService {
 	}
 
 	/**
-     * 更新备案
-     */
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void editRecord(RecordEntity record) throws ServiceException {
-        try {
-            Assert.hasText(record.getId());
-            RecordEntity oldRe = getRecord(record.getId());
-            Assert.notNull(oldRe);
+	 * 更新备案
+	 */
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void editRecord(RecordEntity record) throws ServiceException {
+		try {
+			Assert.hasText(record.getId());
+			RecordEntity oldRe = getRecord(record.getId());
+			Assert.notNull(oldRe);
 
-            updateImages(record, oldRe);
-            recordDao.updateRecord(record);
-        } catch (ServiceException e) {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException(e.getMessage());
-        } catch (Exception e) {
-            SxjLogger.error(e.getMessage(), e, this.getClass());
-            throw new ServiceException("更新备案信息错误", e);
-        }
-    }
-	
+			updateImages(record, oldRe);
+			recordDao.updateRecord(record);
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("更新备案信息错误", e);
+		}
+	}
+
 	private void updateImages(RecordEntity record, RecordEntity oldRe) {
 		String[] oldPath = null;
 		String[] nowPath = null;
@@ -653,5 +653,29 @@ public class RecordServiceImpl implements IRecordService {
 			throw new ServiceException("获取备案号错误", e);
 		}
 
+	}
+
+	
+	@Override
+	public RecordEntity getRecordByContract(String contractNo, String memberNo,
+			String type) {
+		try {
+			QueryCondition<RecordEntity> condition = new QueryCondition<RecordEntity>();
+			condition.addCondition("contractNo", contractNo);// 合同号
+			condition.addCondition("applyId", memberNo);// 申请ＩＤ
+			condition.addCondition("recordType", type);// 备案类型
+			List<RecordEntity> recordList = recordDao.queryRecord(condition);
+			RecordEntity recordEntity = new RecordEntity();
+			if (!CollectionUtils.isEmpty(recordList)) {
+				recordEntity = recordList.get(0);
+			}
+			return recordEntity;
+		} catch (ServiceException e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException(e.getMessage());
+		} catch (Exception e) {
+			SxjLogger.error(e.getMessage(), e, this.getClass());
+			throw new ServiceException("获取备案错误", e);
+		}
 	}
 }
