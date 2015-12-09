@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import third.rewrite.fastdfs.service.IStorageClientService;
+
 import com.sxj.redis.core.pubsub.RedisTopics;
 import com.sxj.statemachine.exceptions.StateMachineException;
 import com.sxj.statemachine.interfaces.IStateMachine;
@@ -45,8 +47,6 @@ import com.sxj.util.common.StringUtils;
 import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
-
-import third.rewrite.fastdfs.service.IStorageClientService;
 
 @Service
 @Transactional
