@@ -2,18 +2,19 @@ package com.sxj.supervisor.service.statemachine.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sxj.statemachine.StateMachineImpl;
 import com.sxj.statemachine.TransitionInfo;
 import com.sxj.statemachine.annotations.StateMachine;
 import com.sxj.statemachine.annotations.Transition;
 import com.sxj.statemachine.annotations.Transitions;
 import com.sxj.statemachine.exceptions.StateMachineException;
+import com.sxj.statemachine.interfaces.IStateMachine;
 
-@StateMachine(name = "fsm1", stateType = State1.class, startState = "A1", finalStates = { "C1,D1" })
+@StateMachine(name = "fsm1", stateType = State1.class, startState = "A1", finalStates = {
+        "C1,D1" })
 public class FSM1
 {
     @Autowired
-    private StateMachineImpl<State2> fsm2;
+    private IStateMachine<State2> fsm2;
     
     @Autowired
     private FSMServiceImpl fsmServiceImpl;
@@ -29,9 +30,10 @@ public class FSM1
         fsmServiceImpl.doSomething();
     }
     
-    @Transitions({ @Transition(source = "C1", target = "A1", event = "C1TOA1") })
+    @Transitions({
+            @Transition(source = "C1", target = "A1", event = "C1TOA1") })
     public void error(TransitionInfo event)
     {
-        
+    
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="com.sxj.freemarker.FreeMarkerConfiguration"
+		lazy-init="false">
+		<property name="configLocation" value="classpath:freemarker.properties"></property>
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- StringTemplate配置文件 -->
+		<property name="templateConfig" value="classpath:message-template.properties"></property>
+	</bean>
+</beans>

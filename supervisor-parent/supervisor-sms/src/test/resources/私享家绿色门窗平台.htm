@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html class=" js no-touch csstransforms csstransitions" style=""><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>私享家绿色门窗平台</title>
+<meta name="keywords" content="私享家绿色门窗平台,门窗,型材厂,玻璃厂,门窗">
+<meta name="description" content="私享家绿色门窗平台,为门窗行业的玻璃厂,型材厂提供产品盘点,物流跟踪,质量溯源服务。致力于推动江苏省房地产建筑行业绿色环保事业。">
+<link href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/style.css" rel="stylesheet" type="text/css">
+<link href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/uploadify.css" rel="stylesheet" type="text/css">
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_008.js" type="text/javascript"></script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jqueryui.js"></script>
+<link rel="stylesheet" type="text/css" href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/elastislide.css">
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/tytabs.js" type="text/javascript"></script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/intense.js"></script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/comet4j.js"></script>
+<link href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery.css" rel="stylesheet" type="text/css">
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_003.js" type="text/javascript"></script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_006.js"></script>
+<script type="text/javascript" src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_002.js"></script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery.js" type="text/javascript"></script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_007.js" type="text/javascript"></script>
+	<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/tytabs_002.js" type="text/javascript"></script>
+<!--<script src="http://static.menchuang.org.cn/supervisor-website/js/jquery.paginate.js"></script>  -->
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_005.js"></script>
+<link rel="stylesheet" href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/pagination_2.css">
+<script>
+function loadPage(currentPage,totalPage) {
+	$(".jump").die("click");
+	layer.closeAll();
+	// 创建分页
+	$(".pagination").attr("currentPage",currentPage);
+	$(".pagination").attr("totalPage",totalPage);
+	$(".pagination").pagination(totalPage, {
+		num_edge_entries: 1, //边缘页数
+		num_display_entries: 4, //主体页数
+		callback: function(page_index,jp){
+			loadingImg();
+			query(page_index+1);
+			$(".pagination").attr("currentPage",page_index+1);
+			return false;
+		},
+		current_page:currentPage-1,
+		items_per_page:1, //每页显示1项
+		prev_text: "前一页",
+		next_text: "后一页"
+	});
+	jump(currentPage);
+ }
+$(".pagination").ready(function(){
+	
+	loadPage(1,6);
+});
+var jump = function(currentPage){
+	$(".pagination").append("&nbsp;<span style='color:#15b;'>到第<input name=''class='pageNumber' style=' width: 35px;margin:0 3px;' value='"+currentPage+"'/>页</span><a class='next jump' >确定</a>");
+	$(".jump").live("click",function(){
+		$(".pageNumber").each(function(i){
+			if(i==0){
+				var totalPage=$(".pagination").attr("totalPage");
+				var currentpage=$(".pagination").attr("currentpage");
+				var pageNumber = $(this).val();
+				if(pageNumber!=''){
+					if(!isNaN(pageNumber)){
+						if(parseInt(pageNumber)>parseInt(totalPage)){
+							//数值大于当前最大页码,返回当前最大页码
+							$(this).val(totalPage);
+							pageNumber=totalPage;
+						}
+						query(pageNumber);
+						}else{
+						   $(this).val(currentpage);
+					}
+				}
+			}
+		})
+	});
+}
+$(".pageNumber").live("keyup",function(){
+	var $val = $(this).val();
+	$(".pageNumber").each(function(){
+		$(this).val($val);
+	})
+})
+</script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/jquery_004.js"></script>
+<link href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/uploadify.css" rel="stylesheet" type="text/css">
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/layer.js"></script><link style="" id="layui_layer_skinlayercss" href="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/layer.css" rel="stylesheet">
+<script>
+function loadingImg(){
+var loadInfoIndex =layer.msg('加载中...',{icon:16,offset: ['40%', '45%'],shade: [0.1, '#000']});
+	return loadInfoIndex;
+}
+
+function dialogBox(confirm,message){
+		 var pageii =layer.confirm(message, {icon: 3,offset: ['40%', '43%']}, function(index){
+			 	confirm(index);
+			    layer.close(index);
+		});
+	 
+ }
+ 
+function dialogBoxOut(html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['10%', '10%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html
+		    }
+		});
+	 return pageii;
+ }
+function dialogBoxOutId(id){
+	 var pageii  =layer.open({
+		    type: 1,
+		    shade: false,
+		    title: false, //不显示标题
+		    content: id, //捕获的元素
+		    cancel: function(index){
+		        layer.close(index);
+		        this.content.show();
+		    }
+		});
+	 
+	 
+	$(id).attr("index",pageii);
+	return pageii;
+}
+var isNumber=function(str){
+	for(i=0;i<str.length;i++){
+		if(str.charAt(i)>='0'&&str.charAt(i)<='9'||str.charAt(i)=='-'&&i==0){
+		continue;
+		}else{
+		return false;
+		}
+		}
+		return true;
+}
+function errorInfo(message){
+	var pageii = layer.alert(message, {icon: 2,offset: ['40%', '43%']});
+
+ }
+function messageInfo(message){
+		var pageii = layer.alert(message, {icon: 1,offset: ['40%', '43%']});
+ }
+ 
+function succInfo(confirm,message){
+		var pageii = layer.alert(message, {icon: 1,offset: ['40%', '43%']},function(index){
+		 	confirm(index);
+		    layer.close(index);
+		});
+ }
+ </script>
+<script>
+
+var iviewer;
+var msie=$.browser.msie
+var elastislideConfig={
+		count:6//当前显示数量
+}
+var slideTimes=elastislideConfig.count;
+var currentHiddenImages;
+var currentLi;
+var closeViewer;
+$(document).ready(function(){
+	$(".iviewer_del").live("click",function(){
+		var url=$(this).siblings("img").attr("src");
+		var prefix="http://storage.menchuang.org.cn/";
+		var image=url.substring(url.indexOf(prefix)+prefix.length);
+		var images=currentHiddenImages.attr("value");
+		var result=images.replace(image+",","").replace(","+image,"").replace(image,"");
+		currentHiddenImages.attr("value",result)
+		currentLi.remove();
+		closeViewer();
+	});
+});
+var refreshIviewer=function($viewer,src,$container){
+	$viewer.find("img").attr("src","");
+	if($viewer.children().length==0){
+		iviewer=$viewer.iviewer({
+			src : src,
+			mousewheel : true
+		});
+	}else{
+		iviewer.iviewer('loadImage', src);
+	}
+	if($container){
+		$container.css("top",$(window).scrollTop());
+		$container.show();
+		$container.find(".modal-header").show();
+	}else{
+		$(".modal-wrap").show();
+		$(".modal-header").show();
+	}
+	$viewer.show();
+}
+var errorImage=function($this){
+	var times=parseInt($($this).attr("times"));
+	if(times<3){
+		$($this).attr("src", $($this).attr("src"));
+		$($this).attr("times",times+1);
+	}else if(times==3){
+		$($this).attr("src", "http://static.menchuang.org.cn/images/bg404.jpg");
+		$($this).attr("times",times+1);
+	}
+}
+
+var imageSrc=function(src){
+	if($.browser.msie) {
+		return src;
+	} 
+	return "";
+}
+
+var refreshElastislide=function($container,$carousel,data,empty){
+	if(!data)
+		return;
+	var start=0;
+	if(empty)
+		$carousel.empty();
+	if(data){
+		if(data instanceof Array){
+			for (var i = 0; i < data.length; i++) {
+				var suffix=/\.[^\.]+$/.exec(data[i]);
+				var $img,$a;
+				if(suffix==".PDF"){
+					 $img=$('<img src="http://static.menchuang.org.cn/supervisor-website/images/pdf.png" times="0" title="点击下载文件"/>');
+					 $a=$('<a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data[i]+'"></a>');
+				}else{
+					 $img=$('<img data-image="http://storage.menchuang.org.cn/'+data[i]+'80x100.JPG" alt="" src="'+imageSrc(data[i])+'" onerror="errorImage(this)" times="0"/>');
+					 $a=$('<a href="javascript:void(0);" class="demo-image" data-image="http://storage.menchuang.org.cn/'+data[i]+'"></a>');
+				}
+				
+				$a.append($img);
+// 				var $p=$('<p>'+(i+1)+'</p>');
+				var $li=$('<li></li>');
+				$li.append($a);
+// 				$li.append($p);
+				$carousel.append($li);
+			}
+		}else{
+			var suffix=/\.[^\.]+$/.exec(data.fileIds);
+			var $img,$a;
+			if(suffix==".PDF"){
+				 $img=$('<img src="http://static.menchuang.org.cn/supervisor-website/images/pdf.png" times="0" title="点击下载文件"/>');
+				 $a=$('<a href="javascript:void(0);" class="demo-pdf" data-pdf="'+data.fileIds+'"></a>');
+			}else{
+				 $img=$('<img src="http://storage.menchuang.org.cn/'+data.fileIds+'80x100.JPG" src="'+imageSrc(data.fileIds)+'"  onerror="errorImage(this)" times="0"/>');
+				 $a=$('<a href="javascript:void(0);" class="demo-image" data-image="http://storage.menchuang.org.cn/'+data.fileIds+'"></a>');
+			}
+			
+			$a.append($img);
+			var $li=$('<li></li>');
+			$li.append($a);
+			
+			$carousel.append($li);
+// 			var $p=$('<p>'+$carousel.children().length+'</p>');
+// 			$li.append($p);
+			start=$carousel.children().length;
+		}
+	}
+	$container.empty();
+	$container.append($carousel);
+	$carousel.elastislide({
+		orientation : 'horizontal',
+		speed : 500,
+		easing : 'ease-in-out',
+		minItems : elastislideConfig.count,
+		start : start,
+		onClick : function( el, position, evt ) { 
+			return false; 
+		},
+		onReady : function() { 
+			$carousel.children("li:lt("+elastislideConfig.count+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			if($carousel.children("li").length<elastislideConfig.count)
+				$(".elastislide-prev").hide();
+			return false; },
+		onBeforeSlide : function() { return false; },
+		onAfterSlide : function() { 
+			if(start>0)
+				slideTimes=slideTimes+start;
+			$carousel.children("li:lt("+slideTimes+")").each(function(){
+				var $image=$(this).find("img");
+				if($image.attr("data-image"))
+					$image.attr("src",$image.attr("data-image"));
+			});
+			slideTimes=slideTimes+elastislideConfig.count;
+			return false; }
+	});
+	$container.show();
+	
+}
+
+function loadUpload(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '/upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:200,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
+function loadUploadMember(id,url,isMulti,text,fn){
+	  $("#"+id).uploadify({
+	        swf: '/upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg',
+	        auto: true,
+	        multi: false,
+	        /* queueID: 'safetyPath_FileDiv', */
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	fn(data);
+	        }
+	        
+	    });
+}
+function loadUploadWord(id,url,isMulti,text){
+	  $("#"+id).uploadify({
+	        swf: '/upload/uploadify.swf',
+	        uploader: url,
+	        fileTypeExts: '*.jpg;*.html;*.htm;*.doc;*.docx',
+	        auto: true,
+	        multi: false,
+	        simUploadLimit:1,
+	        height:30,
+	        width:100,
+	        buttonText:text,
+	        onUploadSuccess : function(file, data, response) {
+	        	alert('ok')
+	        }
+	        
+	    });
+}
+function flashChecker() {
+    var hasFlash = 0; //是否安装了flash
+    var flashVersion = 0; //flash版本
+    if (document.all) {
+      var swf = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+      if (swf) {
+        hasFlash = 1;
+        VSwf = swf.GetVariable("$version");
+        flashVersion = parseInt(VSwf.split(" ")[1].split(",")[0]);
+      }
+    } else {
+      if (navigator.plugins && navigator.plugins.length > 0) {
+        var swf = navigator.plugins["Shockwave Flash"];
+        if (swf) {
+          hasFlash = 1;
+          var words = swf.description.split(" ");
+          for (var i = 0; i < words.length; ++i) {
+            if (isNaN(parseInt(words[i]))) continue;
+            flashVersion = parseInt(words[i]);
+          }
+        }
+      }
+    }
+    return { f: hasFlash, v: flashVersion };
+  }
+  var fls = flashChecker();
+  var s = "";
+  if (!fls.f) {
+	  dialogBoxOut('<p class="tc fontYH" style="padding:20px;">您没有安装Flash插件,<a href="https://get.adobe.com/cn/flashplayer/" target="_blank" class="lnk-red">点击安装flash插件</a></p><p class="tc fontYH"><a href="javascript:location=location;" class="button button-blue">刷新页面</a></p>');
+  }
+</script>
+<script src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/layer.js"></script>
+<script>
+function loadingImg(){
+var loadInfoIndex =layer.msg('加载中...',{icon:16,offset: ['40%', '45%'],shade: [0.1, '#000']});
+	return loadInfoIndex;
+}
+
+function dialogBox(confirm,message){
+		 var pageii =layer.confirm(message, {icon: 3,offset: ['40%', '43%']}, function(index){
+			 	confirm(index);
+			    layer.close(index);
+		});
+	 
+ }
+ 
+function dialogBoxOut(html){
+	 var pageii = $.layer({
+		    type: 1,
+		    title: false,
+		    offset: ['200px', ''],
+		   	area: ['10%', '10%'],
+		    border: [0], //去掉默认边框
+		    shade: [0.5,'#000'], //去掉遮罩
+		    closeBtn: [0, false], //去掉默认关闭按钮
+		    //shift: 'left', //从左动画弹出
+		    page: {
+		        html: html
+		    }
+		});
+	 return pageii;
+ }
+function dialogBoxOutId(id){
+	 var pageii  =layer.open({
+		    type: 1,
+		    shade: false,
+		    title: false, //不显示标题
+		    content: id, //捕获的元素
+		    cancel: function(index){
+		        layer.close(index);
+		        this.content.show();
+		    }
+		});
+	 
+	 
+	$(id).attr("index",pageii);
+	return pageii;
+}
+var isNumber=function(str){
+	for(i=0;i<str.length;i++){
+		if(str.charAt(i)>='0'&&str.charAt(i)<='9'||str.charAt(i)=='-'&&i==0){
+		continue;
+		}else{
+		return false;
+		}
+		}
+		return true;
+}
+function errorInfo(message){
+	var pageii = layer.alert(message, {icon: 2,offset: ['40%', '43%']});
+
+ }
+function messageInfo(message){
+		var pageii = layer.alert(message, {icon: 1,offset: ['40%', '43%']});
+ }
+ 
+function succInfo(confirm,message){
+		var pageii = layer.alert(message, {icon: 1,offset: ['40%', '43%']},function(index){
+		 	confirm(index);
+		    layer.close(index);
+		});
+ }
+ </script>
+<script>
+var preModal;
+jQuery(document).ready(function($) {
+	var top=$(window).height()*0.2;
+	$(window).scroll(function(){
+		$(".notViewer").css("top",parseInt($(window).scrollTop())+top);
+	})
+	$(".modal-header .close").click(function(){
+		var $parent=$(this).parent().parent();
+		$parent.hide();
+		$(".maskdivgen1").hide();
+		if($parent.attr("class").indexOf("notViewer")<0){
+			preModal.show();
+			$(".maskdivgen1").show();
+		}
+		
+	});
+	
+	
+	
+	$('.elastislide-list').find("li").live("click",function(){
+		var el=$(this);
+		var imageSource = el.find("a").attr("data-image");
+		if(typeof(imageSource) == 'undefined'){
+			var filePath =el.find("a").attr("data-pdf");
+			window.location.href = "/downloadFile.htm?filePath=" + filePath;
+		}else{
+			refreshIviewer($("#viewer2"),imageSource,$("#iviewerModal"));
+			el.parent().children("li").removeClass("view");
+			el.addClass("view"); 
+			$(".maskdivgen1").show();
+			if(preModal)
+				preModal.hide();
+		}
+		
+	});
+	
+	
+	$('.lnk-view').live('click',function(){
+		var imgPath=$(this).attr("imgPath");
+		if(imgPath){
+       			$.post("/filesort.htm?random="+Math.random(),{fileId:imgPath},function(imgPaths){
+       				if(imgPaths){
+       					refreshElastislide($("#linkRollBox"),$("#linkcarousel"),imgPaths,true);	
+       					$("#linkModal").show();
+       					$(".maskdivgen1").show();
+       					preModal=$("#linkModal");
+       				}else{
+       					messageInfo("暂无合同副本!");
+       				}
+       			});
+		}else{
+			messageInfo("暂无合同副本!");
+			}
+	});
+});
+
+
+////上传图片
+$(document).ready(function() {
+	$("#bgFile").uploadify({
+			swf : '/upload/uploadify.swf',
+			uploader : "/upload.htm",
+			 fileTypeExts: '*.jpg;*.pdf',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传变更扫描文件',
+			onUploadSuccess : function(file,
+					data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data+ ")");//转换为json对象 
+				var hideVal = $("#bgimgPath").val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					
+					var arrays =hideVal.split(",");
+					for(var i=0;i<arrays.length;i++){
+						if(arrays[i]){
+							num+=1;
+						}
+					}
+					hideVal += ","+ dataObj.fileIds;
+				}
+					refreshElastislide($("#bgRollBox"),$("#bgcarousel"),dataObj);
+					$("#bgimgPath").val(hideVal);
+				
+			}
+		});
+	$("#bsFile").uploadify({
+			swf : '/upload/uploadify.swf',
+			uploader : "/upload.htm",
+			 fileTypeExts: '*.jpg;*.pdf',
+			auto : true,
+			multi : true,
+			height : 30,
+			width : 120,
+			buttonText : '上传变更扫描文件',
+			onUploadSuccess : function(file,
+					data, response) {
+				var num = 1;
+				var dataObj = eval("(" + data+ ")");//转换为json对象 
+				var hideVal = $("#bsimgPath").val();
+				if (hideVal == '') {
+					hideVal = dataObj.fileIds;
+				} else {
+					
+					var arrays =hideVal.split(",");
+					for(var i=0;i<arrays.length;i++){
+						if(arrays[i]){
+							num+=1;
+						}
+					}
+					hideVal += ","+ dataObj.fileIds;
+				}
+				refreshElastislide($("#bsRollBox"),$("#bscarousel"),dataObj);
+				$("#bsimgPath").val(hideVal);
+				$("#bscarousel").show();
+				
+			}
+		});
+})
+//显示变更记录
+function biangeng(recordId,contractNo){
+	$.post("getRecord.htm", {contractNo:contractNo}, function(data) {
+		if(data.isOK =='ok'){
+			preModal=$("#chanPic");
+			$("#bgimgPath").val("");
+			$('#bgcarousel').empty();
+			$('#bgRollBox').hide();
+			$("#bgRecordId").val("");
+			$('.maskdivgen1').fadeIn(100);
+			$('#chanPic').slideDown(200);
+			$('#bgRecordId').val(recordId);
+			$('#bgimgShow').show();	
+		}else{
+			messageInfo("还有一笔申请未备案,不能进行该操作!");	
+		}
+	})
+	
+	
+}
+//补损
+function busun(recordId,contractNo){
+	$.post("getRecord.htm", {contractNo:contractNo}, function(data) {
+		if(data.isOK =='ok'){
+			preModal=$("#bsModal");
+			$("#bsimgPath").val("");
+			$('#bscarousel').empty();
+			$("#bsRecordId").val("");
+			$('.maskdivgen1').fadeIn(100);
+			$('.suppPop').slideDown(200);
+			$('#bsRecordId').val(recordId);
+			$("#rfidHide").val("");
+			$("#rfid").text("");
+		}else{
+			messageInfo("还有一笔申请未备案,不能进行该操作!");	
+		}
+	})
+}
+//保存变更记录
+function saveBiangeng(){
+	var o = {
+			"recordId" : $("#bgRecordId").val(),
+			"imgPath" : $("#bgimgPath").val(),
+			"flag":"1"
+		};
+		if($("#bgimgPath").val()==''){
+			messageInfo("请上传扫描件");
+			return false;
+		}
+		if($("#bgimgPath").val()!='' ){
+			dialogBox(function(index){
+				$.post("modifyRecord.htm", o, function(data) {
+					layer.close(index);
+					if (data.isOK == 'ok') {
+						succInfo(function(){
+							window.location.href="query.htm";
+						},"变更备案成功!");  
+					} else {
+						errorInfo("变更备案失败");
+					}
+				});
+			},"是否变更合同?");
+		}else{
+			messageInfo("请上传图片");
+		}
+}
+//保存补损
+function busunSeav(){
+	var o = {
+			"recordId" : $("#bsRecordId").val(),
+			"imgPath" : $("#bsimgPath").val(),
+			"RFID" : $("input[name='rfid']").val(),
+			"flag":"2"
+		};
+		if($("#bsimgPath").val()==''){
+			messageInfo("请上传扫描件");
+			return;
+		}
+		if($("input[name='rfid']").val()==''){
+			messageInfo("请选择补损批次");
+			return;
+		}
+		if($("#bsimgPath").val()!='' ){
+			dialogBox(function(index){
+			$.post("modifyRecord.htm", o, function(data) {
+				layer.close(index);
+				if (data.isOK == 'ok') {
+					succInfo(function(){
+						window.location.href="query.htm";
+					},"补损备案成功!");  
+				} else {
+					errorInfo("补损备案失败");
+				}
+			});
+		},"是否补损合同?");
+	}else{
+		messageInfo("请上传图片");
+	}
+}
+
+	jQuery(document).ready(function($) {
+		$("#batchId").change(function(){
+			var value=$(this).val();
+			if(value!=''){
+			$(this).children("option").each(function(){
+				if($(this).val()==value)
+					$(this).attr("disabled","disabled");
+			});
+			}else{
+				$("#rfidHide").val("");
+				$("#rfid").text("");
+			}
+		})
+		//获取选中的值
+		$('#batchBtn').click(function() {
+			var strSel='';
+			$("[name='batchRfidNo']:checked").each(function(index, element) {
+                strSel += $(this).val() + ",";
+            });
+			if(strSel!='')
+				strSel = strSel.substring(0, strSel.length - 1);
+			$("#rfid").text(strSel);
+			$("#rfidHide").val(strSel);
+			$("#batch-list").slideUp(200);
+			$('.maskdivgen2').fadeOut(100);
+		})
+		$('.closeBatch').click(function() {
+			$("#batch-list").slideUp(200);
+			$('.maskdivgen2').fadeOut(100);
+		})
+		$('.button-box .button-gray').click(function() {
+			$('.maskdivgen1').fadeOut(100);
+			$('.chanPic').slideUp(200);
+			$("#bgimgShow").hide();
+		})
+		$('.item .button-gray').click(function() {
+			$('.maskdivgen1').fadeOut(100);
+			$('.suppPop').slideUp(200);
+			$("#bsimgShow").hide();
+		})
+		//获取rfid
+		$('.batchSelect').change(function(){  
+		   var batchId=$(this).children('option:selected').val();  
+		   if(batchId!=''){
+		   $.post("getRfid.htm", {batchId:batchId}, function(data) {
+				if (data.rfid != '') {
+				var hide=$("#rfidHide").val();
+				var rfid ;
+				if(hide!=''){
+				 rfid =hide+','+data.rfid;
+				}else{
+					rfid=data.rfid;
+				}
+				$("#rfid").text(rfid);
+				$("#rfidHide").val(rfid);
+				} else {
+					errorInfo("没有找到批次相关的RFID!");
+				}
+			});
+		   }
+   		}) 
+   		//结束
+//    			JS.Engine.on({
+//    				start : function(cId, channelList, engine){ 
+//    			      $.get("/notifyComet.htm?channelName=record_push_message_M99999&ram="+Math.random());
+//    			    }, 
+// 				 "record_push_message_M99999" : function(data){//侦听一个channel
+// 					 $("#message_div").empty();
+// 				 for(var i=0;i<data.length;i++){
+// 	            	 var message = new Array();
+// 	            	 message = data[i].split(",");
+// 	            	 var bb="";
+// 	            	 if(message[4]==0){
+// 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue zhaobiaoMessage' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
+// 	            	 }else{
+// 	            		 bb="<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?message="+data[i]+"&recordId="+message[0]+"&contractNo="+message[2]+"' class='lnk-blue message' data-message='"+data[i]+"' id=''>待确认</a>的"+message[1]+"信息</div>"; 
+// 	            	 }
+// 	            	 $("#message_div").append(bb);
+// 				 	}
+// 	             },   
+// 	     	});
+// 		JS.Engine.start('/comet');
+		message();
+   		window.setInterval(message, 3000); 
+	});
+	//{"channelName":"record_push_message_MEM000001","cache":["vxJiLbwzbbaT9KAc6B0CI0zpcK4soVN2,开发商,CT15030102,MEM000001,0"]}
+	//提示消息
+	function message() {
+		$.get("/message.htm?channelName=record_push_message_M99999&ram="+ Math.random(),
+						function(data) {
+							if (typeof (data.cache) != "undefined") {
+								$("#message_div").empty();
+								for (var i = 0; i < data.cache.length; i++) {
+									var message = new Array();
+									message = data.cache[i].split(",");
+									var bb = "";
+									if (message[4] == 0) {
+										bb = "<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm-kfs.htm?message="
+												+ data.cache[i]
+												+ "&recordId="
+												+ message[0]
+												+ "&contractNo="
+												+ message[2]
+												+ "' class='lnk-blue zhaobiaoMessage' data-message='"
+												+ data.cache[i]
+												+ "' id=''>待确认</a>的"
+												+ message[1] + "信息</div>";
+									} else {
+										bb = "<div class='msgBox msg-info msgTip tipOge'><span class='icon icon16 icon-close ly-right' onclick='closeMessage(this);'>关闭</span><span class='icon icon16 icon-notice'></span>贵公司有一条<a href='confirm.htm?message="
+												+ data.cache[i]
+												+ "&recordId="
+												+ message[0]
+												+ "&contractNo="
+												+ message[2]
+												+ "' class='lnk-blue message' data-message='"
+												+ data.cache[i]
+												+ "' id=''>待确认</a>的"
+												+ message[1] + "信息</div>";
+									}
+									$("#message_div").append(bb);
+								}
+							}
+
+						});
+	}
+
+	function closeMessage(obj) {
+		$(obj).parent().remove();
+	}
+
+	function query(page) {
+		var params = $("#search_form").serialize();
+		if (page != undefined) {
+			params = params + "&currentPage=" + page;
+		}
+		$.post("query.htm", params, function(data) {
+			var res = $(data).find("#res_table");
+			var pager = $(data).find("#pager");
+			$("#res_table").empty();
+			$("#res_table").append(res.html());
+			var totalPage = pager.attr("totalPage");
+			var currentPage = pager.attr("currentPage");
+			loadPage(currentPage, totalPage, query);
+		});
+	}
+
+	function loadBatch(contractNo, recordNo, type) {
+		var isopen = $("#info" + recordNo).attr("isopen");
+		if (isopen == "0") {
+			$("#info" + recordNo).load(
+					"getBatchPay.htm?contractNo=" + contractNo + "&recordNo="
+							+ recordNo)
+					+ "&type=" + type;
+			$("#info" + recordNo).attr("isopen", "1");
+		} else if (isopen == "1") {
+			$("#info" + recordNo).html("");
+			$("#info" + recordNo).attr("isopen", "0");
+		}
+	}
+	function loadInfo(contractNo, recordNo) {
+		$("#res_table").find(".infoTr").each(function() {
+			if ($(this).attr("isopen") == 1)
+				$(this).html("");
+		});
+		var isopen = $("#info" + recordNo).attr("isopen");
+		if (isopen == "0") {
+			$("#info" + recordNo).load(
+					"info.htm?contractNo=" + contractNo + "&recordNo="
+							+ recordNo);
+			$("#info" + recordNo).attr("isopen", "1");
+		} else if (isopen == "1") {
+			$("#info" + recordNo).html("");
+			$("#info" + recordNo).attr("isopen", "0");
+		}
+	}
+	function closeContract(recordNo) {
+		$("#info" + recordNo).html("");
+		$("#info" + recordNo).attr("isopen", "0");
+	}
+
+	function delRecord(id, contractNo) {
+		$.post("getRecordState.htm", {
+			id : id
+		}, function(data) {
+			if (data.isOK == "ok") {
+				dialogBox(function(index) {
+					$.post("delRecord.htm", {
+						id : id
+					}, function(data) {
+						layer.close(index);
+						if (data.isOK == "ok") {
+							succInfo(function() {
+								query($("#pager").attr("currentPage"));
+							}, "刪除备案成功！");
+
+						} else {
+							errorInfo("删除备案失败");
+						}
+					});
+				}, "是否删除备案?");
+			} else if (data.isOK == "no") {
+				errorInfo("该备案已处理,不能刪除！");
+			} else {
+				errorInfo("该备案已刪除！");
+				query($("#pager").attr("currentPage"));
+			}
+		});
+	}
+	function to_modify(id) {
+		$.post("getRecordState.htm", {
+			id : id
+		}, function(data) {
+			if (data.isOK == "ok") {
+				window.location.href = "to_modify.htm?recordId=" + id;
+			} else if (data.isOK == "no") {
+				errorInfo("该备案已处理,不能修改！");
+			} else {
+				errorInfo("该备案已刪除！");
+				query($("#pager").attr("currentPage"));
+			}
+		});
+	}
+	function openBatch() {
+		var recordId = $("#bsRecordId").val();
+		$("#batchUl").empty();
+		$
+				.post(
+						"getBatch.htm",
+						{
+							recordId : recordId
+						},
+						function(data) {
+							if (data.batch != undefined
+									&& data.batch.length > 0) {
+								$("#batch-list").slideDown(200);
+								$('.maskdivgen2').fadeIn(100);
+								var batch = data.batch;
+								for (var i = 0; i < batch.length; i++) {
+									var bu = '';
+									if (batch[i].type == 3) {
+										bu = '补'
+									}
+									$("#batchUl")
+											.append(
+													'<li><input  type="checkbox" name="batchRfidNo"  title="'+batch[i].batchNo+'" value="'+batch[i].rfidNo+'" />'
+															+ bu
+															+ '第'
+															+ batch[i].batchNo
+															+ '批次</li>');
+								}
+							} else {
+								errorInfo("没有找到相关批次!");
+							}
+						});
+	}
+</script>
+<style class="firebugResetStyles" type="text/css" charset="utf-8">/* See license.txt for terms of usage */
+/** reset styling **/
+.firebugResetStyles {
+    z-index: 2147483646 !important;
+    top: 0 !important;
+    left: 0 !important;
+    display: block !important;
+    border: 0 none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    outline: 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    position: fixed !important;
+    transform: rotate(0deg) !important;
+    transform-origin: 50% 50% !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent none !important;
+    pointer-events: none !important;
+    white-space: normal !important;
+}
+style.firebugResetStyles {
+    display: none !important;
+}
+
+.firebugBlockBackgroundColor {
+    background-color: transparent !important;
+}
+
+.firebugResetStyles:before, .firebugResetStyles:after {
+    content: "" !important;
+}
+/**actual styling to be modified by firebug theme**/
+.firebugCanvas {
+    display: none !important;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.firebugLayoutBox {
+    width: auto !important;
+    position: static !important;
+}
+
+.firebugLayoutBoxOffset {
+    opacity: 0.8 !important;
+    position: fixed !important;
+}
+
+.firebugLayoutLine {
+    opacity: 0.4 !important;
+    background-color: #000000 !important;
+}
+
+.firebugLayoutLineLeft, .firebugLayoutLineRight {
+    width: 1px !important;
+    height: 100% !important;
+}
+
+.firebugLayoutLineTop, .firebugLayoutLineBottom {
+    width: 100% !important;
+    height: 1px !important;
+}
+
+.firebugLayoutLineTop {
+    margin-top: -1px !important;
+    border-top: 1px solid #999999 !important;
+}
+
+.firebugLayoutLineRight {
+    border-right: 1px solid #999999 !important;
+}
+
+.firebugLayoutLineBottom {
+    border-bottom: 1px solid #999999 !important;
+}
+
+.firebugLayoutLineLeft {
+    margin-left: -1px !important;
+    border-left: 1px solid #999999 !important;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.firebugLayoutBoxParent {
+    border-top: 0 none !important;
+    border-right: 1px dashed #E00 !important;
+    border-bottom: 1px dashed #E00 !important;
+    border-left: 0 none !important;
+    position: fixed !important;
+    width: auto !important;
+}
+
+.firebugRuler{
+    position: absolute !important;
+}
+
+.firebugRulerH {
+    top: -15px !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 14px !important;
+    background: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%13%88%00%00%00%0E%08%02%00%00%00L%25a%0A%00%00%00%04gAMA%00%00%D6%D8%D4OX2%00%00%00%19tEXtSoftware%00Adobe%20ImageReadyq%C9e%3C%00%00%04%F8IDATx%DA%EC%DD%D1n%E2%3A%00E%D1%80%F8%FF%EF%E2%AF2%95%D0D4%0E%C1%14%B0%8Fa-%E9%3E%CC%9C%87n%B9%81%A6W0%1C%A6i%9A%E7y%0As8%1CT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AATE9%FE%FCw%3E%9F%AF%2B%2F%BA%97%FDT%1D~K(%5C%9D%D5%EA%1B%5C%86%B5%A9%BDU%B5y%80%ED%AB*%03%FAV9%AB%E1%CEj%E7%82%EF%FB%18%BC%AEJ8%AB%FA'%D2%BEU9%D7U%ECc0%E1%A2r%5DynwVi%CFW%7F%BB%17%7Dy%EACU%CD%0E%F0%FA%3BX%FEbV%FEM%9B%2B%AD%BE%AA%E5%95v%AB%AA%E3E5%DCu%15rV9%07%B5%7F%B5w%FCm%BA%BE%AA%FBY%3D%14%F0%EE%C7%60%0EU%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5JU%88%D3%F5%1F%AE%DF%3B%1B%F2%3E%DAUCNa%F92%D02%AC%7Dm%F9%3A%D4%F2%8B6%AE*%BF%5C%C2Ym~9g5%D0Y%95%17%7C%C8c%B0%7C%18%26%9CU%CD%13i%F7%AA%90%B3Z%7D%95%B4%C7%60%E6E%B5%BC%05%B4%FBY%95U%9E%DB%FD%1C%FC%E0%9F%83%7F%BE%17%7DkjMU%E3%03%AC%7CWj%DF%83%9An%BCG%AE%F1%95%96yQ%0Dq%5Dy%00%3Et%B5'%FC6%5DS%95pV%95%01%81%FF'%07%00%00%00%00%00%00%00%00%00%F8x%C7%F0%BE%9COp%5D%C9%7C%AD%E7%E6%EBV%FB%1E%E0(%07%E5%AC%C6%3A%ABi%9C%8F%C6%0E9%AB%C0'%D2%8E%9F%F99%D0E%B5%99%14%F5%0D%CD%7F%24%C6%DEH%B8%E9rV%DFs%DB%D0%F7%00k%FE%1D%84%84%83J%B8%E3%BA%FB%EF%20%84%1C%D7%AD%B0%8E%D7U%C8Y%05%1E%D4t%EF%AD%95Q%BF8w%BF%E9%0A%BF%EB%03%00%00%00%00%00%00%00%00%00%B8vJ%8E%BB%F5%B1u%8Cx%80%E1o%5E%CA9%AB%CB%CB%8E%03%DF%1D%B7T%25%9C%D5(%EFJM8%AB%CC'%D2%B2*%A4s%E7c6%FB%3E%FA%A2%1E%80~%0E%3E%DA%10x%5D%95Uig%15u%15%ED%7C%14%B6%87%A1%3B%FCo8%A8%D8o%D3%ADO%01%EDx%83%1A~%1B%9FpP%A3%DC%C6'%9C%95gK%00%00%00%00%00%00%00%00%00%20%D9%C9%11%D0%C0%40%AF%3F%EE%EE%92%94%D6%16X%B5%BCMH%15%2F%BF%D4%A7%C87%F1%8E%F2%81%AE%AAvzr%DA2%ABV%17%7C%E63%83%E7I%DC%C6%0Bs%1B%EF6%1E%00%00%00%00%00%00%00%00%00%80cr%9CW%FF%7F%C6%01%0E%F1%CE%A5%84%B3%CA%BC%E0%CB%AA%84%CE%F9%BF)%EC%13%08WU%AE%AB%B1%AE%2BO%EC%8E%CBYe%FE%8CN%ABr%5Dy%60~%CFA%0D%F4%AE%D4%BE%C75%CA%EDVB%EA(%B7%F1%09g%E5%D9%12%00%00%00%00%00%00%00%00%00H%F6%EB%13S%E7y%5E%5E%FB%98%F0%22%D1%B2'%A7%F0%92%B1%BC%24z3%AC%7Dm%60%D5%92%B4%7CEUO%5E%F0%AA*%3BU%B9%AE%3E%A0j%94%07%A0%C7%A0%AB%FD%B5%3F%A0%F7%03T%3Dy%D7%F7%D6%D4%C0%AAU%D2%E6%DFt%3F%A8%CC%AA%F2%86%B9%D7%F5%1F%18%E6%01%F8%CC%D5%9E%F0%F3z%88%AA%90%EF%20%00%00%00%00%00%00%00%00%00%C0%A6%D3%EA%CFi%AFb%2C%7BB%0A%2B%C3%1A%D7%06V%D5%07%A8r%5D%3D%D9%A6%CAu%F5%25%CF%A2%99%97zNX%60%95%AB%5DUZ%D5%FBR%03%AB%1C%D4k%9F%3F%BB%5C%FF%81a%AE%AB'%7F%F3%EA%FE%F3z%94%AA%D8%DF%5B%01%00%00%00%00%00%00%00%00%00%8E%FB%F3%F2%B1%1B%8DWU%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*UiU%C7%BBe%E7%F3%B9%CB%AAJ%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5*%AAj%FD%C6%D4%5Eo%90%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5%86%AF%1B%9F%98%DA%EBm%BBV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%AD%D6%E4%F58%01%00%00%00%00%00%00%00%00%00%00%00%00%00%40%85%7F%02%0C%008%C2%D0H%16j%8FX%00%00%00%00IEND%AEB%60%82") repeat-x !important;
+    border-top: 1px solid #BBBBBB !important;
+    border-right: 1px dashed #BBBBBB !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+.firebugRulerV {
+    top: 0 !important;
+    left: -15px !important;
+    width: 14px !important;
+    height: 100% !important;
+    background: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%0E%00%00%13%88%08%02%00%00%00%0E%F5%CB%10%00%00%00%04gAMA%00%00%D6%D8%D4OX2%00%00%00%19tEXtSoftware%00Adobe%20ImageReadyq%C9e%3C%00%00%06~IDATx%DA%EC%DD%D1v%A20%14%40Qt%F1%FF%FF%E4%97%D9%07%3BT%19%92%DC%40(%90%EEy%9A5%CB%B6%E8%F6%9Ac%A4%CC0%84%FF%DC%9E%CF%E7%E3%F1%88%DE4%F8%5D%C7%9F%2F%BA%DD%5E%7FI%7D%F18%DDn%BA%C5%FB%DF%97%BFk%F2%10%FF%FD%B4%F2M%A7%FB%FD%FD%B3%22%07p%8F%3F%AE%E3%F4S%8A%8F%40%EEq%9D%BE8D%F0%0EY%A1Uq%B7%EA%1F%81%88V%E8X%3F%B4%CEy%B7h%D1%A2E%EBohU%FC%D9%AF2fO%8BBeD%BE%F7X%0C%97%A4%D6b7%2Ck%A5%12%E3%9B%60v%B7r%C7%1AI%8C%BD%2B%23r%00c0%B2v%9B%AD%CA%26%0C%1Ek%05A%FD%93%D0%2B%A1u%8B%16-%95q%5Ce%DCSO%8E%E4M%23%8B%F7%C2%FE%40%BB%BD%8C%FC%8A%B5V%EBu%40%F9%3B%A72%FA%AE%8C%D4%01%CC%B5%DA%13%9CB%AB%E2I%18%24%B0n%A9%0CZ*Ce%9C%A22%8E%D8NJ%1E%EB%FF%8F%AE%CAP%19*%C3%BAEKe%AC%D1%AAX%8C*%DEH%8F%C5W%A1e%AD%D4%B7%5C%5B%19%C5%DB%0D%EF%9F%19%1D%7B%5E%86%BD%0C%95%A12%AC%5B*%83%96%CAP%19%F62T%86%CAP%19*%83%96%CA%B8Xe%BC%FE)T%19%A1%17xg%7F%DA%CBP%19*%C3%BA%A52T%86%CAP%19%F62T%86%CA%B0n%A9%0CZ%1DV%C6%3D%F3%FCH%DE%B4%B8~%7F%5CZc%F1%D6%1F%AF%84%F9%0F6%E6%EBVt9%0E~%BEr%AF%23%B0%97%A12T%86%CAP%19%B4T%86%CA%B8Re%D8%CBP%19*%C3%BA%A52huX%19%AE%CA%E5%BC%0C%7B%19*CeX%B7h%A9%0C%95%E1%BC%0C%7B%19*CeX%B7T%06%AD%CB%5E%95%2B%BF.%8F%C5%97%D5%E4%7B%EE%82%D6%FB%CF-%9C%FD%B9%CF%3By%7B%19%F62T%86%CA%B0n%D1R%19*%A3%D3%CA%B0%97%A12T%86uKe%D0%EA%B02*%3F1%99%5DB%2B%A4%B5%F8%3A%7C%BA%2B%8Co%7D%5C%EDe%A8%0C%95a%DDR%19%B4T%C66%82fA%B2%ED%DA%9FC%FC%17GZ%06%C9%E1%B3%E5%2C%1A%9FoiB%EB%96%CA%A0%D5qe4%7B%7D%FD%85%F7%5B%ED_%E0s%07%F0k%951%ECr%0D%B5C%D7-g%D1%A8%0C%EB%96%CA%A0%A52T%C6)*%C3%5E%86%CAP%19%D6-%95A%EB*%95q%F8%BB%E3%F9%AB%F6%E21%ACZ%B7%22%B7%9B%3F%02%85%CB%A2%5B%B7%BA%5E%B7%9C%97%E1%BC%0C%EB%16-%95%A12z%AC%0C%BFc%A22T%86uKe%D0%EA%B02V%DD%AD%8A%2B%8CWhe%5E%AF%CF%F5%3B%26%CE%CBh%5C%19%CE%CB%B0%F3%A4%095%A1%CAP%19*Ce%A8%0C%3BO*Ce%A8%0C%95%A12%3A%AD%8C%0A%82%7B%F0v%1F%2FD%A9%5B%9F%EE%EA%26%AF%03%CA%DF9%7B%19*Ce%A8%0C%95%A12T%86%CA%B8Ze%D8%CBP%19*Ce%A8%0C%95%D1ae%EC%F7%89I%E1%B4%D7M%D7P%8BjU%5C%BB%3E%F2%20%D8%CBP%19*Ce%A8%0C%95%A12T%C6%D5*%C3%5E%86%CAP%19*Ce%B4O%07%7B%F0W%7Bw%1C%7C%1A%8C%B3%3B%D1%EE%AA%5C%D6-%EBV%83%80%5E%D0%CA%10%5CU%2BD%E07YU%86%CAP%19*%E3%9A%95%91%D9%A0%C8%AD%5B%EDv%9E%82%FFKOee%E4%8FUe%A8%0C%95%A12T%C6%1F%A9%8C%C8%3D%5B%A5%15%FD%14%22r%E7B%9F%17l%F8%BF%ED%EAf%2B%7F%CF%ECe%D8%CBP%19*Ce%A8%0C%95%E1%93~%7B%19%F62T%86%CAP%19*Ce%A8%0C%E7%13%DA%CBP%19*Ce%A8%0CZf%8B%16-Z%B4h%D1R%19f%8B%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1%A2%A52%CC%16-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2EKe%98-Z%B4h%D1%A2EKe%D02%5B%B4h%D1%A2EKe%D02%5B%B4h%D1%A2E%8B%96%CA0%5B%B4h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%16-%95a%B6h%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-Z*%C3l%D1%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z%B4T%86%D9%A2E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4h%A9%0C%B3E%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%D1R%19f%8B%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1%A2%A52%CC%16-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2EKe%98-Z%B4h%D1%A2EKe%D02%5B%B4h%D1%A2EKe%D02%5B%B4h%D1%A2E%8B%96%CA0%5B%B4h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%16-%95a%B6h%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-Z*%C3l%D1%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z%B4T%86%D9%A2E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4h%A9%0C%B3E%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%D1R%19f%8B%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1%A2%A52%CC%16-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2EKe%98-Z%B4h%D1%A2EKe%D02%5B%B4h%D1%A2EKe%D02%5B%B4h%D1%A2E%8B%96%CA0%5B%B4h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%16-%95a%B6h%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-Z*%C3l%D1%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z%B4T%86%D9%A2E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4%AE%A4%F5%25%C0%00%DE%BF%5C'%0F%DA%B8q%00%00%00%00IEND%AEB%60%82") repeat-y !important;
+    border-left: 1px solid #BBBBBB !important;
+    border-right: 1px solid #000000 !important;
+    border-bottom: 1px dashed #BBBBBB !important;
+}
+
+.overflowRulerX > .firebugRulerV {
+    left: 0 !important;
+}
+
+.overflowRulerY > .firebugRulerH {
+    top: 0 !important;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.fbProxyElement {
+    position: fixed !important;
+    pointer-events: auto !important;
+}
+</style></head>
+
+<body>
+	<div id="header" class="fence"><meta name="renderer" content="webkit">
+<div id="header">
+	<div class="fence-wide">
+		<div class="logOut ly-right">
+			 <span class="mr10">测试门窗厂，您好！</span>
+			 <a href="http://static.menchuang.org.cn/supervisor-website/help.html" target="_blank">帮助说明</a><a href="http://www.menchuang.org.cn/logout.htm">退出当前帐户</a>
+		</div>
+	</div>
+	<h1 class="fence-wide">
+		<a href="javascript:void(0);" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a>
+	</h1>
+	<h1 class="fence-wide">
+		<a href="http://static.menchuang.org.cn/supervisor-website/html/register.html" class="logo" title="私享家绿色门窗平台">私享家绿色门窗平台</a>
+	</h1>
+</div>
+<script>
+$(document).ready(function(){
+	var currentUrl=window.location.href;
+	var functionId=getUrlParam("function");
+	$.get("/enter.htm?functionId="+functionId+"&url="+currentUrl);
+});
+
+function getUrlParam(name){
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	if (r!=null) return unescape(r[2]); return null; //返回参数值
+}
+</script>
+</div>
+	<div class="fence-wide ly-clearFix">
+			<div class="yard-190 mt15 ly-left"><div id="leftList"><div class="leftMenu">
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-home"></span><a url="/index.htm" id="99" href="javascript:clickFunction('/index.htm')" class="homelink">平台首页</a></h2>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-member"></span>会员中心</h2>
+<ul>
+<li id="2_menu" class=""><a url="/member/memberInfo.htm" href="javascript:clickFunction('/member/memberInfo.htm')">会员中心</a></li>
+<li id="3_menu" class=""><a url="/member/account/accountList.htm" href="javascript:clickFunction('/member/account/accountList.htm')">子账号管理</a></li>
+</ul>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-info"></span><a url="/government/query.htm" id="30" href="javascript:clickFunction('/government/query.htm')" class="homelink">政务信息</a></h2>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-info"></span><span style="display: none;" class="new-message" id="tender_message"></span><a url="/systender/query.htm" id="23" href="javascript:clickFunction('/systender/query.htm')" class="homelink">工程信息</a></h2>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-contract"></span>融资服务</h2>
+<ul>
+<li id="5_menu" class=""><a url="/record/to_apply.htm" href="javascript:clickFunction('/record/to_apply.htm')">融资信息提交</a></li>
+<span class="new-message" id="contract_message" style="display: none;"></span>
+<li id="6_menu" class="on"><a url="/record/query.htm" href="javascript:clickFunction('/record/query.htm')">融资信息管理</a></li>
+<li id="7_menu" class=""><a url="/finance/finance.htm" href="javascript:clickFunction('/finance/finance.htm')">账务统计</a></li>
+<span class="new-message" id="pay_message" style="display: none;"></span>
+<li id="8_menu" class=""><a url="/pay/paylist.htm" href="javascript:clickFunction('/pay/paylist.htm')">付款管理</a></li>
+</ul>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-supply"></span>物流服务</h2>
+<ul>
+<li id="13_menu" class=""><a url="/rfid/window/to_apply.htm" href="javascript:clickFunction('/rfid/window/to_apply.htm')">门窗标签申请</a></li>
+<li id="15_menu" class=""><a url="/rfid/window/apply_list.htm" href="javascript:clickFunction('/rfid/window/apply_list.htm')">门窗标签申请管理</a></li>
+<li id="16_menu" class=""><a url="/rfid/window/query.htm" href="javascript:clickFunction('/rfid/window/query.htm')">门窗标签管理</a></li>
+<li id="17_menu" class=""><a url="/rfid/window/logistics/query.htm" href="javascript:clickFunction('/rfid/window/logistics/query.htm')">物流标签管理</a></li>
+<li id="18_menu" class=""><a url="/rfid/window/startmrfid_list.htm" href="javascript:clickFunction('/rfid/window/startmrfid_list.htm')">启用门窗标签</a></li>
+<li id="19_menu" class=""><a url="/rfid/window/to_loss.htm" href="javascript:clickFunction('/rfid/window/to_loss.htm')">门窗损坏补损标签</a></li>
+</ul>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-news"></span>信息服务</h2>
+<ul>
+<span class="new-message" id="sys_message" style="display: none;"></span>
+<li id="21_menu" class=""><a url="/sysMessage/query.htm" href="javascript:clickFunction('/sysMessage/query.htm')">系统信息</a></li>
+<span class="new-message" id="trans_message" style="display: none;"></span>
+<li id="22_menu" class=""><a url="/transMessage/query.htm" href="javascript:clickFunction('/transMessage/query.htm')">交易信息</a></li>
+</ul>
+<h2 class="fontYH f18" style="border-bottom:1px solid #B5BFCB">
+<span class="icon icon-dev"></span>开发商名录</h2>
+<ul>
+<li id="25_menu" class=""><a url="/developers/developers.htm" href="javascript:clickFunction('/developers/developers.htm')">江苏省开发商信息</a></li>
+</ul>
+</div>
+</div>
+<script>
+	var isLoad="";
+	var account="";
+	if(account==""){
+		account="M99999"
+	}
+	if(isLoad=="true"){
+		$("#leftList").load("/menu.htm?account="+account+"&"+ Math.random());
+	}else{
+		$("#leftList").load("/menu.htm?account="+account);
+	}
+</script>
+
+</div>
+				<div class="yard-870 rightSide ly-left">
+					<div class="heading mb15 ly-clearFix">
+						<h1>
+							<span class="title fontYH f20 fb">融资信息管理</span> <input value="0" id="typeId" type="hidden">
+						</h1>
+					</div>
+					<div class="contBox">
+					<form id="search_form" action="javascript:void(0);" method="post">
+						
+							<div class="searBox f12 mb10">
+								备案号 <input class="input" name="recordNo" type="text"> 合同号 <input class="input" name="contractNo" type="text">
+										合同备案状态 <select name="confirmState">
+											<option selected="selected" value="">全部</option> 											<option value="0">受理中</option>
+											<option value="1">未确认</option>
+											<option value="2">需方已确认</option>
+											<option value="3">供方已确认</option>
+											<option value="4">已备案</option>
+									</select>
+										<button class="button button-search" onclick="query();">查询</button>
+							</div>
+					</form>
+					<div id="message_div"></div>
+					<div class="msgBox msg-error msgTip tipRed" style="display: none">
+						<span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-16-info"></span>贵公司有笔应付款的订单<span class="fb">未付款</span>
+					</div>
+					<div id="comet_div2" class="msgBox msg-info msgTip tipOge" style="display: none">
+						<span class="icon icon16 icon-close ly-right">关闭</span><span class="icon icon16 icon-notice"></span>贵公司有一条<a href="#" class="lnk-blue" id="comet_div2_href">待确认</a>的合同信息
+					</div>
+<div id="pager" class="pagination f12 mt10 ly-right" totalpage="6" currentpage="1"><span class="current prev">前一页</span><span class="current">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><span>...</span><a href="#">6</a><a class="next" href="#">后一页</a>&nbsp;<span style="color:#15b;">到第<input name="" class="pageNumber" style=" width: 35px;margin:0 3px;" value="1">页</span><a class="next jump">确定</a></div>
+					<table class="tabList" id="res_table" border="0" cellpadding="0" cellspacing="0">
+							 <colgroup><col width="8%">
+        <col width="8%">
+        <col width="8%">
+        <col width="8%">
+        <col width="8%">
+        <col width="8%">
+        <col width="5%">
+        <col width="10%">
+        <col width="10%">
+        <col width="12%">
+        <col width="4%">
+        <col width="10%">
+						</colgroup><tbody><tr>
+							<th>备案号</th>
+							<th>合同号</th>
+							<th>需方</th>
+							<th>供方</th>
+							<th>备案<br> 类型
+							</th>
+							<th>合同<br> 类型
+							</th>
+							<th>合同<br> 副本
+							</th>
+							<th>申请<br> 时间
+							</th>
+							<th>备案<br> 时间
+							</th>
+							<th>备案<br> 状态
+							</th>
+							<th>合同<br> 进度
+							</th>
+							<th class="rLine">操作</th>
+						</tr>
+						 						<tr id="z9FXurBW78c9fFhctyqoiylBjvB9avlu">
+							<td>BA15100004</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('','BA15100004');" class="lnk-blue"></a></td>
+							<td>其他</td>
+							<td>测试门窗厂</td>
+							<td>合同备案</td>
+							<td>门窗招标</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M01/00/14/wKgBDVYkk9CADGROAANYL8NzY8U935.PDF">查看</a></td>
+							<td>2015-10-19 14:55:15</td>
+							<td></td>
+							<td> <span class="state normal">受理中</span>     
+							</td>
+							<td><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+							</td>
+							<td>
+							<a href="javascript:to_modify('z9FXurBW78c9fFhctyqoiylBjvB9avlu')" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a> <br> <a href="javascript:delRecord('z9FXurBW78c9fFhctyqoiylBjvB9avlu','')" class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> 
+							</td>
+
+						</tr>
+						<tr id="infoBA15100004" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="5em5qOkOBgcQU2R0Ys0Rcwze05qnNgYt">
+							<td>BA15100002</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15100002','BA15100002');" class="lnk-blue">CT15100002</a></td>
+							<td>测试门窗厂</td>
+							<td>测试玻璃厂</td>
+							<td>合同备案</td>
+							<td>玻璃采购</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M01/00/13/wKgBDVYcekiABFCWAARKbiTiUD0276.JPG">查看</a></td>
+							<td>2015-10-13 11:28:13</td>
+							<td>2015-10-13
+								11:30:29</td>
+							<td>     <span class="state verified">已备案</span> 
+							</td>
+							<td>
+							<div class="progressBarClass" value="CT15100002" onclick="loadBatch('CT15100002','BA15100002','1');">
+								<div class="progressBar">
+									<div class="progre" style="width:40%"></div>
+								</div>
+								<div class="color-red">40%</div> 
+							</div>
+								
+							</td>
+							<td>
+							<a href="javascript:biangeng('5em5qOkOBgcQU2R0Ys0Rcwze05qnNgYt','CT15100002');" class="lnk-blue variContract " recordid="5em5qOkOBgcQU2R0Ys0Rcwze05qnNgYt"><span class="icon icon16 icon-change"></span>变更</a><br>
+								<a href="javascript:busun('5em5qOkOBgcQU2R0Ys0Rcwze05qnNgYt','CT15100002');" class="lnk-blue suppContract" recordid="5em5qOkOBgcQU2R0Ys0Rcwze05qnNgYt"><span class="icon icon16 icon-loss"></span>补损</a>
+							</td>
+
+						</tr>
+						<tr id="infoBA15100002" class="infoTr" isopen="1">
+<!-- 合同详情 -->
+<td colspan="12">
+	<div id="tabsholder" class="tabmenuBar contInfo tl">
+	 <ul class="tabMenu tabs">
+              <li class="current" id="tabz1">合同信息</li>
+              
+              
+     </ul>
+     <div class="contents">
+     <div style="display: block;" id="content1" class="tabscontent">
+		<div class="info ly-clearFix">
+			<div class="item">
+				<label>合同号</label> CT15100002
+			</div>
+			<div class="item">
+				<label>工程名称</label> 招标133
+			</div>
+			<div class="item">
+				<label>工程地点</label> 江苏南京栖霞
+			</div>
+			<div class="item">
+				<label>对应备案号</label> BA15100002,BA15100003
+			</div>
+			<div class="item">
+				<label>需方</label> 测试门窗厂
+			</div>
+			<div class="item">
+				<label>供方</label> 测试玻璃厂
+			</div>
+			<div class="item">
+				<label>签订地点</label> 江苏南京仙林
+			</div>
+			<div class="item">
+				<label>签订时间</label>
+				2015年10月01日
+			</div>
+			<div class="item">
+				<label>合同期限</label>
+				2015年11月30日
+			</div>
+			<div class="item">
+				<label>生效时间</label>
+				 2015年10月13日
+			</div>
+		</div>
+		<div class="item ly-clearFix">
+			<label class="ly-left">&nbsp;</label>
+			<table class="tabProd ly-left" border="0" cellpadding="0" cellspacing="0">
+				<colgroup><col width="10%">
+				<col width="20%">
+				<col width="13%">
+				<col width="15%">
+				<col width="14%">
+				<col width="20%">
+				<col width="8%">
+				</colgroup><tbody><tr>
+					<th>产品名称</th>
+					<th>产品规格</th>
+					<th>数量<span>（㎡）
+					</span></th>
+					<th>单价<span>（元/㎡）</span></th>
+					<th>金额<span>（元）</span></th>
+					<th>备注说明</th>
+					<th>&nbsp;&nbsp;&nbsp;</th>
+				</tr>
+				<tr>
+					<td>玻璃</td>
+					<td>85系列</td>
+					<td>15.00</td>
+					<td>15.00</td>
+					<td>225.00</td>
+					<td></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr class="fb">
+					<td>合计</td>
+					<td>&nbsp;</td>
+					<td>15.00</td>
+					<td>&nbsp;</td>
+					<td>225.00元</td> 
+					<td class="tl">						本合同附件清单共1页</td> 
+					<td></td> 
+				</tr>
+			</tbody></table>
+		</div>
+		<div class="item">
+			<label>交货地址</label> 江苏南京栖霞
+		</div>
+		<div class="item ly-clearFix">
+                    <label class="ly-left">&nbsp;</label>
+                    <table class="tabProd ly-left" border="0" cellpadding="0" cellspacing="0">
+                      <colgroup><col width="15%">
+                      <col width="35%">
+                      <col width="15%">
+                      <col width="15%">
+                      <col width="15%">
+                       <col width="5%">
+                      </colgroup><tbody><tr>
+                        <th>批次</th>
+                        <th>产品规格</th>
+                        <th>数量<span>（㎡）</span></th>
+                        <th>应付货款</th>
+                        <th>对应物流标签</th>
+                        <th>&nbsp;&nbsp;&nbsp;</th>
+                      </tr>
+                      <tr>
+                        <td>第1批次</td>
+                        <td><table class="tabProd tabBatch" border="0" cellpadding="0" cellspacing="0">
+                          <tbody><tr>
+                            <td>85系列 1.4</td>
+                          </tr>
+                        </tbody></table>
+                        </td>
+                        <td><table class="tabProd tabBatch" border="0" cellpadding="0" cellspacing="0">
+                          <tbody><tr>
+                            <td>13.00</td>
+                          </tr>
+                        </tbody></table>
+                        </td>
+                        <td>169.00元</td>
+                        <td>AAAA00891</td>
+                       <td></td>
+                      </tr>
+                      <tr>
+                        <td>第2批次</td>
+                        <td><table class="tabProd tabBatch" border="0" cellpadding="0" cellspacing="0">
+                          <tbody><tr>
+                            <td>85系列 1.4</td>
+                          </tr>
+                        </tbody></table>
+                        </td>
+                        <td><table class="tabProd tabBatch" border="0" cellpadding="0" cellspacing="0">
+                          <tbody><tr>
+                            <td>14.00</td>
+                          </tr>
+                        </tbody></table>
+                        </td>
+                        <td>196.00元</td>
+                        <td>AAAA00890</td>
+                       <td></td>
+                      </tr>
+                      <tr>
+                        <td>第3批次</td>
+                        <td><table class="tabProd tabBatch" border="0" cellpadding="0" cellspacing="0">
+                          <tbody><tr>
+                            <td>测试系列1</td>
+                          </tr>
+                          <tr>
+                            <td>测试系列2</td>
+                          </tr>
+                          <tr>
+                            <td>测试系列3</td>
+                          </tr>
+                        </tbody></table>
+                        </td>
+                        <td><table class="tabProd tabBatch" border="0" cellpadding="0" cellspacing="0">
+                          <tbody><tr>
+                            <td>100.00</td>
+                          </tr>
+                          <tr>
+                            <td>200.00</td>
+                          </tr>
+                          <tr>
+                            <td>300.00</td>
+                          </tr>
+                        </tbody></table>
+                        </td>
+                        <td>500.00元</td>
+                        <td>AAAA00835</td>
+                       <td></td>
+                      </tr>
+                    </tbody></table>
+                  </div>
+		<div class="item">
+			<label>交货批次</label> 本合同共<span class="color-red fb ml5 mr5">
+			 5</span>个交付批次,还有<span class="color-red fb ml5 mr5">				2
+				</span>个待交付
+		</div>
+		<div class="item">
+			<label>合同定金</label> 100.00元
+		</div>
+		<div class="item">
+			<label>合同备注</label> 
+		</div>
+		<div class="item">
+			<label>合同扫描件</label>  
+			<div class="rollBox">
+				<div class="elastislide-wrapper elastislide-horizontal"><div class="elastislide-carousel"><ul style="display: block; transition: all 500ms ease-in-out 0s;" class="elastislide-list imagelist" tab="content1"><li class="view"><a href="javascript:void(0);" data-image="http://storage.menchuang.org.cn/group1/M01/00/13/wKgBDVYcekiABFCWAARKbiTiUD0276.JPG"><img src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/wKgBDVYcekiABFCWAARKbiTiUD0276.JPG" data-image="http://storage.menchuang.org.cn/group1/M01/00/13/wKgBDVYcekiABFCWAARKbiTiUD0276.JPG" height="107" width="80"></a></li></ul></div><nav><span style="display: none;" class="elastislide-prev">Previous</span><span style="display: none;" class="elastislide-next">Next</span></nav></div>
+			</div>
+			 <span class="item"> <label>关联招标合同号</label>
+				CT15100001
+			</span>
+			</div>
+			</div>
+			<div style="display: none;" id="content2" class="tabscontent">
+ 
+			</div>
+			 <div style="display: none;" id="content3" class="tabscontent">
+
+			</div>
+			</div>
+			<div class="item mt10">
+				<label>&nbsp;</label>
+				<button class="button button-gray" onclick="closeContract('BA15100002')">收起</button>
+			</div>
+		</div></td>
+</tr>
+												<tr id="bDMt3b42usuminSkZ7lo5Int8hqVOjEp">
+							<td>BA15100001</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15100001','BA15100001');" class="lnk-blue">CT15100001</a></td>
+							<td>测试133</td>
+							<td>测试门窗厂</td>
+							<td>合同备案</td>
+							<td>门窗招标</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M00/00/13/wKgBDVYcebyAb5r1AARKbiTiUD0750.JPG">查看</a></td>
+							<td>2015-10-13 11:25:55</td>
+							<td>2015-10-13
+								11:27:47</td>
+							<td>     <span class="state verified">已备案</span> 
+							</td>
+							<td><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+							</td>
+							<td>
+							-
+							</td>
+
+						</tr>
+						<tr id="infoBA15100001" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="onpmh7Y8U89ImLbR7IupmlRTeA0O9VgC">
+							<td>BA15090006</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15090005','BA15090006');" class="lnk-blue">CT15090005</a></td>
+							<td>测试门窗厂</td>
+							<td>测试型材厂</td>
+							<td>合同备案</td>
+							<td>型材采购</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M01/00/11/wKgBDVXrrjqAGCoAAARKbiTiUD0963.JPG">查看</a></td>
+							<td>2015-09-06 11:08:46</td>
+							<td></td>
+							<td> <span class="state normal">受理中</span>     
+							</td>
+							<td>
+							<div class="progressBarClass" value="CT15090005" onclick="loadBatch('CT15090005','BA15090006','2');">
+								<div class="progressBar">
+									<div class="progre" style="width:0%"></div>
+								</div>
+								<div class="color-red">0%</div> 
+							</div>
+								
+							</td>
+							<td>
+							<a href="javascript:biangeng('onpmh7Y8U89ImLbR7IupmlRTeA0O9VgC','CT15090005');" class="lnk-blue variContract " recordid="onpmh7Y8U89ImLbR7IupmlRTeA0O9VgC"><span class="icon icon16 icon-change"></span>变更</a><br>
+								<a href="javascript:busun('onpmh7Y8U89ImLbR7IupmlRTeA0O9VgC','CT15090005');" class="lnk-blue suppContract" recordid="onpmh7Y8U89ImLbR7IupmlRTeA0O9VgC"><span class="icon icon16 icon-loss"></span>补损</a>
+							</td>
+
+						</tr>
+						<tr id="infoBA15090006" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="b4ZQvF2nVwxqYMP7C0Y59aTt7l8fvfiI">
+							<td>BA15090005</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15090002','BA15090005');" class="lnk-blue">CT15090002</a></td>
+							<td>测试门窗厂</td>
+							<td>测试型材厂</td>
+							<td>合同备案</td>
+							<td>型材采购</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M00/00/11/wKgBDVXrq0yAI3QUACeWtHE8JPU016.JPG">查看</a></td>
+							<td>2015-09-06 10:56:18</td>
+							<td></td>
+							<td> <span class="state normal">受理中</span>     
+							</td>
+							<td>
+							<div class="progressBarClass" value="CT15090002" onclick="loadBatch('CT15090002','BA15090005','2');">
+								<div class="progressBar">
+									<div class="progre" style="width:0%"></div>
+								</div>
+								<div class="color-red">0%</div> 
+							</div>
+								
+							</td>
+							<td>
+							<a href="javascript:biangeng('b4ZQvF2nVwxqYMP7C0Y59aTt7l8fvfiI','CT15090002');" class="lnk-blue variContract " recordid="b4ZQvF2nVwxqYMP7C0Y59aTt7l8fvfiI"><span class="icon icon16 icon-change"></span>变更</a><br>
+								<a href="javascript:busun('b4ZQvF2nVwxqYMP7C0Y59aTt7l8fvfiI','CT15090002');" class="lnk-blue suppContract" recordid="b4ZQvF2nVwxqYMP7C0Y59aTt7l8fvfiI"><span class="icon icon16 icon-loss"></span>补损</a>
+							</td>
+
+						</tr>
+						<tr id="infoBA15090005" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="qsvwFn2tiDEP1yLejg1eAk4qiHJQ3nWa">
+							<td>BA15090004</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15090003','BA15090004');" class="lnk-blue">CT15090003</a></td>
+							<td>开发商</td>
+							<td>测试门窗厂</td>
+							<td>合同备案</td>
+							<td>门窗招标</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M01/00/11/wKgBDVXrqp6Acp9nAB7obyyL_8M448.JPG">查看</a></td>
+							<td>2015-09-06 10:53:27</td>
+							<td>2015-09-17
+								10:05:49</td>
+							<td>     <span class="state verified">已备案</span> 
+							</td>
+							<td><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+							</td>
+							<td>
+							-
+							</td>
+
+						</tr>
+						<tr id="infoBA15090004" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="ID9dw87NdTJlI5w7sBT8cBqNOQqvwnzk">
+							<td>BA15090003</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15090004','BA15090003');" class="lnk-blue">CT15090004</a></td>
+							<td>测试门窗厂</td>
+							<td>测试型材厂</td>
+							<td>合同备案</td>
+							<td>型材采购</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M00/00/11/wKgBDVXrqPmAAdL1AARKbiTiUD0878.JPG">查看</a></td>
+							<td>2015-09-06 10:46:21</td>
+							<td>2015-09-07
+								15:01:03</td>
+							<td>     <span class="state verified">已备案</span> 
+							</td>
+							<td>
+							<div class="progressBarClass" value="CT15090004" onclick="loadBatch('CT15090004','BA15090003','2');">
+								<div class="progressBar">
+									<div class="progre" style="width:0%"></div>
+								</div>
+								<div class="color-red">0%</div> 
+							</div>
+								
+							</td>
+							<td>
+							<a href="javascript:biangeng('ID9dw87NdTJlI5w7sBT8cBqNOQqvwnzk','CT15090004');" class="lnk-blue variContract " recordid="ID9dw87NdTJlI5w7sBT8cBqNOQqvwnzk"><span class="icon icon16 icon-change"></span>变更</a><br>
+								<a href="javascript:busun('ID9dw87NdTJlI5w7sBT8cBqNOQqvwnzk','CT15090004');" class="lnk-blue suppContract" recordid="ID9dw87NdTJlI5w7sBT8cBqNOQqvwnzk"><span class="icon icon16 icon-loss"></span>补损</a>
+							</td>
+
+						</tr>
+						<tr id="infoBA15090003" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="CJBQPJQk7ACepNu0m4rLRVoBT1jRDL7u">
+							<td>BA15090001</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15090001','BA15090001');" class="lnk-blue">CT15090001</a></td>
+							<td>测试11</td>
+							<td>测试门窗厂</td>
+							<td>合同备案</td>
+							<td>门窗招标</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M00/00/11/wKgBDVXrpsKACTEnAARKbiTiUD0481.JPG">查看</a></td>
+							<td>2015-09-06 10:38:07</td>
+							<td>2015-09-06
+								10:45:46</td>
+							<td>     <span class="state verified">已备案</span> 
+							</td>
+							<td><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+							</td>
+							<td>
+							-
+							</td>
+
+						</tr>
+						<tr id="infoBA15090001" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="s3oMxD0pvRxtFEXiZbF1FiCuyQgtrIWI">
+							<td>BA15080009</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('','BA15080009');" class="lnk-blue"></a></td>
+							<td>测试</td>
+							<td>测试门窗厂</td>
+							<td>合同备案</td>
+							<td>门窗招标</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M00/00/11/wKgBDVXgO-mARAveAADRgb8eAb4545.JPG">查看</a></td>
+							<td>2015-08-28 18:46:17</td>
+							<td></td>
+							<td> <span class="state normal">受理中</span>     
+							</td>
+							<td><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+							</td>
+							<td>
+							<a href="javascript:to_modify('s3oMxD0pvRxtFEXiZbF1FiCuyQgtrIWI')" class="lnk-blue"><span class="icon icon16 icon-edit"></span>修改</a> <br> <a href="javascript:delRecord('s3oMxD0pvRxtFEXiZbF1FiCuyQgtrIWI','')" class="lnk-blue"> <span class="icon icon16 icon-del"></span>删除
+							</a> 
+							</td>
+
+						</tr>
+						<tr id="infoBA15080009" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+												<tr id="vzCvYCIY3Zruq2MKKryzyj653J3vTwgg">
+							<td>BA15080002</td>
+							<td><a href="javascript:void(0);" onclick="loadInfo('CT15080001','BA15080002');" class="lnk-blue">CT15080001</a></td>
+							<td>测试开发商</td>
+							<td>测试门窗厂</td>
+							<td>合同备案</td>
+							<td>门窗招标</td>
+							<td><a href="javascript:void(0);" class="lnk-blue lnk-underline lnk-view" imgpath="group1/M00/00/0F/wKgBDVXNoh2ACrayABhjiUiYu9Q947.PDF">查看</a></td>
+							<td>2015-08-14 16:09:09</td>
+							<td>2015-08-14
+								16:37:40</td>
+							<td>     <span class="state verified">已备案</span> 
+							</td>
+							<td><div class="progressBar">
+                  					<div class="progre100"></div>
+               					 </div>
+							</td>
+							<td>
+							-
+							</td>
+
+						</tr>
+						<tr id="infoBA15080002" class="infoTr" isopen="0">
+							<!-- 详细内容 -->
+						</tr>
+						 					</tbody></table>
+					<div class="ly-clearFix"><div id="pager" class="pagination f12 mt10 ly-right" totalpage="6" currentpage="1"><span class="current prev">前一页</span><span class="current">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><span>...</span><a href="#">6</a><a class="next" href="#">后一页</a>&nbsp;<span style="color:#15b;">到第<input name="" class="pageNumber" style=" width: 35px;margin:0 3px;" value="1">页</span><a class="next jump">确定</a></div>
+</div>
+				</div>
+			</div>
+			</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	var newDate = new Date();
+	var year = newDate.getFullYear();
+	$("#yearSapn").text(year);
+});
+</script>
+<div class="f12" id="footer">
+	© <span id="yearSapn">2015</span> 私享家绿色门窗平台&nbsp;版权所有<span class="ml10">&nbsp;&nbsp;<a href="http://static.menchuang.org.cn/supervisor-website/aboutus.html" target="_blank">关于我们</a>&nbsp;&nbsp;&nbsp;<a href="http://static.menchuang.org.cn/supervisor-website/help.html" target="_blank">帮助说明</a><a target="_blank" href="http://www.miitbeian.gov.cn/">苏ICP备14040094号-1</a></span>
+</div>
+	<div class="modal-wrap popDemo chanPic notViewer" id="chanPic" style="display: none; width: 700px; top: 3044.4px;">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="bgimgShow">
+
+				<input value="" name="" id="bgRecordId" type="hidden"> <input value="" name="imgPath" id="bgimgPath" type="hidden">
+				<div class="rollBox" id="bgRollBox">
+					<ul id="bgcarousel" class="elastislide-list" style="height: 140px">
+
+					</ul>
+				</div>
+			</div>
+			<div class="button-box">
+				<div style="height: 30px; width: 120px;" class="uploadify" id="bgFile"><object style="position: absolute; z-index: 1;" id="SWFUpload_0" type="application/x-shockwave-flash" data="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/uploadify_002.swf" class="swfupload" height="30" width="120"><param name="wmode" value="transparent"><param name="movie" value="/upload/uploadify.swf?preventswfcaching=1445948713750"><param name="quality" value="high"><param name="menu" value="false"><param name="allowScriptAccess" value="always"><param name="flashvars" value="movieName=SWFUpload_0&amp;uploadURL=%2Fupload.htm&amp;useQueryString=false&amp;requeueOnError=false&amp;httpSuccess=&amp;assumeSuccessTimeout=30&amp;params=&amp;filePostName=Filedata&amp;fileTypes=*.jpg%3B*.pdf&amp;fileTypesDescription=All%20Files&amp;fileSizeLimit=0&amp;fileUploadLimit=0&amp;fileQueueLimit=999&amp;debugEnabled=false&amp;buttonImageURL=&amp;buttonWidth=120&amp;buttonHeight=30&amp;buttonText=&amp;buttonTextTopPadding=0&amp;buttonTextLeftPadding=0&amp;buttonTextStyle=color%3A%20%23000000%3B%20font-size%3A%2016pt%3B&amp;buttonAction=-110&amp;buttonDisabled=false&amp;buttonCursor=-2"></object><div style="height: 30px; line-height: 30px; width: 120px;" class="uploadify-button " id="bgFile-button"><span class="uploadify-button-text">上传变更扫描文件</span></div></div><div class="uploadify-queue" id="bgFile-queue"></div>
+			</div>
+			<div class="button-box">
+				<button class="button button-pop" onclick="saveBiangeng()">确认</button>
+				<button class="button button-gray">取消</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-wrap popDemo chanPic notViewer" id="linkModal" style="display: none; width: 700px; top: 3044.4px;">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<div class="modal-body">
+			<div id="bgimgShow">
+				<div class="rollBox" id="linkRollBox">
+					<ul id="linkcarousel" class="elastislide-list" style="height: 140px">
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal-wrap popDemo contPop suppPop notViewer" id="bsModal" style="display: none; width: 700px; top: 3044.4px;">
+		<div class="modal-header">
+			<span class="close">关闭</span>
+		</div>
+		<form action="" id="bsForm" method="post">
+			<div class="modal-body">
+				<div class="item" id="bsimgShow">
+					<label>&nbsp;</label>
+					<div class="ly-left">
+						<input value="" name="" id="bsRecordId" type="hidden"> <input value="" name="imgPath" id="bsimgPath" type="hidden">
+						<div class="rollBox" id="bsRollBox">
+							<ul id="bscarousel" class="elastislide-list" style="height: 140px">
+
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<label>&nbsp;</label>
+					<div class="ly-left">
+						<div style="height: 30px; width: 120px;" class="uploadify" id="bsFile"><object style="position: absolute; z-index: 1;" id="SWFUpload_1" type="application/x-shockwave-flash" data="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/uploadify.swf" class="swfupload" height="30" width="120"><param name="wmode" value="transparent"><param name="movie" value="/upload/uploadify.swf?preventswfcaching=1445948713753"><param name="quality" value="high"><param name="menu" value="false"><param name="allowScriptAccess" value="always"><param name="flashvars" value="movieName=SWFUpload_1&amp;uploadURL=%2Fupload.htm&amp;useQueryString=false&amp;requeueOnError=false&amp;httpSuccess=&amp;assumeSuccessTimeout=30&amp;params=&amp;filePostName=Filedata&amp;fileTypes=*.jpg%3B*.pdf&amp;fileTypesDescription=All%20Files&amp;fileSizeLimit=0&amp;fileUploadLimit=0&amp;fileQueueLimit=999&amp;debugEnabled=false&amp;buttonImageURL=&amp;buttonWidth=120&amp;buttonHeight=30&amp;buttonText=&amp;buttonTextTopPadding=0&amp;buttonTextLeftPadding=0&amp;buttonTextStyle=color%3A%20%23000000%3B%20font-size%3A%2016pt%3B&amp;buttonAction=-110&amp;buttonDisabled=false&amp;buttonCursor=-2"></object><div style="height: 30px; line-height: 30px; width: 120px;" class="uploadify-button " id="bsFile-button"><span class="uploadify-button-text">上传变更扫描文件</span></div></div><div class="uploadify-queue" id="bsFile-queue"></div>
+					</div>
+				</div>
+
+				<div class="item">
+					<label>选择补损批次</label><span class="color-green hand ml10" onclick="openBatch();">请选择批次</span>
+				</div>
+				<div class="item">
+					<label>需补损物流标签</label><span id="rfid"></span><input name="rfid" id="rfidHide" type="hidden">
+				</div>
+				<div class="item">
+					<label>&nbsp;</label> <input class="button button-pop" onclick="busunSeav();" value="确定补损" type="button">
+					<button class="button button-gray">取消</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-wrap popDemo popView notViewer" id="image-list" style="display: none; width: 680px; top: 3044.4px;">
+		<div class="modal-header">
+			<span class="close"><a onclick="">关闭窗口</a></span>
+		</div>
+		<div class="modal-body">
+			<div class="rollBox" id="rollBox" style="height: 150px;"></div>
+		</div>
+	</div>
+	<!-- 批次选择 -->
+	<div class="modal-wrap popDemo dropList notViewer" id="batch-list" style="display: none; width: 680px; height: 300px; z-index: 10011; top: 3044.4px;">
+		<div class="modal-header">
+			<span class="close closeBatch"><a>关闭窗口</a></span>
+		</div>
+		 <div class="modal-body dropBox">
+		 <div class="item"> <span>
+          </span>
+          <ul id="batchUl">
+          </ul>
+        </div>
+		 <button class="button button-pop" id="batchBtn">确认</button>
+		 </div>
+	</div>
+	
+	<div style="top: 941px;" class="viewer modal-wrap" id="iviewerModal">
+		<div class="modal-header" style="">
+			<span class="close">关闭</span>
+		</div>
+		<div id="viewer2" class="modal-body iviewer iviewer_cursor" style="width: 100%; top: 0px; overflow: hidden;"><img style="position: absolute; top: 0px; left: 320px; max-width: none; width: 687px; height: 500px;" src="%E7%A7%81%E4%BA%AB%E5%AE%B6%E7%BB%BF%E8%89%B2%E9%97%A8%E7%AA%97%E5%B9%B3%E5%8F%B0_files/wKgBDVYcekiABFCWAARKbiTiUD0276.JPG"><div id="toolbuttons" style="width:324px;height:70px;margin:auto;position: relative;padding-top:370px"><div class="iviewer_zoom_in iviewer_common iviewer_button"></div><div class="iviewer_zoom_out iviewer_common iviewer_button"></div><div class="iviewer_del iviewer_common iviewer_button"></div><div class="iviewer_rotate_right iviewer_common iviewer_button"></div></div></div>
+	</div>
+	<div class="maskdivgen maskdivgen1" style=""></div>
+	<div class="maskdivgen maskdivgen2" style="display: none;z-index: 10010;"></div>
+
+
+
+</body></html>

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sxj.spring.modules.mapper.JsonMapper;
-import com.sxj.statemachine.StateMachineImpl;
+import com.sxj.statemachine.interfaces.IStateMachine;
 import com.sxj.supervisor.dao.contract.IContractBatchDao;
 import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.contract.IContractItemDao;
@@ -38,8 +38,6 @@ import com.sxj.supervisor.dao.contract.IContractModifyItemDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishBatchDao;
 import com.sxj.supervisor.dao.contract.IContractReplenishDao;
 import com.sxj.supervisor.dao.record.IRecordDao;
-import com.sxj.supervisor.dao.rfid.logistics.ILogisticsRfidDao;
-import com.sxj.supervisor.dao.rfid.ref.ILogisticsRefDao;
 import com.sxj.supervisor.entity.contract.ContractBatchEntity;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.contract.ContractItemEntity;
@@ -80,7 +78,6 @@ import com.sxj.supervisor.model.rfid.window.WindowRfidQuery;
 import com.sxj.supervisor.service.contract.IContractPayService;
 import com.sxj.supervisor.service.contract.IContractService;
 import com.sxj.supervisor.service.record.IRecordService;
-import com.sxj.supervisor.service.rfid.app.IRfidApplicationService;
 import com.sxj.supervisor.service.rfid.logistics.ILogisticsRfidService;
 import com.sxj.supervisor.service.rfid.ref.ILogisticsRefService;
 import com.sxj.supervisor.service.rfid.window.IWindowRfidService;
@@ -101,14 +98,20 @@ import com.sxj.util.persistent.QueryCondition;
 @Transactional
 public class ContractServiceImpl implements IContractService
 {
+    
+    @Autowired
+    @Qualifier("contractStatefsm")
+    private IStateMachine contractStatefsm;
+    
+    @Autowired
+    @Qualifier("recordStatefsm")
+    private IStateMachine recordStatefsm;
+    
     /**
      * 合同DAO
      */
     @Autowired
     private IContractDao contractDao;
-    
-    @Autowired
-    private ILogisticsRfidDao logisticsDao;
     
     /**
      * 批次DAO
@@ -119,8 +122,6 @@ public class ContractServiceImpl implements IContractService
     /**
      * 变更合同批次DAO
      */
-    @Autowired
-    private IContractModifyBatchDao contractBatchHisDao;
     
     /**
      * 合同产品条目
@@ -188,24 +189,10 @@ public class ContractServiceImpl implements IContractService
     @Autowired
     private IWindowRfidRefService windowRefService;
     
-    @Autowired
-    private IRfidApplicationService appRfidService;
-    
     private IContractService self;
     
     @Autowired
     private ApplicationContext context;
-    
-    @Autowired
-    private ILogisticsRefDao refDao;
-    
-    @Autowired
-    @Qualifier("recordStatefsm")
-    private StateMachineImpl<RecordStateEnum> recordStatefsm;
-    
-    @Autowired
-    @Qualifier("contractStatefsm")
-    private StateMachineImpl<ContractStateEnum> contractStatefsm;
     
     @PostConstruct
     public void init()
@@ -220,7 +207,7 @@ public class ContractServiceImpl implements IContractService
     @Transactional
     public void addContract(ContractEntity contract,
             List<ContractItemEntity> itemList, String recordId)
-            throws ServiceException
+                    throws ServiceException
     {
         try
         {
@@ -249,10 +236,10 @@ public class ContractServiceImpl implements IContractService
             contract.setState(ContractStateEnum.NOAPPROVAL);
             contract.setConfirmState(ContractSureStateEnum.NOAFFIRM);
             contract.setCreateDate(new Date());
-            String year = new SimpleDateFormat("yy", Locale.CHINESE).format(Calendar.getInstance()
-                    .getTime());
-            String month = new SimpleDateFormat("MM", Locale.CHINESE).format(Calendar.getInstance()
-                    .getTime());
+            String year = new SimpleDateFormat("yy", Locale.CHINESE)
+                    .format(Calendar.getInstance().getTime());
+            String month = new SimpleDateFormat("MM", Locale.CHINESE)
+                    .format(Calendar.getInstance().getTime());
             contract.setDateNo("CT" + year + month);
             contract.setUseQuantity(0f);
             contract.setItemQuantity(itemQuantity);
@@ -289,7 +276,8 @@ public class ContractServiceImpl implements IContractService
             {
                 if (StringUtils.isNotEmpty(contractItemEntity.getId()))
                 {
-                    ContractItemEntity ci = contractItemDao.getItems(contractItemEntity.getId());
+                    ContractItemEntity ci = contractItemDao
+                            .getItems(contractItemEntity.getId());
                     if (ci.getUpdateState() != null && ci.getUpdateState() != 0)
                     {
                         contractItemEntity.setUpdateState(1);
@@ -304,8 +292,8 @@ public class ContractServiceImpl implements IContractService
             // 条目
             if (!CollectionUtils.isEmpty(contract.getItemList()))
             {
-                List<ContractItemEntity> item = contractItemDao.queryItems(contract.getContract()
-                        .getContractNo());
+                List<ContractItemEntity> item = contractItemDao
+                        .queryItems(contract.getContract().getContractNo());
                 if (item != null)
                 {
                     String ids = "";
@@ -332,8 +320,8 @@ public class ContractServiceImpl implements IContractService
             // 主体
             if (contract.getContract() != null)
             {
-                ContractEntity ce = contractDao.getContract(contract.getContract()
-                        .getId());
+                ContractEntity ce = contractDao
+                        .getContract(contract.getContract().getId());
                 String[] arr = ce.getRecordNo().split(",");
                 String recordNo = contract.getContract().getRecordNo();
                 if (recordNo != null && recordNo.length() > 0)
@@ -345,7 +333,8 @@ public class ContractServiceImpl implements IContractService
                         // 解绑备案号
                         for (String str : arr)
                         {
-                            RecordEntity re = recordService.getRecordByNo(str.trim());
+                            RecordEntity re = recordService
+                                    .getRecordByNo(str.trim());
                             re.setContractNo("");
                             re.setState(RecordStateEnum.NOBINDING);
                             recordDao.updateRecord(re);
@@ -354,8 +343,8 @@ public class ContractServiceImpl implements IContractService
                         for (String str : recordNoArr)
                         {
                             RecordEntity re = recordService.getRecordByNo(str);
-                            re.setContractNo(contract.getContract()
-                                    .getContractNo());
+                            re.setContractNo(
+                                    contract.getContract().getContractNo());
                             re.setState(RecordStateEnum.BINDING);
                             recordDao.updateRecord(re);
                         }
@@ -397,20 +386,22 @@ public class ContractServiceImpl implements IContractService
                     }
                     if (!CollectionUtils.isEmpty(cmm.getModifyItemList()))
                     {
-                        contractModifyItemDao.updateItems(cmm.getModifyItemList());
+                        contractModifyItemDao
+                                .updateItems(cmm.getModifyItemList());
                     }
                     List<ModifyBatchEntity> mbeList = new ArrayList<ModifyBatchEntity>();
                     if (!CollectionUtils.isEmpty(cmm.getModifyBatchList()))
                     {
-                        for (int j = 0; j < cmm.getModifyBatchList().size(); j++)
+                        for (int j = 0; j < cmm.getModifyBatchList()
+                                .size(); j++)
                         {
                             ModifyBatchModel mbm = cmm.getModifyBatchList()
                                     .get(j);
                             if (mbm.getModifyBatchItems() != null)
                             {
-                                mbm.getModifyBatch()
-                                        .setBatchItems(JsonMapper.nonEmptyMapper()
-                                                .toJson(mbm.getModifyBatchItems()));
+                                mbm.getModifyBatch().setBatchItems(
+                                        JsonMapper.nonEmptyMapper().toJson(
+                                                mbm.getModifyBatchItems()));
                             }
                             mbeList.add(mbm.getModifyBatch());
                         }
@@ -440,9 +431,9 @@ public class ContractServiceImpl implements IContractService
                                     .get(j);
                             if (rbm.getReplenishBatch() != null)
                             {
-                                rbm.getReplenishBatch()
-                                        .setBatchItems(JsonMapper.nonEmptyMapper()
-                                                .toJson(rbm.getReplenishBatchItems()));
+                                rbm.getReplenishBatch().setBatchItems(
+                                        JsonMapper.nonEmptyMapper().toJson(
+                                                rbm.getReplenishBatchItems()));
                             }
                             rbeList.add(rbm.getReplenishBatch());
                         }
@@ -472,12 +463,14 @@ public class ContractServiceImpl implements IContractService
             ContractEntity contract = contractDao.getContract(id);// 合同主体
             Assert.notNull(contract, "合同主体不能为NULL！！！");
             contractModel.setContract(contract);
-            List<ContractItemEntity> itemList = contractItemDao.queryItems(contract.getContractNo());
+            List<ContractItemEntity> itemList = contractItemDao
+                    .queryItems(contract.getContractNo());
             // 产品条目
             getItems(contractModel, itemList);
             QueryCondition<ContractBatchEntity> batchCondition = new QueryCondition<ContractBatchEntity>();
             batchCondition.addCondition("contractId", contract.getContractNo());// 补损备案
-            List<ContractBatchEntity> batchList = contractBatchDao.queryBacths(batchCondition);
+            List<ContractBatchEntity> batchList = contractBatchDao
+                    .queryBacths(batchCondition);
             // 批次信息
             getBatches(contractModel, batchList);
             // 变更信息
@@ -503,8 +496,8 @@ public class ContractServiceImpl implements IContractService
     }
     
     private void getReplenishes(ContractModel contractModel,
-            ContractEntity contract) throws IOException, JsonParseException,
-            JsonMappingException
+            ContractEntity contract)
+                    throws IOException, JsonParseException, JsonMappingException
     {
         String replenishRecordIds = this.recordIdArr(contract.getContractNo(),
                 "2");// 获取变更备案
@@ -513,13 +506,15 @@ public class ContractServiceImpl implements IContractService
             
             QueryCondition<ReplenishContractEntity> replenishCondition = new QueryCondition<ReplenishContractEntity>();
             replenishCondition.addCondition("recordIds", replenishRecordIds);// 补损备案ID
-            List<ReplenishContractEntity> replenishList = contractReplenishDao.queryReplenish(replenishCondition);
+            List<ReplenishContractEntity> replenishList = contractReplenishDao
+                    .queryReplenish(replenishCondition);
             if (!CollectionUtils.isEmpty(replenishList))
             {
                 String[] recordIds = projectRecordIds(replenishList);
                 QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
                 query.addCondition("recordIdArray", recordIds);
-                List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao.queryReplenishBatch(query);
+                List<ReplenishBatchEntity> replenishBatchList = contractReplenishBatchDao
+                        .queryReplenishBatch(query);
                 if (!CollectionUtils.isEmpty(replenishBatchList))
                 {
                     for (ReplenishContractEntity replenish : replenishList)
@@ -531,13 +526,14 @@ public class ContractServiceImpl implements IContractService
                             replenishBatchModel.setReplenishBatch(batch);
                             if (StringUtils.isNotEmpty(batch.getBatchItems()))
                             {
-                                List<BatchItemModel> batchItemModelList = JsonMapper.nonEmptyMapper()
-                                        .getMapper()
-                                        .readValue(batch.getBatchItems(),
+                                List<BatchItemModel> batchItemModelList = JsonMapper
+                                        .nonEmptyMapper().getMapper().readValue(
+                                                batch.getBatchItems(),
                                                 new TypeReference<List<BatchItemModel>>()
                                                 {
                                                 });
-                                replenishBatchModel.setReplenishBatchItems(batchItemModelList);
+                                replenishBatchModel.setReplenishBatchItems(
+                                        batchItemModelList);
                             }
                             if (replenish.getId()
                                     .equals(batch.getReplenishId()))
@@ -573,26 +569,31 @@ public class ContractServiceImpl implements IContractService
     }
     
     private void getContractModifies(ContractModel contractModel,
-            ContractEntity contract) throws IOException, JsonParseException,
-            JsonMappingException
+            ContractEntity contract)
+                    throws IOException, JsonParseException, JsonMappingException
     {
-        String modifyRecordIds = this.recordIdArr(contract.getContractNo(), "1");// 获取变更备案
+        String modifyRecordIds = this.recordIdArr(contract.getContractNo(),
+                "1");// 获取变更备案
         if (!StringUtils.isEmpty(modifyRecordIds))
         {
             // 变更合同主体
             QueryCondition<ModifyBatchEntity> modifyCondition = new QueryCondition<ModifyBatchEntity>();
             modifyCondition.addCondition("recordIds", modifyRecordIds.trim());// 变更备案ID
-            modifyCondition.addCondition("contractId", contract.getContractNo());
-            List<ModifyContractEntity> modifyList = contractModifyDao.queryModify(modifyCondition);
-            
+            modifyCondition.addCondition("contractId",
+                    contract.getContractNo());
+            List<ModifyContractEntity> modifyList = contractModifyDao
+                    .queryModify(modifyCondition);
+                    
             if (!CollectionUtils.isEmpty(modifyList))
             {
                 String[] modifyIds = projectModifyIds(modifyList);
-                List<ModifyItemEntity> modifyItems = contractModifyItemDao.queryItemsByModifyIds(modifyIds);
+                List<ModifyItemEntity> modifyItems = contractModifyItemDao
+                        .queryItemsByModifyIds(modifyIds);
                 QueryCondition<ModifyBatchEntity> query = new QueryCondition<ModifyBatchEntity>();
                 query.addCondition("modifyIds", modifyIds);
-                List<ModifyBatchEntity> modifyBatches = contractModifyBatchDao.queryBacths(query);
-                
+                List<ModifyBatchEntity> modifyBatches = contractModifyBatchDao
+                        .queryBacths(query);
+                        
                 for (ModifyContractEntity modify : modifyList)
                 {
                     ContractModifyModel cmm = new ContractModifyModel();
@@ -617,20 +618,19 @@ public class ContractServiceImpl implements IContractService
     
     private void getModifyBatches(List<ModifyBatchEntity> modifyBatches,
             ModifyContractEntity modify, ContractModifyModel cmm,
-            ModifyBatchModel modifyBatchModel) throws IOException,
-            JsonParseException, JsonMappingException
+            ModifyBatchModel modifyBatchModel)
+                    throws IOException, JsonParseException, JsonMappingException
     {
         for (ModifyBatchEntity batch : modifyBatches)
         {
             if (batch.getModifyId().equals(modify.getId()))
             {
                 List<BatchItemModel> batchItems = null;
-                batchItems = JsonMapper.nonEmptyMapper()
-                        .getMapper()
-                        .readValue(batch.getBatchItems(),
-                                new TypeReference<List<BatchItemModel>>()
-                                {
-                                });
+                batchItems = JsonMapper.nonEmptyMapper().getMapper().readValue(
+                        batch.getBatchItems(),
+                        new TypeReference<List<BatchItemModel>>()
+                        {
+                        });
                 modifyBatchModel.setModifyBatchItems(batchItems);
                 modifyBatchModel.setModifyBatch(batch);
                 cmm.getModifyBatchList().add(modifyBatchModel);
@@ -659,23 +659,23 @@ public class ContractServiceImpl implements IContractService
     }
     
     private void getBatches(ContractModel contractModel,
-            List<ContractBatchEntity> batchList) throws IOException,
-            JsonParseException, JsonMappingException
+            List<ContractBatchEntity> batchList)
+                    throws IOException, JsonParseException, JsonMappingException
     {
         if (!CollectionUtils.isEmpty(batchList))
         {
-            List<ContractBatchModel> batchModelList = contractModel.getBatchList();
+            List<ContractBatchModel> batchModelList = contractModel
+                    .getBatchList();
             for (ContractBatchEntity batch : batchList)
             {
                 ContractBatchModel batchModel = new ContractBatchModel();
                 batchModel.setBatch(batch);
                 List<BatchItemModel> beanList = null;
-                beanList = JsonMapper.nonEmptyMapper()
-                        .getMapper()
-                        .readValue(batch.getBatchItems(),
-                                new TypeReference<List<BatchItemModel>>()
-                                {
-                                });
+                beanList = JsonMapper.nonEmptyMapper().getMapper().readValue(
+                        batch.getBatchItems(),
+                        new TypeReference<List<BatchItemModel>>()
+                        {
+                        });
                 batchModel.setBatchItems(beanList);
                 batchModelList.add(batchModel);
             }
@@ -696,7 +696,8 @@ public class ContractServiceImpl implements IContractService
             }
             QueryCondition<ContractEntity> condition = new QueryCondition<ContractEntity>();
             condition.addCondition("contractNo", contractNo);// 合同号
-            List<ContractEntity> contractList = contractDao.queryContract(condition);
+            List<ContractEntity> contractList = contractDao
+                    .queryContract(condition);
             if (contractList == null || contractList.size() == 0)
             {
                 return null;
@@ -727,7 +728,8 @@ public class ContractServiceImpl implements IContractService
         String recordIds = "";
         if (record != null && record.size() > 0)
         {
-            for (Iterator<RecordEntity> iterator = record.iterator(); iterator.hasNext();)
+            for (Iterator<RecordEntity> iterator = record.iterator(); iterator
+                    .hasNext();)
             {
                 RecordEntity recordEntity = (RecordEntity) iterator.next();
                 recordIds += "'" + recordEntity.getRecordNo() + "',";
@@ -776,7 +778,8 @@ public class ContractServiceImpl implements IContractService
             condition.addCondition("engAddress", query.getEngAddress());// 工程地址
             condition.setPage(query);
             
-            List<ContractEntity> contractList = contractDao.queryContract(condition);
+            List<ContractEntity> contractList = contractDao
+                    .queryContract(condition);
             query.setPage(condition);
             List<ContractModel> contractModelList = new ArrayList<ContractModel>();
             for (ContractEntity contractEntity : contractList)
@@ -810,7 +813,7 @@ public class ContractServiceImpl implements IContractService
             ce.setDeleteState(true);
             contractDao.updateContract(ce);
             //回滚备案
-            String[] recordNo=ce.getRecordNo().split(",");
+            String[] recordNo = ce.getRecordNo().split(",");
             recordDao.updateContractByRecordNo(recordNo);
         }
         catch (Exception e)
@@ -828,7 +831,7 @@ public class ContractServiceImpl implements IContractService
     public void changeContract(String recordId, ContractModifyModel model,
             List<ContractItemEntity> itemList, String contractIds,
             String changeIds, String contractBatchIds, String changeBatchIds)
-            throws ServiceException
+                    throws ServiceException
     {
         try
         {
@@ -846,8 +849,9 @@ public class ContractServiceImpl implements IContractService
                     List<ModifyItemEntity> mieList = new ArrayList<ModifyItemEntity>();
                     if (!CollectionUtils.isEmpty(model.getModifyItemList()))
                     {
-                        for (Iterator<ModifyItemEntity> iterator = model.getModifyItemList()
-                                .iterator(); iterator.hasNext();)
+                        for (Iterator<ModifyItemEntity> iterator = model
+                                .getModifyItemList().iterator(); iterator
+                                        .hasNext();)
                         {
                             ModifyItemEntity mie = iterator.next();
                             mie.setModifyId(mec.getId());
@@ -863,9 +867,10 @@ public class ContractServiceImpl implements IContractService
                     {
                         for (ModifyBatchModel modifyBatchEntity : mbmList)
                         {
-                            ModifyBatchEntity mbe = modifyBatchEntity.getModifyBatch();
-                            String json = JsonMapper.nonEmptyMapper()
-                                    .toJson(modifyBatchEntity.getModifyBatchItems());
+                            ModifyBatchEntity mbe = modifyBatchEntity
+                                    .getModifyBatch();
+                            String json = JsonMapper.nonEmptyMapper().toJson(
+                                    modifyBatchEntity.getModifyBatchItems());
                             mbe.setBatchItems(json);
                             mbe.setReplenishState(0);
                             mbe.setUpdateState(0);
@@ -886,7 +891,8 @@ public class ContractServiceImpl implements IContractService
             // 更新变更信息
             if (StringUtils.isNotEmpty(contractIds))
             {
-                contractIds = contractIds.substring(0, contractIds.length() - 1);
+                contractIds = contractIds.substring(0,
+                        contractIds.length() - 1);
                 String[] contractIdArr = contractIds.split(",");
                 List<ContractItemEntity> cilist = new ArrayList<ContractItemEntity>();
                 for (String string : contractIdArr)
@@ -972,7 +978,8 @@ public class ContractServiceImpl implements IContractService
                     String[] rfidNoArr = record.getRfidNo().split(",");
                     for (String rfidNo : rfidNoArr)
                     {
-                        ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
+                        ContractBatchEntity batch = contractBatchDao
+                                .getBacthsByRfid(rfidNo);
                         if (batch != null)
                         {
                             if (batch.getType() == 1)
@@ -1008,8 +1015,10 @@ public class ContractServiceImpl implements IContractService
                             for (ReplenishBatchModel replenishBatchModel : batchList)
                             {
                                 String json = JsonMapper.nonEmptyMapper()
-                                        .toJson(replenishBatchModel.getReplenishBatchItems());
-                                ReplenishBatchEntity rb = replenishBatchModel.getReplenishBatch();
+                                        .toJson(replenishBatchModel
+                                                .getReplenishBatchItems());
+                                ReplenishBatchEntity rb = replenishBatchModel
+                                        .getReplenishBatch();
                                 rb.setBatchItems(json);
                                 rb.setRfidNo(record.getRfidNo());// 添加补损RFID到批次
                                 rb.setReplenishState(0);
@@ -1028,13 +1037,14 @@ public class ContractServiceImpl implements IContractService
                     re.setState(RecordStateEnum.BINDING);
                     recordDao.updateRecord(re);
                     // 更新合同有效批次条目
-                    ContractModel cm = this.getContractModelByContractNo(contractId);
+                    ContractModel cm = this
+                            .getContractModelByContractNo(contractId);
                     if (cm != null)
                     {
                         ContractEntity ce = new ContractEntity();
                         ce.setId(cm.getContract().getId());
-                        ce.setEffectiveBatch(cm.getContract()
-                                .getEffectiveBatch() + 1);
+                        ce.setEffectiveBatch(
+                                cm.getContract().getEffectiveBatch() + 1);
                         contractDao.updateContract(ce);
                     }
                 }
@@ -1108,7 +1118,8 @@ public class ContractServiceImpl implements IContractService
             List<ContractModel> res = queryContracts(query);
             if (res != null && res.size() > 0)
             {
-                ContractModel cm = getContract(res.get(0).getContract().getId());
+                ContractModel cm = getContract(
+                        res.get(0).getContract().getId());
                 return cm;
             }
             return null;
@@ -1127,9 +1138,11 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            List<ContractEntity> contractList = getContractByRefContractNo(refContractNo);
+            List<ContractEntity> contractList = getContractByRefContractNo(
+                    refContractNo);
             ContractBatchModel batchModel = new ContractBatchModel();
-            ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
+            ContractBatchEntity batch = contractBatchDao
+                    .getBacthsByRfid(rfidNo);
             if (batch == null)
             {
                 return null;
@@ -1150,12 +1163,11 @@ public class ContractServiceImpl implements IContractService
                 }
             }
             List<BatchItemModel> beanList = null;
-            beanList = JsonMapper.nonEmptyMapper()
-                    .getMapper()
-                    .readValue(batch.getBatchItems(),
-                            new TypeReference<List<BatchItemModel>>()
-                            {
-                            });
+            beanList = JsonMapper.nonEmptyMapper().getMapper().readValue(
+                    batch.getBatchItems(),
+                    new TypeReference<List<BatchItemModel>>()
+                    {
+                    });
             batchModel.setBatchItems(beanList);
             batchModel.setBatch(batch);
             return batchModel;
@@ -1177,7 +1189,8 @@ public class ContractServiceImpl implements IContractService
             QueryCondition<ModifyBatchEntity> condition = new QueryCondition<ModifyBatchEntity>();
             condition.addCondition("contractId", contractNo);// 合同号
             condition.addCondition("rfidNo", rfid);// 备案号
-            List<ModifyBatchEntity> batchList = contractModifyBatchDao.queryBacths(condition);
+            List<ModifyBatchEntity> batchList = contractModifyBatchDao
+                    .queryBacths(condition);
             List<ModifyBatchModel> newBatchModelLIst = new ArrayList<ModifyBatchModel>();
             if (!CollectionUtils.isEmpty(batchList))
             {
@@ -1216,7 +1229,8 @@ public class ContractServiceImpl implements IContractService
             QueryCondition<ReplenishBatchEntity> condition = new QueryCondition<ReplenishBatchEntity>();
             condition.addCondition("contractId", contractNo);// 合同号
             condition.addCondition("rfidNo", rfid);// 备案号
-            List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.queryReplenishBatch(condition);
+            List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+                    .queryReplenishBatch(condition);
             List<ReplenishBatchModel> newBatchModelLIst = new ArrayList<ReplenishBatchModel>();
             if (!CollectionUtils.isEmpty(batchList))
             {
@@ -1284,7 +1298,8 @@ public class ContractServiceImpl implements IContractService
             ContractBatchEntity batch = model.getBatch();
             // 判断是否能启用
             int oldBatchCount = 0;
-            ContractModel contract = getContractModelByContractNo(batch.getContractId());
+            ContractModel contract = getContractModelByContractNo(
+                    batch.getContractId());
             if (contract == null)
             {
                 throw new ServiceException("系统错误");
@@ -1325,9 +1340,10 @@ public class ContractServiceImpl implements IContractService
             logistics.setRfidState(RfidStateEnum.USED);
             logistics.setBatchNo(batch.getBatchNo());
             logistics.setIsLossBatch(false);
-            int num= logisticsRfidService.updateRfid(logistics);
-            if(num==0){
-                throw new ServiceException("RFID已经启用！");  
+            int num = logisticsRfidService.updateRfid(logistics);
+            if (num == 0)
+            {
+                throw new ServiceException("RFID已经启用！");
             }
             // 申请关联
             LogisticsRefEntity ref = new LogisticsRefEntity();
@@ -1367,9 +1383,8 @@ public class ContractServiceImpl implements IContractService
      */
     @Override
     @Transactional
-    public void updateRfidLoss(String rfidNo, String contractNo,
-            String batchNo, MemberEntity member, String newRfid)
-            throws ServiceException
+    public void updateRfidLoss(String rfidNo, String contractNo, String batchNo,
+            MemberEntity member, String newRfid) throws ServiceException
     {
         try
         {
@@ -1385,7 +1400,8 @@ public class ContractServiceImpl implements IContractService
             // if (batchItems == null || batchItems.size() == 0) {
             // throw new ServiceException("该RFID没有对应的批次条目信息！");
             // }
-            List<ContractBatchEntity> list = contractBatchDao.getAllBacthsByRfid(rfidNo);
+            List<ContractBatchEntity> list = contractBatchDao
+                    .getAllBacthsByRfid(rfidNo);
             if (list == null || list.size() == 0)
             {
                 throw new ServiceException("该RFID没有对应的批次！");
@@ -1419,7 +1435,8 @@ public class ContractServiceImpl implements IContractService
                 }
             }
             // 更新旧的RFID
-            LogisticsRfidEntity logistics = logisticsRfidService.getLogisticsByNo(rfidNo);
+            LogisticsRfidEntity logistics = logisticsRfidService
+                    .getLogisticsByNo(rfidNo);
             if (logistics.getRfidState().equals(RfidStateEnum.DAMAGED))
             {
                 throw new ServiceException("此RFID已经被补损，不能再次补损");
@@ -1428,7 +1445,8 @@ public class ContractServiceImpl implements IContractService
             logistics.setReplenishNo(newRfid);
             logisticsRfidService.updateLogistics(logistics);
             // 更新新的RFID
-            LogisticsRfidEntity newLogisRfid = logisticsRfidService.getLogisticsByNo(newRfid);
+            LogisticsRfidEntity newLogisRfid = logisticsRfidService
+                    .getLogisticsByNo(newRfid);
             if (newLogisRfid == null)
             {
                 throw new ServiceException("新RFID信息不存在");
@@ -1516,7 +1534,7 @@ public class ContractServiceImpl implements IContractService
     @Transactional
     public void updateContractLoss(String rfidNos, String contractNo,
             String batchId, MemberEntity member, String newRfid)
-            throws ServiceException
+                    throws ServiceException
     {
         try
         {
@@ -1525,7 +1543,8 @@ public class ContractServiceImpl implements IContractService
             {
                 throw new ServiceException("rfid编号不能为空");
             }
-            ReplenishBatchEntity batch = contractReplenishBatchDao.getBatch(batchId);
+            ReplenishBatchEntity batch = contractReplenishBatchDao
+                    .getBatch(batchId);
             if (batch == null)
             {
                 throw new ServiceException("补损批次不存在");
@@ -1570,7 +1589,8 @@ public class ContractServiceImpl implements IContractService
             logisticsRefService.add(ref);
             
             // 更新新的RFID
-            LogisticsRfidEntity newLogisRfid = logisticsRfidService.getLogisticsByNo(newRfid);
+            LogisticsRfidEntity newLogisRfid = logisticsRfidService
+                    .getLogisticsByNo(newRfid);
             if (newLogisRfid == null)
             {
                 throw new ServiceException("新RFID信息不存在");
@@ -1606,7 +1626,8 @@ public class ContractServiceImpl implements IContractService
     {
         QueryCondition<ReplenishContractEntity> query = new QueryCondition<ReplenishContractEntity>();
         query.addCondition("contractId", contractNo);
-        List<ReplenishContractEntity> replenishList = contractReplenishDao.queryReplenish(query);
+        List<ReplenishContractEntity> replenishList = contractReplenishDao
+                .queryReplenish(query);
         if (replenishList.size() > 0 && replenishList != null)
         {
             ReplenishContractEntity replenish = replenishList.get(0);
@@ -1614,7 +1635,8 @@ public class ContractServiceImpl implements IContractService
             {
                 QueryCondition<ReplenishBatchEntity> query2 = new QueryCondition<ReplenishBatchEntity>();
                 query2.addCondition("recordIds", replenish.getId());
-                List<ReplenishBatchEntity> replenisBatch = contractReplenishBatchDao.queryReplenishBatch(query2);
+                List<ReplenishBatchEntity> replenisBatch = contractReplenishBatchDao
+                        .queryReplenishBatch(query2);
                 return replenisBatch.get(0).getNewRfidNo();
             }
         }
@@ -1673,7 +1695,8 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            List<ContractItemEntity> itemList = contractItemDao.queryItems(contractNo);// 产品条目
+            List<ContractItemEntity> itemList = contractItemDao
+                    .queryItems(contractNo);// 产品条目
             return itemList;
         }
         catch (Exception e)
@@ -1685,8 +1708,8 @@ public class ContractServiceImpl implements IContractService
     
     @Override
     @Transactional(readOnly = true)
-    public List<ContractItemEntity> getRefContractItem(String contractNo,String windowType)
-            throws ServiceException
+    public List<ContractItemEntity> getRefContractItem(String contractNo,
+            String windowType) throws ServiceException
     {
         try
         {
@@ -1703,7 +1726,6 @@ public class ContractServiceImpl implements IContractService
         }
     }
     
-    
     @Override
     @Transactional
     public void startWindowRfid(Integer startNum, String refContractNo,
@@ -1712,7 +1734,8 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            ContractModel refContract = getContractModelByContractNo(refContractNo);
+            ContractModel refContract = getContractModelByContractNo(
+                    refContractNo);
             if (refContract == null)
             {
                 throw new ServiceException("招标合同不存在");
@@ -1770,7 +1793,8 @@ public class ContractServiceImpl implements IContractService
             QueryCondition<ReplenishBatchEntity> query = new QueryCondition<ReplenishBatchEntity>();
             query.addCondition("newRfid", newRfid);
             query.addCondition("batchNo", batchNo);
-            List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.queryReplenishBatch(query);
+            List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+                    .queryReplenishBatch(query);
             return batchList;
         }
         catch (Exception e)
@@ -1792,7 +1816,8 @@ public class ContractServiceImpl implements IContractService
         ContractBatchEntity batch = contractBatchDao.getBacthsByRfid(rfidNo);
         LogisticsRfidQuery query = new LogisticsRfidQuery();
         query.setRfidNo(rfidNo);
-        List<LogisticsRfidEntity> lr = logisticsRfidService.queryLogistics(query);
+        List<LogisticsRfidEntity> lr = logisticsRfidService
+                .queryLogistics(query);
         if (batch != null)
         {
             if (lr != null && lr.size() > 0)
@@ -1801,7 +1826,8 @@ public class ContractServiceImpl implements IContractService
                 batch.setContractId(logistics.getContractNo());
             }
             batchModel.setBatch(batch);
-            List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch.getBatchItems());
+            List<BatchItemModel> batchList = JsonMapperUtil
+                    .getBatchItems(batch.getBatchItems());
             batchModel.setBatchItems(batchList);
         }
         
@@ -1812,9 +1838,9 @@ public class ContractServiceImpl implements IContractService
      * 根据合同号获取批次
      */
     @Override
-    public ContractBatchModel getBacthsByContractNoAndBatchNo(
-            String contractNo, String bacthNo, String isLossBatch)
-            throws ServiceException, SQLException
+    public ContractBatchModel getBacthsByContractNoAndBatchNo(String contractNo,
+            String bacthNo, String isLossBatch)
+                    throws ServiceException, SQLException
     {
         try
         {
@@ -1835,7 +1861,8 @@ public class ContractServiceImpl implements IContractService
             
             batch.setContractId(contractNo);
             batchModel.setBatch(batch);
-            List<BatchItemModel> batchList = JsonMapperUtil.getBatchItems(batch.getBatchItems());
+            List<BatchItemModel> batchList = JsonMapperUtil
+                    .getBatchItems(batch.getBatchItems());
             batchModel.setBatchItems(batchList);
             return batchModel;
         }
@@ -1858,7 +1885,8 @@ public class ContractServiceImpl implements IContractService
         {
             QueryCondition<ContractBatchEntity> query = new QueryCondition<ContractBatchEntity>();
             query.addCondition("rfidNo", rfidNo);
-            List<ContractBatchEntity> batchList = contractBatchDao.queryBacths(query);
+            List<ContractBatchEntity> batchList = contractBatchDao
+                    .queryBacths(query);
             if (batchList != null && batchList.size() > 0)
             {
                 ContractBatchEntity batch = batchList.get(0);
@@ -1876,7 +1904,8 @@ public class ContractServiceImpl implements IContractService
                 batchQuery.addCondition("contractId", contractNo);
                 batchQuery.addCondition("batchNo",
                         Integer.valueOf(batch.getBatchNo()) + 1);
-                List<ContractBatchEntity> list = contractBatchDao.queryBacths(batchQuery);
+                List<ContractBatchEntity> list = contractBatchDao
+                        .queryBacths(batchQuery);
                 if (list != null && list.size() > 0)
                 {
                     throw new ServiceException("该批次之后已存在新的批次，不能删除");
@@ -1916,7 +1945,8 @@ public class ContractServiceImpl implements IContractService
                 throw new ServiceException("物流RFID关联已审核");
             }
             // 判断物流关联是否能回滚
-            LogisticsRfidEntity rfid = logisticsRfidService.getLogisticsByNo(ref.getRfidNo());
+            LogisticsRfidEntity rfid = logisticsRfidService
+                    .getLogisticsByNo(ref.getRfidNo());
             if (rfid != null)
             {
                 if (rfid.getRfidState().equals(RfidStateEnum.DAMAGED))
@@ -1925,14 +1955,16 @@ public class ContractServiceImpl implements IContractService
                 }
                 WindowRfidQuery query = new WindowRfidQuery();
                 query.setRfid(ref.getRfidNo());
-                List<WindowRfidEntity> winRfidList = windowRfidService.queryWindowRfid(query);
+                List<WindowRfidEntity> winRfidList = windowRfidService
+                        .queryWindowRfid(query);
                 if (winRfidList != null && winRfidList.size() > 0)
                 {
                     throw new ServiceException("该物流RFID已被门窗标签关联！");
                 }
                 LogisticsRefQuery refQuery = new LogisticsRefQuery();
                 refQuery.setReplenishRfid(ref.getRfidNo());
-                List<LogisticsRefEntity> refList = logisticsRefService.query(refQuery);
+                List<LogisticsRefEntity> refList = logisticsRefService
+                        .query(refQuery);
                 if (refList != null && refList.size() > 0)
                 {
                     throw new ServiceException("该物流RFID已被采购合同补损过！");
@@ -1942,12 +1974,14 @@ public class ContractServiceImpl implements IContractService
             {
                 // 删除批次
                 self.deleteBatch(ref.getRfidNo(), ref.getContractNo());
-                ContractEntity contract = getContractEntityByNo(ref.getContractNo());
+                ContractEntity contract = getContractEntityByNo(
+                        ref.getContractNo());
                 contract.setEffectiveBatch(contract.getEffectiveBatch() - 1);
                 contractDao.updateContract(contract);
                 
                 // 回滚RFID
-                LogisticsRfidEntity l = logisticsRfidService.getLogisticsByNo(ref.getRfidNo());
+                LogisticsRfidEntity l = logisticsRfidService
+                        .getLogisticsByNo(ref.getRfidNo());
                 l.setRfidState(RfidStateEnum.UN_USED);
                 l.setContractNo("");
                 l.setBatchNo("");
@@ -1993,8 +2027,10 @@ public class ContractServiceImpl implements IContractService
                 }
                 
                 // 更新被补损的RFID
-                LogisticsRfidEntity replenishRfid = logisticsRfidService.getLogisticsByNo(ref.getReplenishRfid());
-                LogisticsRfidEntity logistics = logisticsRfidService.getLogisticsByNo(ref.getRfidNo());
+                LogisticsRfidEntity replenishRfid = logisticsRfidService
+                        .getLogisticsByNo(ref.getReplenishRfid());
+                LogisticsRfidEntity logistics = logisticsRfidService
+                        .getLogisticsByNo(ref.getRfidNo());
                 if (replenishRfid == null)
                 {
                     throw new ServiceException("被补损的RFID信息已不存在");
@@ -2041,7 +2077,8 @@ public class ContractServiceImpl implements IContractService
             else if (ref.getType().equals(AssociationTypesEnum.CONTRACTOR_ADD))
             {
                 // 更新新的RFID
-                LogisticsRfidEntity logisRfid = logisticsRfidService.getLogisticsByNo(ref.getRfidNo());
+                LogisticsRfidEntity logisRfid = logisticsRfidService
+                        .getLogisticsByNo(ref.getRfidNo());
                 if (logisRfid == null)
                 {
                     throw new ServiceException("RFID信息不存在");
@@ -2056,8 +2093,8 @@ public class ContractServiceImpl implements IContractService
                 logisRfid.setIsLossBatch(false);
                 logisticsRfidService.updateLogistics(logisRfid);
                 // 回滚批次
-                List<ReplenishBatchEntity> batchList = getReplenishByNewRfid(ref.getBatchNo(),
-                        ref.getRfidNo());
+                List<ReplenishBatchEntity> batchList = getReplenishByNewRfid(
+                        ref.getBatchNo(), ref.getRfidNo());
                 if (batchList == null || batchList.size() == 0)
                 {
                     throw new ServiceException("补损批次不存在");
@@ -2115,13 +2152,15 @@ public class ContractServiceImpl implements IContractService
                     // query.setMinRfidNo(minRfidNo);
                     // query.setMaxRfidNo(maxRfidNo);
                     // query.setRfidState(RfidStateEnum.used.getId());
-                    List<WindowRfidEntity> list = windowRfidService.queryWindowRfid(query);
+                    List<WindowRfidEntity> list = windowRfidService
+                            .queryWindowRfid(query);
                     if (list == null || list.size() == 0)
                     {
                         throw new ServiceException("门窗RFID标签不存在");
                     }
                     startCount = list.size();
-                    for (Iterator<WindowRfidEntity> iterator = list.iterator(); iterator.hasNext();)
+                    for (Iterator<WindowRfidEntity> iterator = list
+                            .iterator(); iterator.hasNext();)
                     {
                         WindowRfidEntity windowRfid = iterator.next();
                         if (windowRfid == null)
@@ -2131,70 +2170,80 @@ public class ContractServiceImpl implements IContractService
                         if (!windowRfid.getRfidState()
                                 .equals(RfidStateEnum.USED))
                         {
-                            throw new ServiceException("编号为："
-                                    + windowRfid.getRfidNo() + "的门窗RFID不是已使用状态");
+                            throw new ServiceException(
+                                    "编号为：" + windowRfid.getRfidNo()
+                                            + "的门窗RFID不是已使用状态");
                         }
                         windowRfid.setGlassRfid("");
                         windowRfid.setProfileRfid("");
                         windowRfid.setWindowType(null);
                         windowRfid.setRfidState(RfidStateEnum.UN_USED);
                     }
-                    windowRfidService.batchUpdateWindowRfid(list.toArray(new WindowRfidEntity[list.size()]));
-                    
+                    windowRfidService.batchUpdateWindowRfid(
+                            list.toArray(new WindowRfidEntity[list.size()]));
+                            
                     // 将之前设置停用的剩余标签回滚到未停用，物流标签有值得除外
                     WindowRfidQuery query2 = new WindowRfidQuery();
                     query2.setRfidState(RfidStateEnum.DISABLE.getId());
                     query2.setContractNo(ref.getContractNo());
-                    List<WindowRfidEntity> disableList = windowRfidService.queryWindowRfid(query2);
+                    List<WindowRfidEntity> disableList = windowRfidService
+                            .queryWindowRfid(query2);
                     if (disableList != null && disableList.size() > 0)
                     {
-                        for (Iterator<WindowRfidEntity> iterator = disableList.iterator(); iterator.hasNext();)
+                        for (Iterator<WindowRfidEntity> iterator = disableList
+                                .iterator(); iterator.hasNext();)
                         {
                             WindowRfidEntity disableRfid = iterator.next();
                             if (disableRfid == null)
                             {
                                 continue;
                             }
-                            if (StringUtils.isNotEmpty(disableRfid.getGlassRfid()))
+                            if (StringUtils
+                                    .isNotEmpty(disableRfid.getGlassRfid()))
                             {
                                 iterator.remove();
                                 continue;
                             }
                             disableRfid.setRfidState(RfidStateEnum.UN_USED);
                         }
-                        windowRfidService.batchUpdateWindowRfid(disableList.toArray(new WindowRfidEntity[disableList.size()]));
+                        windowRfidService.batchUpdateWindowRfid(disableList
+                                .toArray(new WindowRfidEntity[disableList
+                                        .size()]));
                     }
                     // 回滚招标合同数量
-                    ContractEntity contract = getContractEntityByNo(ref.getContractNo());
+                    ContractEntity contract = getContractEntityByNo(
+                            ref.getContractNo());
                     if (contract != null)
                     {
-                        contract.setUseQuantity(contract.getUseQuantity()
-                                - startCount);
+                        contract.setUseQuantity(
+                                contract.getUseQuantity() - startCount);
                         contractDao.updateContract(contract);
                     }
                 }
             }
             else if (ref.getType().equals(LinkStateEnum.RFID_LOSS))
             {
-                WindowRfidEntity rfid = windowRfidService.getWindowRfidByNo(ref.getMinRfidNo());
+                WindowRfidEntity rfid = windowRfidService
+                        .getWindowRfidByNo(ref.getMinRfidNo());
                 if (rfid == null)
                 {
                     throw new ServiceException("补损的RFID不存在");
                 }
                 if (!rfid.getRfidState().equals(RfidStateEnum.USED))
                 {
-                    throw new ServiceException("补损的" + rfid.getRfidNo()
-                            + "RFID不是已使用状态");
+                    throw new ServiceException(
+                            "补损的" + rfid.getRfidNo() + "RFID不是已使用状态");
                 }
-                WindowRfidEntity replenishRfid = windowRfidService.getWindowRfidByNo(ref.getReplenishRfid());
+                WindowRfidEntity replenishRfid = windowRfidService
+                        .getWindowRfidByNo(ref.getReplenishRfid());
                 if (replenishRfid == null)
                 {
                     throw new ServiceException("被补损的RFID不存在");
                 }
                 if (!replenishRfid.getRfidState().equals(RfidStateEnum.DAMAGED))
                 {
-                    throw new ServiceException("被补损的"
-                            + replenishRfid.getRfidNo() + "RFID不是已破损状态");
+                    throw new ServiceException(
+                            "被补损的" + replenishRfid.getRfidNo() + "RFID不是已破损状态");
                 }
                 // 还原被补损的RFID
                 replenishRfid.setReplenishNo("");
@@ -2244,14 +2293,16 @@ public class ContractServiceImpl implements IContractService
                     }
                     WindowRfidQuery query = new WindowRfidQuery();
                     query.setRfidNos(rfidArr);
-                    List<WindowRfidEntity> list = windowRfidService.queryWindowRfid(query);
+                    List<WindowRfidEntity> list = windowRfidService
+                            .queryWindowRfid(query);
                     if (list == null || list.size() == 0)
                     {
                         throw new ServiceException("门窗RFID标签不存在");
                     }
                     for (int i = 0; i < replenishRfidArr.length; i++)
                     {
-                        WindowRfidEntity replenishRfid = windowRfidService.getWindowRfidByNo(replenishRfidArr[i]);
+                        WindowRfidEntity replenishRfid = windowRfidService
+                                .getWindowRfidByNo(replenishRfidArr[i]);
                         if (replenishRfid == null)
                         {
                             throw new ServiceException("编号为："
@@ -2260,9 +2311,9 @@ public class ContractServiceImpl implements IContractService
                         if (!replenishRfid.getRfidState()
                                 .equals(RfidStateEnum.DAMAGED))
                         {
-                            throw new ServiceException("被补损的"
-                                    + replenishRfid.getRfidNo()
-                                    + "的RFID不是已破损状态");
+                            throw new ServiceException(
+                                    "被补损的" + replenishRfid.getRfidNo()
+                                            + "的RFID不是已破损状态");
                         }
                         WindowRfidEntity newRfid = list.get(i);
                         if (newRfid == null)
@@ -2338,7 +2389,8 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            List<ReplenishBatchEntity> batchList = contractReplenishBatchDao.getReplenishBatch(contractNo);
+            List<ReplenishBatchEntity> batchList = contractReplenishBatchDao
+                    .getReplenishBatch(contractNo);
             return batchList;
         }
         catch (ServiceException e)
@@ -2363,11 +2415,13 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            ContractBatchEntity contractBatch = contractBatchDao.getBacthsByRfid(rfidNo);
+            ContractBatchEntity contractBatch = contractBatchDao
+                    .getBacthsByRfid(rfidNo);
             if (contractBatch != null)
             {
                 // 更新合同支付批次条目
-                ContractModel cm = this.getContractModelByContractNo(contractNo);
+                ContractModel cm = this
+                        .getContractModelByContractNo(contractNo);
                 ContractEntity ce = new ContractEntity();
                 ce.setId(cm.getContract().getId());
                 if (contractBatch.getType() == 1)
@@ -2419,7 +2473,8 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            List<ContractBatchEntity> batchList = contractBatchDao.getBacthsByContractNo(contractNo);
+            List<ContractBatchEntity> batchList = contractBatchDao
+                    .getBacthsByContractNo(contractNo);
             List<ContractBatchModel> cbList = new ArrayList<ContractBatchModel>();
             if (batchList != null && batchList.size() > 0)
             {
@@ -2427,7 +2482,8 @@ public class ContractServiceImpl implements IContractService
                 {
                     ContractBatchModel cb = new ContractBatchModel();
                     cb.setBatch(contractBatchEntity);
-                    List<BatchItemModel> itemList = JsonMapperUtil.getBatchItems(contractBatchEntity.getBatchItems());
+                    List<BatchItemModel> itemList = JsonMapperUtil
+                            .getBatchItems(contractBatchEntity.getBatchItems());
                     cb.setBatchItems(itemList);
                     cbList.add(cb);
                 }
@@ -2451,7 +2507,8 @@ public class ContractServiceImpl implements IContractService
     {
         try
         {
-            ContractEntity contract = contractDao.getContractByContractNo(contractNo);
+            ContractEntity contract = contractDao
+                    .getContractByContractNo(contractNo);
             return contract;
         }
         catch (ServiceException e)
