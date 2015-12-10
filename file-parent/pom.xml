@@ -72,10 +72,6 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 					<encoding>UTF-8</encoding>
-					 <compilerArguments>
-                        <verbose />
-                        <bootclasspath>${java.home}\lib\rt.jar;${java.home}\lib\jce.jar</bootclasspath>
-                    </compilerArguments>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -95,6 +91,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.7.1</version>
 				<configuration>
+					<skip>true</skip>
 					<!-- <redirectTestOutputToFile>true</redirectTestOutputToFile> -->
 					<argLine>-XX:MaxPermSize=128m -Xmx256m</argLine>
 					<!-- Force alphabetical order to have a reproducible build -->
