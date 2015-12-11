@@ -159,7 +159,16 @@ public class RecordController extends BaseController {
 				record.setType(RecordTypeEnum.CONTRACT);
 				record.setApplyDate(new Date());
 				record.setDelState(false);
-				setContractType(record, memberB);
+				if(memberB.getMemberNo().equals("B000159")){
+					if(record.getRecordType()==1){
+						record.setContractType(ContractTypeEnum.GLASS);// 合同类型
+					}else if(record.getRecordType()==2){
+						record.setContractType(ContractTypeEnum.EXTRUSIONS);// 合同类型
+					}
+					
+				}else{
+					setContractType(record, memberB);
+				}
 				record.setFlag(RecordFlagEnum.A);
 				record.setConfirmState(RecordConfirmStateEnum.ACCEPTED);
 				recordService.addRecord(record);

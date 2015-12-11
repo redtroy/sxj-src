@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sxj.redis.core.pubsub.RedisTopics;
-import com.sxj.statemachine.StateMachineImpl;
+import com.sxj.statemachine.interfaces.IStateMachine;
 import com.sxj.supervisor.dao.contract.IAccountingDao;
 import com.sxj.supervisor.dao.contract.IContractPayDao;
 import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.message.TransMessageEntity;
 import com.sxj.supervisor.entity.pay.PayRecordEntity;
-import com.sxj.supervisor.enu.contract.PayModeEnum;
-import com.sxj.supervisor.enu.contract.PayStageEnum;
 import com.sxj.supervisor.enu.message.MessageStateEnum;
 import com.sxj.supervisor.enu.message.MessageTypeEnum;
 import com.sxj.supervisor.model.comet.MessageChannel;
@@ -31,10 +29,19 @@ import com.sxj.util.exception.ServiceException;
 import com.sxj.util.logger.SxjLogger;
 import com.sxj.util.persistent.QueryCondition;
 
+
 @Service
 @Transactional
 public class ContractPayServiceImpl implements IContractPayService
 {
+    @Autowired
+    @Qualifier("payModeFsm")
+    private IStateMachine payModeFsm;
+    
+    @Autowired
+    @Qualifier("payStagefsm")
+    private IStateMachine payStagefsm;
+    
     @Autowired
     private IContractPayDao payDao;
     
@@ -49,14 +56,6 @@ public class ContractPayServiceImpl implements IContractPayService
     
     @Autowired
     private ITransMessageService tms;
-    
-    @Autowired
-    @Qualifier("payStagefsm")
-    private StateMachineImpl<PayStageEnum> payStagefsm;
-    
-    @Autowired
-    @Qualifier("payModeFsm")
-    private StateMachineImpl<PayModeEnum> payModeFsm;
     
     @Override
     @Transactional(readOnly = true)
@@ -151,8 +150,7 @@ public class ContractPayServiceImpl implements IContractPayService
     }
     
     @Override
-    public String updateMode(String payNo, String event)
-            throws ServiceException
+    public String updateMode(String payNo, String event) throws ServiceException
     {
         try
         {
@@ -199,8 +197,7 @@ public class ContractPayServiceImpl implements IContractPayService
      */
     @Override
     @Transactional
-    public String payOk(PayRecordEntity re, String flag)
-            throws ServiceException
+    public String payOk(PayRecordEntity re, String flag) throws ServiceException
     {
         try
         {
@@ -225,7 +222,7 @@ public class ContractPayServiceImpl implements IContractPayService
     @Transactional(readOnly = true)
     public List<AccountingModel> query_finance(AccountingModel query,
             String startDate, String endDate, String memberNo)
-            throws ServiceException
+                    throws ServiceException
     {
         try
         {
@@ -263,7 +260,8 @@ public class ContractPayServiceImpl implements IContractPayService
                     String contractNo = list.get(i).getContractNo();
                     Double amount = accountingDao.queryAmountItem(contractNo)
                             + accountingDao.queryAmountModifyItem(contractNo);
-                    Double payAmount = accountingDao.queryAmountBatch(contractNo)
+                    Double payAmount = accountingDao
+                            .queryAmountBatch(contractNo)
                             + accountingDao.queryAmountModifyBatch(contractNo);
                     list.get(i).setAmount(amount);
                     list.get(i).setPayAmount(payAmount);
@@ -281,8 +279,7 @@ public class ContractPayServiceImpl implements IContractPayService
     
     @Override
     @Transactional
-    public PayRecordEntity getPayRecordEntity(String id)
-            throws ServiceException
+    public PayRecordEntity getPayRecordEntity(String id) throws ServiceException
     {
         try
         {
@@ -304,11 +301,10 @@ public class ContractPayServiceImpl implements IContractPayService
         {
             pay.setCreatPayDate(new Date());
             payDao.addPay(pay);
-            CometServiceImpl.takeCount(MessageChannel.WEBSITE_PAY_MESSAGE
-                    + pay.getMemberNoA());
-            redisTopics.getTopic(MessageChannel.TOPIC_NAME)
-                    .publish(MessageChannel.WEBSITE_PAY_MESSAGE
-                            + pay.getMemberNoA());
+            CometServiceImpl.takeCount(
+                    MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
+            redisTopics.getTopic(MessageChannel.TOPIC_NAME).publish(
+                    MessageChannel.WEBSITE_PAY_MESSAGE + pay.getMemberNoA());
             CometServiceImpl.takeCount(MessageChannel.WEBSITE_FINANCE_MESSAGE
                     + pay.getMemberNoA());
             redisTopics.getTopic(MessageChannel.TOPIC_NAME)
@@ -356,8 +352,7 @@ public class ContractPayServiceImpl implements IContractPayService
     }
     
     @Override
-    public PayRecordEntity getPayNoBypayNo(String payNo)
-            throws ServiceException
+    public PayRecordEntity getPayNoBypayNo(String payNo) throws ServiceException
     {
         try
         {
@@ -405,18 +400,22 @@ public class ContractPayServiceImpl implements IContractPayService
             throw new ServiceException("查询付款管理出错!", e);
         }
     }
-
-	@Override
-	public void updatePayAmountByContractNo(ContractEntity contract)
-			throws ServiceException {
-		try {
-			payDao.updatePayAmountByContractNo(contract);
-		} catch (Exception e) {
-			SxjLogger.error("查询付款管理出错!", e, this.getClass());
-			throw new ServiceException("查询付款管理出错!", e);
-		}
-
-	}
+    
+    @Override
+    public void updatePayAmountByContractNo(ContractEntity contract)
+            throws ServiceException
+    {
+        try
+        {
+            payDao.updatePayAmountByContractNo(contract);
+        }
+        catch (Exception e)
+        {
+            SxjLogger.error("查询付款管理出错!", e, this.getClass());
+            throw new ServiceException("查询付款管理出错!", e);
+        }
+        
+    }
     
     // @Override
     // public String changeState(String payNo, String state)

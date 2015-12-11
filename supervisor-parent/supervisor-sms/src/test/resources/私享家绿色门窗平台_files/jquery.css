@@ -1,0 +1,85 @@
+.viewer {
+    -ms-touch-action: none;	
+}
+.viewer{
+	width: 100%;
+	left: 0;
+	-webkit-box-shadow: none;
+	border: none;
+	top: 0;
+	height: 600;
+	z-index: 9998;
+}
+.wrapper{overflow:hidden;}
+.viewer .modal-header{ background-color:transparent;}
+.viewer .modal-body{height:500px; background-color:transparent;}
+.iviewer_common {
+    position:absolute;
+    bottom:10px;
+    border: 0px solid #000;
+    height: 28px;
+    z-index: 5000;
+}
+.iviewer_cursor {
+    cursor: url(../images/view/hand.cur) 6 8, pointer;
+}
+
+.iviewer_drag_cursor {
+    cursor: url(../images/view/grab.cur) 6 8, pointer;
+}
+
+.iviewer_button {
+    width: 81px;
+	height:39px;
+    cursor: pointer;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.iviewer_zoom_in {
+    left: 0px;
+    background: url(../images/view/icons+.png) no-repeat -3px -66px;
+}
+
+.iviewer_zoom_out {
+    left: 81px;
+    background: url(../images/view/icons+.png) no-repeat -84px -66px;
+}
+.iviewer_rotate_right {
+    left: 162px;
+    background: url(../images/view/icons+.png) no-repeat -165px -66px;
+}
+.iviewer_del{
+	left: 243px;
+    background: url(../images/view/icons+.png) no-repeat -246px -66px;
+}
+
+
+
+
+iviewer_zoom_zero {
+    left: 90px;
+    background: url(../images/view/iviewer.zoom_zero.gif) center center no-repeat;
+}
+
+iviewer_zoom_fit {
+    left: 125px;
+    background: url(../images/view/iviewer.zoom_fit.gif) center center no-repeat;
+}
+
+iviewer_zoom_status {
+    left: 160px;
+    font: 1em/28px Sans;
+    color: #000;
+    background-color: #fff;
+    text-align: center;
+    width: 60px;
+}
+
+
+
+iviewer_rotate_right {
+    left: 262px;
+    background: #fff url(../images/view/icons+.png) center center no-repeat;
+}
+

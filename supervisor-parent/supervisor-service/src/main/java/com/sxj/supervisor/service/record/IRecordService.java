@@ -90,4 +90,14 @@ public interface IRecordService {
 
     void editRecord(RecordEntity record) throws ServiceException;
 
+    /**
+     * 获取会员申请的备案
+     * @param contractNo
+     * @param memberNo
+     * @param type
+     * @return
+     */
+	RecordEntity getRecordByContract(String contractNo, String memberNo,
+			String type);
+
 }
