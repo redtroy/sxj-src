@@ -52,7 +52,7 @@
 		<![CDATA[ AND (p.NAME LIKE CONCAT(#{condition.name},'%') OR i.NAME LIKE CONCAT(#{condition.name},'%'))]]>
 		</if>
 		<if test="condition.memberNo != null and condition.memberNo != ''">
-		<![CDATA[ AND (p.MEMBER_NO=#{condition.memberNo}]]>
+		<![CDATA[ AND p.MEMBER_NO=#{condition.memberNo}]]>
 		</if>
 		<![CDATA[ ) as tmp ]]>
 	</select>
