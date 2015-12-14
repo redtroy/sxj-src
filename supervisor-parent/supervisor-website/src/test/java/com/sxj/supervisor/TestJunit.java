@@ -66,7 +66,7 @@ public class TestJunit
             //configService.sendAllMessage("测试短信");
         	
         //	String loginUrl = "http://www.menchuang.org.cn/purchase/addRecord.htm";
-        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/addRecord.htm";
+        	String loginUrl = "http://www.menchuang.org.cn/purchase/addRecord.htm";
 //			MemberEntity memberEntity = new MemberEntity();
 //			memberEntity.setName("南京海阔天空科技有限公司");
 //			memberEntity.setAddress("仙林大道");

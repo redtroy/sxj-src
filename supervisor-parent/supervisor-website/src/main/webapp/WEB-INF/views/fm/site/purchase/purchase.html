@@ -33,7 +33,7 @@
 		}
 	}
 	var show;
-	function openApply(recordNumber, type) {
+	function openApply(recordNumber, type,num) {
 		$("#applyType").val(type);
 		
 		if (type == 1) {
@@ -45,8 +45,9 @@
 		} else if (type == 4) {
 			$("#typeValue").text("配件");
 		}
-		var applyNum = $("#applyNum").val("");
+		var applyNum = $("#applyNum").val(num);
 		var applyPrice = $("#applyPrice").val("");
+		var number = $("#number").val(num);
 		$("#releaseRecordId").val(recordNumber);
 		show = layer.open({
 			type : 1,
@@ -96,11 +97,22 @@
 // 	            $("#request-process-patent").html("提交数据失败！");
 // 	        }
 // 	    });
+		var applyNum = $("#applyNum").val();
+		var number =$("#number").val();
+		if(applyNum==''){
+			errorInfo("请输入申请采购数量");
+			return;
+		}
+		if(Number(applyNum)>Number(number)){
+			errorInfo("申请数量不能超过采购池数据");
+			return;
+		}
 		dialogBox(function(index) {
 			$.post("saveApply.htm", $("#applyForm").serialize(),
 					function(data) {
 						if (data.isok == 'ok') {
 							messageInfo("申请成功");
+							layer.close(show);
 						} else {
 							errorInfo(data.isok );
 						}
@@ -181,6 +193,7 @@
 						</ul>
 					</div>
 					<input type="hidden" id="purchaseType" value="${query.purchase}"/>
+					<input type="hidden" id="number" value=""/>
 					<div class="lib_Contentbox lib_tabborder">
 						<div id="con_1_1">
 							<div id="detail-name">
@@ -215,7 +228,7 @@
 												<td id="red">${list.priceRange}</td>
 												<td>${list.releaseTime?string("yyyy-MM-dd")}</td>
 												<td><button class="button-ora fillet"
-														onclick="openApply('${list.recordNumber}','${list.purchase}');">点击申请</button></td>
+														onclick="openApply('${list.recordNumber}','${list.purchase}','${list.num}');">点击申请</button></td>
 											</tr>
 											</#list>
 										</tbody>
