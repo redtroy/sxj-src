@@ -361,8 +361,11 @@
 			gcdome.onmouseout = function() {
 				gcFunction = setInterval(gcmoveTop, gcspeed);
 			}
+		
+		$(document).ready(function() {
 			moveTop();
 			gcmoveTop();
+		});
 	</script>
 </body>
 

@@ -2,6 +2,7 @@ package com.sxj.supervisor;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hslf.record.Record;
@@ -17,6 +18,7 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.service.message.IMessageConfigService;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.ISxjHttpClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -114,17 +116,17 @@ public class TestJunit
 //        	rr.setProfiles(1001);
 //        	rr.setProfilesIncrease(101);
 //        	rr.setProfilesReduce(101);
-        	RecordEntity rr = new RecordEntity();
-        	rr.setApplyId("B000159");
-        	rr.setMemberIdA("MEM000001");
-        	rr.setImgPath("22222");
-        	rr.setRecordType(1);
-        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
-			System.err.println(json);
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("json", json);
-			String a=httpClient.postJson(loginUrl, json);
-			System.err.println(a);
+//        	RecordEntity rr = new RecordEntity();
+//        	rr.setApplyId("B000159");
+//        	rr.setMemberIdA("MEM000001");
+//        	rr.setImgPath("22222");
+//        	rr.setRecordType(1);
+//        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
+//			System.err.println(json);
+//			Map<String, String> map = new HashMap<String, String>();
+//			map.put("json", json);
+//			String a=httpClient.postJson(loginUrl, json);
+//			System.err.println(a);
 //        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
 //        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
 //            CsvBeanReader reader = new CsvBeanReader(freader,
@@ -147,6 +149,10 @@ public class TestJunit
 //            	System.err.println(a+"____________"+windowRfidEntity.getGid()+"_____"+windowRfidEntity.getRfidNo());
 //			}
 //            
+        	List<String> cache = CometServiceImpl.get("record_push_message_B000159");
+        	for (String string : cache) {
+				System.err.println("redis数据-------------"+string);
+			}
         }
         catch (Exception e)
         {
