@@ -67,8 +67,8 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-       	String loginUrl = "http://www.menchuang.org.cn/purchase/getContractState.htm";
-        // 	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/getContractState.htm";
+        	  // 	String loginUrl = "http://www.menchuang.org.cn/purchase/getContractState.htm";
+       	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/getContractState.htm";
 //			MemberEntity memberEntity = new MemberEntity();
 //			memberEntity.setName("南京海阔天空科技有限公司");
 //			memberEntity.setAddress("仙林大道");
@@ -123,12 +123,11 @@ public class TestJunit
 //        	rr.setRecordType(1);
         	Map<String, String> map = new HashMap<String, String>();
 			map.put("contractNos", "CT15040221,CT15120001");
-			String aa= "CT15040221,CT15120001";
-			String[] strings = aa.split(",");
-        	String json = JsonMapper.nonDefaultMapper().toJson(strings);
+        	String json = JsonMapper.nonDefaultMapper().toJson("CT15040221,CT15040221");
 			System.err.println(json);
-			String a=httpClient.postJson(loginUrl, json);
-			System.err.println(a);
+			//String a=httpClient.postJson(loginUrl, "\"CT15040221,CT15040221\"");
+			String bString  = httpClient.post(loginUrl, map);
+			System.err.println(bString);
 //        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
 //        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
 //            CsvBeanReader reader = new CsvBeanReader(freader,

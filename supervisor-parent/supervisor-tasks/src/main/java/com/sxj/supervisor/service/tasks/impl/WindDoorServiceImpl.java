@@ -87,7 +87,7 @@ public class WindDoorServiceImpl implements IWindDoorService
             }
         }
         //updateTenderMessageSync(created);
-        sendSmsSync(created.size());
+//        sendSmsSync(created.size());
     }
     
     private void sendSmsSync(final int count)
