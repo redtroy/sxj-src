@@ -506,8 +506,7 @@ public class PurchaseController extends BaseController {
 	 * @throws IOException
 	 */
 	@RequestMapping("getContractState")
-	@ResponseBody
-	public void getContractState(@RequestBody String contractNos,
+	public void getContractState(String contractNos,
 			HttpServletResponse response, HttpServletRequest request)
 			throws WebException, IOException {
 		PrintWriter out = response.getWriter();
