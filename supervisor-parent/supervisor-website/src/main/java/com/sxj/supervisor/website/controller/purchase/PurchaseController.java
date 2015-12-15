@@ -497,4 +497,33 @@ public class PurchaseController extends BaseController {
 		}
 
 	}
+	/**
+	 * 批量获取合同状态
+	 * @param contractNos
+	 * @param response
+	 * @param request
+	 * @throws WebException
+	 * @throws IOException
+	 */
+	@RequestMapping("getContractState")
+	@ResponseBody
+	public void getContractState(@RequestBody String contractNos,
+			HttpServletResponse response, HttpServletRequest request)
+			throws WebException, IOException {
+		PrintWriter out = response.getWriter();
+		try {
+			Map<String, Integer> map = purchaseService.getContractState(contractNos);
+			out.print(JsonMapper.nonEmptyMapper().toJson(map));
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			out.print("0");
+			SxjLogger.error("获取合同状态错误", e, this.getClass());
+			throw new WebException("获取合同状态错误");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
+	}
 }
