@@ -40,7 +40,7 @@ public class AlEntity implements Serializable
     @Column(name = "AVERAGE")
     private String average;
     
-    @Column(name = "GATHERDATE")
+    @Column(name = "GATHER_DATE")
     private Date gatherDate;
     
     public Date getGatherDate()
