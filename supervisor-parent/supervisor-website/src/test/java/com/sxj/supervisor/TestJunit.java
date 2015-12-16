@@ -13,6 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.sxj.cache.manager.CacheLevel;
+import com.sxj.cache.manager.HierarchicalCacheManager;
 import com.sxj.redis.core.concurrent.RedisConcurrent;
 import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
@@ -45,27 +47,6 @@ public class TestJunit
     {
         try
         {
-            //ids.WindDoorGather();
-            //        CometServiceImpl.takeCount(MessageChannel.MEMBER_PAY_MESSAGE_COUNT
-            //                + "MEM000001");
-            //         FileInputStream doc = new FileInputStream(new File(
-            //                 "D:\\scm-repository\\git\\sxj\\abc.doc"));
-            //         FileOutputStream docHTML = new FileOutputStream(new File(
-            //                 "D:\\scm-repository\\git\\sxj\\abc.html"));
-            //            FileInputStream docx = new FileInputStream(new File(
-            //                    "D:\\采集导入\\江苏省交通技师学院新校区建设工程项目三标段幕墙工程{镇江}.docx"));
-            //         FileOutputStream docxHTML = new FileOutputStream(new File(
-            //                 "D:\\scm-repository\\git\\sxj\\bcd.html"));
-            //            WordTransformer transformer = new WordTransformer();
-            //         AbstractPictureExactor exactor = new LocalPictureExactor("c:\\test",
-            //                 "file");
-            //         transformer.setPictureExactor(exactor)
-            //         //        transformer.toHTML(doc, docHTML);
-            //   OutputStream docxHTML = response.getOutputStream();
-            //   transformer.toHTML(docx, docxHTML);
-            // System.out.println(docxHTML.toString());
-            //   al.gather();
-            //configService.sendAllMessage("测试短信");
         	
         	  // 	String loginUrl = "http://www.menchuang.org.cn/purchase/getContractState.htm";
        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/getContractState.htm";
@@ -121,13 +102,13 @@ public class TestJunit
 //        	rr.setMemberIdA("MEM000001");
 //        	rr.setImgPath("22222");
 //        	rr.setRecordType(1);
-        	Map<String, String> map = new HashMap<String, String>();
-			map.put("contractNos", "CT15040221,CT15120001");
-        	String json = JsonMapper.nonDefaultMapper().toJson("CT15040221,CT15040221");
-			System.err.println(json);
-			//String a=httpClient.postJson(loginUrl, "\"CT15040221,CT15040221\"");
-			String bString  = httpClient.post(loginUrl, map);
-			System.err.println(bString);
+//        	Map<String, String> map = new HashMap<String, String>();
+//			map.put("contractNos", "CT15040221,CT15120001");
+//        	String json = JsonMapper.nonDefaultMapper().toJson("CT15040221,CT15040221");
+//			System.err.println(json);
+//			//String a=httpClient.postJson(loginUrl, "\"CT15040221,CT15040221\"");
+//			String bString  = httpClient.post(loginUrl, map);
+//			System.err.println(bString);
 //        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
 //        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
 //            CsvBeanReader reader = new CsvBeanReader(freader,
@@ -154,6 +135,11 @@ public class TestJunit
 //        	for (String string : cache) {
 //				System.err.println("redis数据-------------"+string);
 //			}
+			
+			String oldDate = (String) HierarchicalCacheManager.get(CacheLevel.REDIS,
+	                "Al",
+	                "date");
+			System.err.println(oldDate);
         }
         catch (Exception e)
         {

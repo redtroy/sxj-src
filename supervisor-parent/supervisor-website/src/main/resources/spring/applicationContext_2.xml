@@ -18,7 +18,7 @@
 	<import resource="classpath*:spring/applicationContext-shiro.xml" />
 	<import resource="classpath*:spring/fast-dfs.xml" />
 <!-- 	<import resource="classpath*:spring/mybatis-shard.xml" /> -->
-<!-- 	<import resource="classpath*:spring/quartz_job.xml" />  -->
+	<import resource="classpath*:spring/quartz_job.xml" /> 
 	<!-- <import resource="classpath*:spring/applicationContext-csrf.xml" /> -->
 	<task:annotation-driven />
 	<context:annotation-config />

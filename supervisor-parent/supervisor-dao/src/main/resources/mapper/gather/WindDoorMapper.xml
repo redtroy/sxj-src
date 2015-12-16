@@ -64,6 +64,6 @@ and message.MEMBER_NO=#{memberNo} where message.ID is null;
 			test="condition.endDate != null  and condition.endDate != ''">
 			<![CDATA[AND NOW_DATE <= CONCAT(#{condition.endDate}," 23:59:59") ]]>
 		</if>
-		<![CDATA[order by NOW_DATE desc ]]>
+		<![CDATA[order by JZRQ desc ]]>
 	</select>
 </mapper>
