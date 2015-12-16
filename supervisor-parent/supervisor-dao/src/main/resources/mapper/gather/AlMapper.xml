@@ -20,4 +20,10 @@
 		parameterType="com.sxj.util.persistent.QueryCondition">
 		<![CDATA[SELECT * FROM AL_PRICE ORDER BY GATHER_DATE DESC,DATE DESC LIMIT 0,30]]>
 	</select>
+	<delete id="deleteByDates" parameterType="java.util.List">
+		delete from AL_PRICE where DATE in 
+		<foreach collection="list" item = "model" open="(" separator="," close=")">
+			#{ model.date}  
+   		</foreach>
+	</delete>
 </mapper>
