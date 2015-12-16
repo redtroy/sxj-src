@@ -2,17 +2,21 @@ package com.sxj.supervisor.service.impl.purchase;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.sxj.supervisor.dao.contract.IContractDao;
 import com.sxj.supervisor.dao.member.IMemberDao;
 import com.sxj.supervisor.dao.purchase.IApplyDao;
 import com.sxj.supervisor.dao.purchase.IPurchaseDao;
 import com.sxj.supervisor.dao.purchase.IReleaseRecordDao;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.member.MemberToMemberEntity;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
@@ -47,9 +51,12 @@ public class PurchaseServiceImpl implements IPurchaseService {
 
 	@Autowired
 	private IPurchaseDao purchaseDao;
-	
+
 	@Autowired
 	private IReleaseRecordDao releaseRecordDao;
+
+	@Autowired
+	private IContractDao contractDao;
 
 	@Override
 	@Transactional
@@ -92,12 +99,12 @@ public class PurchaseServiceImpl implements IPurchaseService {
 				member.setId(memberEntity.getId());
 				member.setMemberNo(memberEntity.getMemberNo());
 				memberEntity.setPurchaseNo(member.getPurchaseNo());
-				if(memberEntity.getPurchaseState()==0){
+				if (memberEntity.getPurchaseState() == 0) {
 					memberDao.updateMember(memberEntity);
-				}else{
+				} else {
 					memberDao.updateMember(member);
 				}
-				
+
 			}
 			// 更新关联企业
 			if (member.getType().equals(MemberTypeEnum.AGENT)
@@ -147,7 +154,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			throw new ServiceException("添加采购申请单出错", e);
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public void updateApply(ApplyEntity apply) {
@@ -159,6 +166,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			throw new ServiceException("更新采购申请单出错", e);
 		}
 	}
+
 	@Override
 	@Transactional
 	public void updatePurchase(PurchaseEntity purchaseEntity) {
@@ -191,9 +199,9 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			}
 			QueryCondition<ApplyEntity> condition = new QueryCondition<ApplyEntity>();
 			condition.addCondition("memberNo", apply.getMemberNo());// 会员号
-			condition.addCondition("applyType", apply.getApplyType());//类型
-			condition.addCondition("applyStatus", apply.getApplyStatus());//类型
-			condition.addCondition("serialNumber", apply.getSerialNumber());//类型
+			condition.addCondition("applyType", apply.getApplyType());// 类型
+			condition.addCondition("applyStatus", apply.getApplyStatus());// 类型
+			condition.addCondition("serialNumber", apply.getSerialNumber());// 类型
 			condition.addCondition("starDate", apply.getStartDate());
 			condition.addCondition("endDate", apply.getEndDate());
 			condition.setPage(apply);
@@ -205,7 +213,7 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			throw new ServiceException("查询采购申请单信息错误", e);
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public void addReleaseRecordDao(ReleaseRecordEntity releaseRecordEntity) {
@@ -217,19 +225,22 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			throw new ServiceException("添加采购池数据出错", e);
 		}
 	}
-	
+
 	@Override
-	public List<ReleaseRecordEntity> queryReleaseRecords(ReleaseRecordEntity releaseRecordEntity) {
+	public List<ReleaseRecordEntity> queryReleaseRecords(
+			ReleaseRecordEntity releaseRecordEntity) {
 		try {
 			List<ReleaseRecordEntity> releaseRecordList = new ArrayList<ReleaseRecordEntity>();
 			if (releaseRecordEntity == null) {
 				return releaseRecordList;
 			}
 			QueryCondition<ReleaseRecordEntity> condition = new QueryCondition<ReleaseRecordEntity>();
-			condition.addCondition("purchase", releaseRecordEntity.getPurchase());// 类型
+			condition.addCondition("purchase",
+					releaseRecordEntity.getPurchase());// 类型
 			// condition.addCondition("name", query.getMemberName());// 会员名称
 			condition.setPage(releaseRecordEntity);
-			releaseRecordList = releaseRecordDao.queryReleaseRecordList(condition);
+			releaseRecordList = releaseRecordDao
+					.queryReleaseRecordList(condition);
 			releaseRecordEntity.setPage(condition);
 			return releaseRecordList;
 		} catch (Exception e) {
@@ -237,5 +248,22 @@ public class PurchaseServiceImpl implements IPurchaseService {
 			throw new ServiceException("查询采购申请单信息错误", e);
 		}
 	}
-	
+
+	@Override
+	public Map<String, Integer> getContractState(String contractNos) {
+		try {
+			List<ContractEntity> list = contractDao
+					.getContractState(contractNos.split(","));
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			for (ContractEntity contractEntity : list) {
+				map.put(contractEntity.getContractNo(), contractEntity
+						.getConfirmState().getId());
+			}
+			return map;
+		} catch (Exception e) {
+			SxjLogger.error("查询合同状态错误", e, this.getClass());
+			throw new ServiceException("查询合同状态错误", e);
+		}
+
+	}
 }

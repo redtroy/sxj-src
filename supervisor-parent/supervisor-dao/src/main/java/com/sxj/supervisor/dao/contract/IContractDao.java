@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sxj.mybatis.orm.annotations.Delete;
 import com.sxj.mybatis.orm.annotations.Get;
 import com.sxj.mybatis.orm.annotations.Insert;
@@ -74,4 +76,11 @@ public interface IContractDao
      * @throws SQLException
      */
     public void updateStartDate(String contractNo)throws SQLException;
+    
+    /**
+     * 批量获取合同状态
+     * @param contractNos
+     * @throws SQLException
+     */
+    public List<ContractEntity> getContractState(String... contractNos)throws SQLException;
 }

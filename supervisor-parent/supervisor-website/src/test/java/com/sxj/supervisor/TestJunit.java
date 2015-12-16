@@ -2,6 +2,7 @@ package com.sxj.supervisor;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hslf.record.Record;
@@ -17,6 +18,7 @@ import com.sxj.spring.modules.mapper.JsonMapper;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.entity.record.RecordEntity;
 import com.sxj.supervisor.service.message.IMessageConfigService;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.ISxjHttpClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -65,8 +67,8 @@ public class TestJunit
             //   al.gather();
             //configService.sendAllMessage("测试短信");
         	
-        //	String loginUrl = "http://www.menchuang.org.cn/purchase/addRecord.htm";
-        	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/addRecord.htm";
+        	  // 	String loginUrl = "http://www.menchuang.org.cn/purchase/getContractState.htm";
+       	String loginUrl = "http://www.menchuang.org.cn:8080/supervisor-website/purchase/getContractState.htm";
 //			MemberEntity memberEntity = new MemberEntity();
 //			memberEntity.setName("南京海阔天空科技有限公司");
 //			memberEntity.setAddress("仙林大道");
@@ -114,17 +116,18 @@ public class TestJunit
 //        	rr.setProfiles(1001);
 //        	rr.setProfilesIncrease(101);
 //        	rr.setProfilesReduce(101);
-        	RecordEntity rr = new RecordEntity();
-        	rr.setApplyId("B000159");
-        	rr.setMemberIdA("MEM000001");
-        	rr.setImgPath("22222");
-        	rr.setRecordType(1);
-        	String json = JsonMapper.nonDefaultMapper().toJson(rr);
+//        	RecordEntity rr = new RecordEntity();
+//        	rr.setApplyId("B000159");
+//        	rr.setMemberIdA("MEM000001");
+//        	rr.setImgPath("22222");
+//        	rr.setRecordType(1);
+        	Map<String, String> map = new HashMap<String, String>();
+			map.put("contractNos", "CT15040221,CT15120001");
+        	String json = JsonMapper.nonDefaultMapper().toJson("CT15040221,CT15040221");
 			System.err.println(json);
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("json", json);
-			String a=httpClient.postJson(loginUrl, json);
-			System.err.println(a);
+			//String a=httpClient.postJson(loginUrl, "\"CT15040221,CT15040221\"");
+			String bString  = httpClient.post(loginUrl, map);
+			System.err.println(bString);
 //        	InputStream is = TestJunit.class.getClassLoader().getResourceAsStream("config/11.csv");
 //        	InputStreamReader freader = new InputStreamReader(is, "UTF-8");
 //            CsvBeanReader reader = new CsvBeanReader(freader,
@@ -147,6 +150,10 @@ public class TestJunit
 //            	System.err.println(a+"____________"+windowRfidEntity.getGid()+"_____"+windowRfidEntity.getRfidNo());
 //			}
 //            
+//        	List<String> cache = CometServiceImpl.get("record_push_message_B000159");
+//        	for (String string : cache) {
+//				System.err.println("redis数据-------------"+string);
+//			}
         }
         catch (Exception e)
         {

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,7 @@ import third.rewrite.fastdfs.NameValuePair;
 import third.rewrite.fastdfs.service.IStorageClientService;
 
 import com.sxj.spring.modules.mapper.JsonMapper;
+import com.sxj.supervisor.entity.contract.ContractEntity;
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
 import com.sxj.supervisor.entity.purchase.PurchaseEntity;
@@ -38,6 +40,7 @@ import com.sxj.supervisor.enu.record.RecordConfirmStateEnum;
 import com.sxj.supervisor.enu.record.RecordFlagEnum;
 import com.sxj.supervisor.enu.record.RecordStateEnum;
 import com.sxj.supervisor.enu.record.RecordTypeEnum;
+import com.sxj.supervisor.model.comet.MessageChannel;
 import com.sxj.supervisor.model.contract.ContractModel;
 import com.sxj.supervisor.model.login.SupervisorPrincipal;
 import com.sxj.supervisor.service.contract.IContractService;
@@ -45,6 +48,7 @@ import com.sxj.supervisor.service.member.IMemberService;
 import com.sxj.supervisor.service.purchase.IPurchaseService;
 import com.sxj.supervisor.service.record.IRecordService;
 import com.sxj.supervisor.website.controller.BaseController;
+import com.sxj.util.comet.CometServiceImpl;
 import com.sxj.util.common.FileUtil;
 import com.sxj.util.common.ISxjHttpClient;
 import com.sxj.util.common.StringUtils;
@@ -445,18 +449,81 @@ public class PurchaseController extends BaseController {
 
 	}
 
-	@RequestMapping("/modifyRecord")
+	/**
+	 * 确认合同
+	 * @param record
+	 * @param response
+	 * @param request
+	 * @throws WebException
+	 * @throws IOException
+	 */
+	@RequestMapping("confirmContract")
 	@ResponseBody
-	public void modifyRecord(@RequestBody RecordEntity record,
+	public void confirmContract(@RequestBody RecordEntity record,
 			HttpServletResponse response, HttpServletRequest request)
-			throws WebException {
+			throws WebException, IOException {
+		PrintWriter out = response.getWriter();
 		try {
-//			if(){
-//				
-//			}
+			ContractEntity contract = contractService
+					.getContractEntityByNo(record.getContractNo());
+			Assert.notNull(contract, "该合同不存在");
+			MemberEntity member = memberService.memberInfo(record.getApplyId());
+			Assert.notNull(member, "该会员不存在");
+			recordService.modifyState(contract.getId(), member.getType());
+			String key = MessageChannel.WEBSITE_RECORD_MESSAGE
+					+ member.getMemberNo();
+			List<String> messageList = CometServiceImpl.get(key);
+			if (messageList != null && messageList.size() > 0) {
+				for (int i = 0; i < messageList.size(); i++) {
+					String message = messageList.get(i);
+					if (message.contains(record.getId())) {
+						CometServiceImpl.remove(key, message);
+					}
+				}
+			}
+			CometServiceImpl
+					.subCount(MessageChannel.MEMBER_CONTRACT_MESSAGE_COUNT
+							+ member.getMemberNo());
+			out.print("1");
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
 		} catch (Exception e) {
-			SxjLogger.error("生成备案错误", e, this.getClass());
-			throw new WebException("生成备案错误");
+			out.print("0");
+			SxjLogger.error("确认备案信息错误", e, this.getClass());
+			throw new WebException("确认备案信息错误");
+		} finally {
+			out.flush();
+			out.close();
 		}
+
+	}
+	/**
+	 * 批量获取合同状态
+	 * @param contractNos
+	 * @param response
+	 * @param request
+	 * @throws WebException
+	 * @throws IOException
+	 */
+	@RequestMapping("getContractState")
+	@ResponseBody
+	public void getContractState(@RequestBody String contractNos,
+			HttpServletResponse response, HttpServletRequest request)
+			throws WebException, IOException {
+		PrintWriter out = response.getWriter();
+		try {
+			Map<String, Integer> map = purchaseService.getContractState(contractNos);
+			out.print(JsonMapper.nonEmptyMapper().toJson(map));
+			response.setContentType("text/plain;UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+		} catch (Exception e) {
+			out.print("0");
+			SxjLogger.error("获取合同状态错误", e, this.getClass());
+			throw new WebException("获取合同状态错误");
+		} finally {
+			out.flush();
+			out.close();
+		}
+
 	}
 }

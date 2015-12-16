@@ -2,6 +2,7 @@ package com.sxj.supervisor.website.controller.message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -73,26 +74,26 @@ public class TenderMessageController extends BaseController
         service.fetchUnreads(memberNo);
         List<TenderMessageModel> list = service.queryMessageList(query);
         map.put("messageList", list);
-        //        MessageConfigEntity config = null;
-        //        List<MessageConfigEntity> configList = configService
-        //                .queryConfigList(memberNo);
-        //        if (configList != null && configList.size() > 0)
-        //        {
-        //            for (Iterator<MessageConfigEntity> iterator = configList
-        //                    .iterator(); iterator.hasNext();)
-        //            {
-        //                MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator
-        //                        .next();
-        //                if (messageConfigEntity.getMessageType()
-        //                        .equals(MessageTypeEnum.TENDER))
-        //                {
-        //                    config = messageConfigEntity;
-        //                    break;
-        //                }
-        //                
-        //            }
-        //        }
-        //        map.put("messageConfig", config);
+                MessageConfigEntity config = null;
+                List<MessageConfigEntity> configList = configService
+                        .queryConfigList(memberNo);
+                if (configList != null && configList.size() > 0)
+                {
+                    for (Iterator<MessageConfigEntity> iterator = configList
+                            .iterator(); iterator.hasNext();)
+                    {
+                        MessageConfigEntity messageConfigEntity = (MessageConfigEntity) iterator
+                                .next();
+                        if (messageConfigEntity.getMessageType()
+                                .equals(MessageTypeEnum.TENDER))
+                        {
+                            config = messageConfigEntity;
+                            break;
+                        }
+                        
+                    }
+                }
+                map.put("messageConfig", config);
         map.put("query", query);
         return "site/message/tendermessage";
     }

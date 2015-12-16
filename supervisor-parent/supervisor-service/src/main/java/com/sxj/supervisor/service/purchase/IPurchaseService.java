@@ -1,6 +1,7 @@
 package com.sxj.supervisor.service.purchase;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sxj.supervisor.entity.member.MemberEntity;
 import com.sxj.supervisor.entity.purchase.ApplyEntity;
@@ -61,5 +62,18 @@ public interface IPurchaseService {
 	public List<ReleaseRecordEntity> queryReleaseRecords(
 			ReleaseRecordEntity releaseRecordEntity);
 
-	void updateApply(ApplyEntity apply);
+	/**
+	 * 更新申请单数据
+	 * 
+	 * @param apply
+	 */
+	public void updateApply(ApplyEntity apply);
+
+	/**
+	 * 批量获取合同状态
+	 * 
+	 * @param contractNos
+	 * @return
+	 */
+	public Map<String, Integer> getContractState(String contractNos);
 }

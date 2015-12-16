@@ -108,4 +108,10 @@
 	<update id="updateStartDate" parameterType="String">
 	<![CDATA[UPDATE M_CONTRACT C SET C.START_DATE=NOW() WHERE C.CONTRACT_NO=#{contractNo}]]>
 	</update>
+	<select id="getContractState" resultMap="ContractResultMap" parameterType="String">
+		SELECT CONTRACT_NO,CONFIRM_STATE FROM M_CONTRACT WHERE CONTRACT_NO IN 
+		<foreach collection="array" open="(" close=")" separator="," item="contractNo">
+			#{contractNo}
+		</foreach> 
+	</select>
 </mapper>
